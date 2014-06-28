@@ -1,0 +1,8 @@
+test
+.idea
+*.pyc
+*/*.pyc
+build
+dist/
+MANIFEST
+doc
