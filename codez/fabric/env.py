@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+from fabric.api import *
 
 # def pssh(file):
 #
@@ -27,9 +28,17 @@ import os
 
 
 
+
+
+
 def pssh(file):
-    if file[0:2] == '~/':
-        file = os.path.realpath(os.getenv('HOME'))+file[1:]
+    '''
+    Parse pssh file
+    :param file:
+    '''
+    # if file[0:2] == '~/':
+    #     file = os.path.realpath(os.getenv('HOME'))+file[1:]
+    file = os.path.realpath(os.path.expanduser(file))
 
     with open(file,'r') as fp:
         buffer = fp.read()
@@ -42,3 +51,13 @@ def pssh(file):
             machines.append(addr)
 
     return machines
+
+
+
+def bind_pssh(file):
+    '''
+    Bind env from pssh file
+    :param file:
+    '''
+    env.hosts=pssh(file)
+
