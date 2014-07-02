@@ -8,7 +8,7 @@ setup(
     url='https://github.com/kbonez/cliez',
     download_url = 'https://github.com/kbonez/cliez/tarball/master',
     license='http://opensource.org/licenses/MIT',
-    install_requires=['pssh','fabric'],
+    # install_requires=['pssh','fabric'],
     author='Breeze.Kay',
     author_email='wangwenpei@kbonez.com',
     description='libs for develop cli program',
