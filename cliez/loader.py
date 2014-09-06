@@ -11,11 +11,15 @@ class Error(object):
 
 
 class ArgLoader(object):
-    def __init__(self, options=tuple(), docs=NotImplemented):
-        self.parseArgs(options)
-        self.argv = sys.argv[:]
+    def __init__(self, options=tuple(), sys_argv=None,docs=NotImplemented):
 
-        for k, v in enumerate(sys.argv):
+        self.parseArgs(options)
+        sys_argv = sys_argv if sys_argv is not None else sys.argv
+
+
+        self.argv = sys_argv[:]
+
+        for k, v in enumerate(sys_argv):
 
             if k == 0:
                 commander = os.path.basename(v).lower()
@@ -60,7 +64,7 @@ class ArgLoader(object):
             # if option is already set. skip? this complex. so it will be error
             if self.required[_opt]:  #and self.options[_opt] is None:
                 try:
-                    next = sys.argv[k + 1]
+                    next = sys_argv[k + 1]
 
                     if next[0] == '-':
                         self.error(_refer, Error.required)
