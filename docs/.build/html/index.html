@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Cliez &mdash; Cliez 0.9.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.9.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Cliez 0.9.0 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="#">Cliez 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="cliez">
+<h1>Cliez<a class="headerlink" href="#cliez" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="http://cliez.kbonez.com">Cliez</a> is a Python library for CLI environment</p>
+<div class="section" id="upgrade-notes">
+<h2>Upgrade notes<a class="headerlink" href="#upgrade-notes" title="Permalink to this headline">¶</a></h2>
+<p>As of Cliez 0.9, we change  <tt class="docutils literal"><span class="pre">--sleep_max</span></tt> option to <tt class="docutils literal"><span class="pre">--sleep-max</span></tt>.</p>
+</div>
+<div class="section" id="quick-links">
+<h2>Quick links<a class="headerlink" href="#quick-links" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="http://cliez.kbonez.com/">Documentation</a></li>
+<li><a class="reference external" href="https://github.com/kbonez/cliez">Source (github)</a></li>
+</ul>
+</div>
+<div class="section" id="a-demo">
+<h2>A Demo<a class="headerlink" href="#a-demo" title="Permalink to this headline">¶</a></h2>
+<p>Here is a simple &#8220;How to use&#8221; example for Cliez:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">tornado.ioloop</span>
+<span class="kn">import</span> <span class="nn">tornado.web</span>
+
+<span class="k">class</span> <span class="nc">MainHandler</span><span class="p">(</span><span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">RequestHandler</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;Hello, world&quot;</span><span class="p">)</span>
+
+<span class="n">application</span> <span class="o">=</span> <span class="n">tornado</span><span class="o">.</span><span class="n">web</span><span class="o">.</span><span class="n">Application</span><span class="p">([</span>
+    <span class="p">(</span><span class="s">r&quot;/&quot;</span><span class="p">,</span> <span class="n">MainHandler</span><span class="p">),</span>
+<span class="p">])</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">application</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">8888</span><span class="p">)</span>
+    <span class="n">tornado</span><span class="o">.</span><span class="n">ioloop</span><span class="o">.</span><span class="n">IOLoop</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This example does not use any of Tornado&#8217;s asynchronous features; for
+that see this <a class="reference external" href="https://github.com/tornadoweb/tornado/tree/stable/demos/chat">simple chat room</a>.</p>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p><strong>Automatic installation</strong>:</p>
+<div class="highlight-python"><div class="highlight"><pre>pip install cliez
+</pre></div>
+</div>
+<p>Cliez is listed in <a class="reference external" href="http://pypi.python.org/pypi/cliez/">PyPI</a> and
+can be installed with <tt class="docutils literal"><span class="pre">pip</span></tt> or <tt class="docutils literal"><span class="pre">easy_install</span></tt>.
+it includes demo applications.</p>
+<p><strong>Manual installation</strong>: Download the latest source from <a class="reference external" href="http://pypi.python.org/pypi/tornado/">PyPI</a>.</p>
+<div class="highlight-python"><div class="highlight"><pre>tar xvzf tornado-$VERSION.tar.gz
+cd tornado-$VERSION
+python setup.py build
+sudo python setup.py install
+</pre></div>
+</div>
+<p>The Tornado source code is <a class="reference external" href="https://github.com/tornadoweb/tornado">hosted on GitHub</a>.</p>
+<p><strong>Prerequisites</strong>: Cliez test on Python 2.7.  It shoule be runs on
+all Python versions.</p>
+</div>
+<div class="section" id="discussion-and-support">
+<h2>Discussion and support<a class="headerlink" href="#discussion-and-support" title="Permalink to this headline">¶</a></h2>
+<p>You can discuss and report bugs on
+the <a class="reference external" href="https://github.com/kbonez/cliez/issues">GitHub issue tracker</a>.</p>
+<p>This web site and all documentation is licensed under <a class="reference external" href="http://creativecommons.org/licenses/by/3.0/">Creative
+Commons 3.0</a>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Cliez</a><ul>
+<li><a class="reference internal" href="#upgrade-notes">Upgrade notes</a></li>
+<li><a class="reference internal" href="#quick-links">Quick links</a></li>
+<li><a class="reference internal" href="#a-demo">A Demo</a></li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#discussion-and-support">Discussion and support</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="#">Cliez 0.9.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Breeze.Kay.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

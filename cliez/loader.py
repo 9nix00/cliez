@@ -11,11 +11,10 @@ class Error(object):
 
 
 class ArgLoader(object):
-    def __init__(self, options=tuple(), sys_argv=None,docs=NotImplemented):
+    def __init__(self, options=tuple(), sys_argv=None, docs=NotImplemented):
 
         self.parseArgs(options)
         sys_argv = sys_argv if sys_argv is not None else sys.argv
-
 
         self.argv = sys_argv[:]
 
@@ -29,15 +28,15 @@ class ArgLoader(object):
                 continue
             else:
                 if v[0:2] == '--':
-                    self.setOpt(k, v)
+                    self.setOpt(k, v, sys_argv)
                 elif v[0:1] == '-':
                     i = 1
                     try:
                         while i < len(v):
                             if i == len(v) - 1:
-                                self.setOpt(k, '-' + v[i])
+                                self.setOpt(k, '-' + v[i], sys_argv)
                             else:
-                                self.setOpt(k, '-' + v[i], delete=False)
+                                self.setOpt(k, '-' + v[i], sys_argv, delete=False)
                             i += 1
                     except:
                         # argument `-' will ignore
@@ -54,7 +53,7 @@ class ArgLoader(object):
             print "Error:`", a, "' Require value"
             os._exit(1)
 
-    def setOpt(self, k, _opt, delete=True):
+    def setOpt(self, k, _opt, sys_argv, delete=True):
         # process alias  first
         _refer = _opt
         if _opt in self.alias:
@@ -62,7 +61,7 @@ class ArgLoader(object):
 
         if _opt in self.options:
             # if option is already set. skip? this complex. so it will be error
-            if self.required[_opt]:  #and self.options[_opt] is None:
+            if self.required[_opt]:  # and self.options[_opt] is None:
                 try:
                     next = sys_argv[k + 1]
 
@@ -78,7 +77,7 @@ class ArgLoader(object):
                     self.error(_refer, Error.required)
 
             else:
-                #no argument option
+                # no argument option
                 self.options[_opt] = True
                 if delete:
                     self.argv[k] = False
@@ -103,7 +102,7 @@ class ArgLoader(object):
 
 
     def __str__(self):
-        return "\n"+self.__doc__
+        return "\n" + self.__doc__
 
 
     def parseArgs(self, options):
@@ -186,7 +185,7 @@ class ArgLoader(object):
 
 
 
-        #for beautiful helper
+        # for beautiful helper
         self.__doc__ = ''
         _origin_docs = docs.split("\n")
 
