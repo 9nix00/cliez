@@ -72,15 +72,15 @@ it includes demo applications.
 
 .. parsed-literal::
 
-    git clone
-    cd tornado-$VERSION
+    git clone  https://github.com/kbonez/cliez.git
+    cd cliez
     python setup.py build
     sudo python setup.py install
 
 The Cliez source code is `hosted on GitHub
-<https://github.com/tornadoweb/tornado>`_.
+<https://github.com/kbonez/cliez/>`_.
 
-**Prerequisites**: Cliez test on Python 2.7.  It should be runs on
+**Prerequisites**: Cliez was only test on Python 2.7.  It may be runs on
 all Python versions.
 
 
