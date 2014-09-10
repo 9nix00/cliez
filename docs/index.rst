@@ -22,24 +22,38 @@ A Demo
 
 Here is a simple "How to use" example for Cliez::
 
-    import tornado.ioloop
-    import tornado.web
+    import cliez
 
-    class MainHandler(tornado.web.RequestHandler):
-        def get(self):
-            self.write("Hello, world")
+    options = (
+        "Useage: cliez.ArgLoader Example",
+        "",
+        "Options",
+        ('--help', 'print help document.', '-h'),
+        "",
+        "HOW-TO:",
+        "    Format:",
+        "        options = (argument-list)",
+        "        argument-list = ('-option[:]|@action','docs','alias1','alias2','alias...')",
+        "",
+        "    Options-Demo:",
+        "        options = (",
+        "           ('--help', 'print help document', '-h')",
+        "           ('@checkout', 'checkout repo', 'co')",
+        "        )",
+        "        a = ArgLoader(options=options)"
+        "        if a.options['--help']:"
+        "           print a"
+    )
 
-    application = tornado.web.Application([
-        (r"/", MainHandler),
-    ])
+    a = ArgLoader(options=options)
 
-    if __name__ == "__main__":
-        application.listen(8888)
-        tornado.ioloop.IOLoop.instance().start()
+    print "****This is used for document****"
+    print a
+    #
+    print "****This is used for debug****"
+    print repr(a)
 
-This example does not use any of Tornado's asynchronous features; for
-that see this `simple chat room
-<https://github.com/tornadoweb/tornado/tree/stable/demos/chat>`_.
+
 
 Installation
 ------------
@@ -53,20 +67,20 @@ can be installed with ``pip`` or ``easy_install``.
 it includes demo applications.
 
 
-**Manual installation**: Download the latest source from `PyPI
-<http://pypi.python.org/pypi/tornado/>`_.
+**Manual installation**: Download the latest source from `Github
+<http://www.github.com/kbonez/cliez/>`_.
 
 .. parsed-literal::
 
-    tar xvzf tornado-$VERSION.tar.gz
+    git clone
     cd tornado-$VERSION
     python setup.py build
     sudo python setup.py install
 
-The Tornado source code is `hosted on GitHub
+The Cliez source code is `hosted on GitHub
 <https://github.com/tornadoweb/tornado>`_.
 
-**Prerequisites**: Cliez test on Python 2.7.  It shoule be runs on
+**Prerequisites**: Cliez test on Python 2.7.  It should be runs on
 all Python versions.
 
 
