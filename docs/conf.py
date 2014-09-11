@@ -52,7 +52,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Cliez'
-copyright = u'2014, Breeze.Kay'
+copyright = u'2014, WANG WENPEI'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -205,7 +205,7 @@ latex_elements = {
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
   ('index', 'Cliez.tex', u'Cliez Documentation',
-   u'Breeze.Kay', 'manual'),
+   u'WANG WENPEI', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -235,7 +235,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'cliez', u'Cliez Documentation',
-     [u'Breeze.Kay'], 1)
+     [u'WANG WENPEI'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -249,7 +249,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'Cliez', u'Cliez Documentation',
-   u'Breeze.Kay', 'Cliez', 'One line description of project.',
+   u'WANG WENPEI', 'Cliez', 'One line description of project.',
    'Miscellaneous'),
 ]
 
