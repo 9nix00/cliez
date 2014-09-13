@@ -4,10 +4,6 @@ Cliez
 `Cliez <http://cliez.kbonez.com>`_ is a Python library for CLI environment
 
 
-Upgrade notes
--------------
-
-As of Cliez 0.9, we change  ``--sleep_max`` option to ``--sleep-max``.
 
 Quick links
 -----------
