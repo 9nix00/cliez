@@ -1,15 +1,16 @@
-from setuptools import setup,find_packages
+from setuptools import setup, find_packages
 
+import cliez
 
 setup(
     name='cliez',
-    version='0.9.2',
+    version=cliez.version,
     packages=['cliez'],
-    url='https://github.com/kbonez/cliez',
-    download_url = 'https://github.com/kbonez/cliez/tarball/master',
+    url='https://github.com/nextoa/cliez',
+    download_url='https://github.com/nextoa/cliez/tarball/master',
     license='http://opensource.org/licenses/MIT',
     author='WANG WENPEI',
-    author_email='wangwenpei@kbonez.com',
-    description='libs for develop cli program',
-    keywords='cli,ez'
+    author_email='wangwenpei@nextoa.com',
+    description='Parser for command-line options,easier but limited than sys.argparse',
+    keywords='cli'
 )
