@@ -3,7 +3,7 @@ from setuptools import setup,find_packages
 
 setup(
     name='cliez',
-    version='0.9.0',
+    version='0.9.2',
     packages=['cliez'],
     url='https://github.com/kbonez/cliez',
     download_url = 'https://github.com/kbonez/cliez/tarball/master',

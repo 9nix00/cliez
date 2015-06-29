@@ -1,9 +1,6 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-
-
-import sys, os
+import sys
+import os
 
 
 class Error(object):
@@ -12,6 +9,36 @@ class Error(object):
 
 class ArgLoader(object):
     def __init__(self, options=tuple(), sys_argv=None, docs=NotImplemented):
+        """Parse arguments from options argument.
+
+        :param options: user defined options.something like this
+
+        .. code-block:: python
+
+            options = (
+                "Useage  COMMAND [options]  arguments",
+                "",
+                "document line1",
+                "document line2",
+                "",  # blank line
+                "Options:",
+                ("--opt1", "comment for opt", '-a'),
+                ("--opt2:", "comment for opt", '-b'),
+                "Actions",
+                ("@hello", "call hello"),
+                "",
+                ("--help", "print help document", '-h'),
+                ("--debug", "debug mode"),
+            )
+
+
+        :param sys_argv: argv input,use :py:obj:`sys.argv` if not set
+        :param docs: [plan] show a complex document by user defined instead print options
+
+        .. note::
+           `ArgLoader` will save value into: `self.actions`,`self.options` and `self.argv`.
+           the value of self.argv and self.options with arguments will be treat as `str`
+        """
 
         self.parseArgs(options)
         sys_argv = sys_argv if sys_argv is not None else sys.argv
@@ -45,17 +72,20 @@ class ArgLoader(object):
                 else:
                     self.setAction(k, v)
 
-        self.argv = filter(lambda x: x is not False, self.argv)
-
+        if sys.version_info[0] == 2:
+            self.argv = filter(lambda x: x is not False, self.argv)
+        else:
+            self.argv = list(filter(lambda x: x is not False, self.argv))
 
     def error(self, a, value):
         if value == Error.required:
-            print "Error:`", a, "' Require value"
+            print("Error:`", a, "' Require value")
             os._exit(1)
 
     def setOpt(self, k, _opt, sys_argv, delete=True):
         # process alias  first
         _refer = _opt
+
         if _opt in self.alias:
             _opt = self.alias[_opt]
 
@@ -82,7 +112,6 @@ class ArgLoader(object):
                 if delete:
                     self.argv[k] = False
 
-
     def setAction(self, k, _opt):
         if _opt in self.alias:
             _opt = self.alias[_opt]
@@ -90,7 +119,6 @@ class ArgLoader(object):
         if _opt in self.actions:
             self.actions[_opt] = True
             self.argv[k] = False
-
 
     def __repr__(self):
         return "Action List:\n {}\nOptions List:\n {}\nArguemnts List:\n {}\nAlias List:\n {}\nRequired List:\n {}\n".format(
@@ -100,10 +128,8 @@ class ArgLoader(object):
             self.alias, \
             self.required)
 
-
     def __str__(self):
         return "\n" + self.__doc__
-
 
     def parseArgs(self, options):
         # parse argument and document
@@ -135,7 +161,6 @@ class ArgLoader(object):
 
                 # vv: --option1[:],document,--alias1,--alias2...
 
-
                 for kk, vv in enumerate(v):
                     if kk == 0:
                         continue
@@ -156,8 +181,6 @@ class ArgLoader(object):
                 _max_space_size = len(_msg) if len(_msg) > _max_space_size else _max_space_size
 
                 docs += " " * 4 + _msg + _space + _doc
-
-
 
                 # push message
                 if _opt:
@@ -183,8 +206,6 @@ class ArgLoader(object):
 
         pass
 
-
-
         # for beautiful helper
         self.__doc__ = ''
         _origin_docs = docs.split("\n")
@@ -198,34 +219,3 @@ class ArgLoader(object):
                 self.__doc__ += line
 
             self.__doc__ += "\n"
-
-
-if __name__ == "__main__":
-    options = (
-        "Useage: cliez.ArgLoader Example",
-        "",
-        "Options",
-        ('--help', 'print help document.', '-h'),
-        "",
-        "HOW-TO:",
-        "    Format:",
-        "        options = (argument-list)",
-        "        argument-list = ('-option[:]|@action','docs','alias1','alias2','alias...')",
-        "",
-        "    Options-Demo:",
-        "        options = (",
-        "           ('--help', 'print help document', '-h')",
-        "           ('@checkout', 'checkout repo', 'co')",
-        "        )",
-        "        a = ArgLoader(options=options)"
-        "        if a.options['--help']:"
-        "           print a"
-    )
-
-    a = ArgLoader(options=options)
-
-    print "****This is used for document****"
-    print a
-    #
-    print "****This is used for debug****"
-    print repr(a)
