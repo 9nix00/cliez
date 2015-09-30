@@ -1,7 +1,7 @@
 Cliez
 ==================
 
-`Cliez <http://cliez.kbonez.com>`_ Parser for command-line options,easier but limited than :py:class:`sys.argparse`
+Cliez is a Parser for command-line options,easier but limited than :py:class:`sys.argparse`
 
 
 Quick links

@@ -32,13 +32,12 @@ class NormalTest(TestCase):
         pass
 
     def test_actions(self):
-
         a = ArgLoader(self.useage, ['COMMAND', 'hello', '1', '-b', '10'])
 
         self.assertEqual(True, a.actions['hello'])
         self.assertEqual('10', a.options['--opt2'])
         self.assertEqual('1', a.argv[1])
-
+        self.assertEqual(str, type(a.argv[1]))
         pass
 
     def test_args(self):
