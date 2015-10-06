@@ -41,6 +41,23 @@ class NormalTest(TestCase):
         pass
 
     def test_args(self):
+        a = ArgLoader(self.useage, ['COMMAND', 'arg'])
+        self.assertEqual('arg', a.argv[1])
+        pass
+
+    def test_parent(self):
+        a = ArgLoader(self.useage, ['COMMAND', 'hello', '1', '-b', '10', '-c', '-d', '10'])
+
+        useage = (
+            ("--opt3", "comment for opt", '-c'),
+            ("--opt4:", "comment for opt", '-d')
+        )
+
+        b = ArgLoader(options=useage, sys_argv=a.argv)
+        self.assertEqual('10', b.options['--opt4'])
+
+        print(a)
+
         pass
 
     pass
