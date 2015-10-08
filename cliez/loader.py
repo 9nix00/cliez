@@ -40,7 +40,7 @@ class ArgLoader(object):
            the value of self.argv and self.options with arguments will be treat as `str`
         """
 
-        self.parseArgs(options)
+        self.parse_args(options)
         sys_argv = sys_argv if sys_argv is not None else sys.argv
 
         self.argv = sys_argv[:]
@@ -55,22 +55,22 @@ class ArgLoader(object):
                 continue
             else:
                 if v[0:2] == '--':
-                    self.setOpt(k, v, sys_argv)
+                    self.set_option(k, v, sys_argv)
                 elif v[0:1] == '-':
                     i = 1
                     try:
                         while i < len(v):
                             if i == len(v) - 1:
-                                self.setOpt(k, '-' + v[i], sys_argv)
+                                self.set_option(k, '-' + v[i], sys_argv)
                             else:
-                                self.setOpt(k, '-' + v[i], sys_argv, delete=False)
+                                self.set_option(k, '-' + v[i], sys_argv, delete=False)
                             i += 1
                     except:
                         # argument `-' will ignore
                         pass
 
                 else:
-                    self.setAction(k, v)
+                    self.set_action(k, v)
 
         if sys.version_info[0] == 2:
             self.argv = filter(lambda x: x is not False, self.argv)
@@ -82,7 +82,7 @@ class ArgLoader(object):
             print("Error:`", a, "' Require value")
             os._exit(1)
 
-    def setOpt(self, k, _opt, sys_argv, delete=True):
+    def set_option(self, k, _opt, sys_argv, delete=True):
         # process alias  first
         _refer = _opt
 
@@ -112,7 +112,7 @@ class ArgLoader(object):
                 if delete:
                     self.argv[k] = False
 
-    def setAction(self, k, _opt):
+    def set_action(self, k, _opt):
         if _opt in self.alias:
             _opt = self.alias[_opt]
 
@@ -131,7 +131,7 @@ class ArgLoader(object):
     def __str__(self):
         return "\n" + self.__doc__
 
-    def parseArgs(self, options):
+    def parse_args(self, options):
         # parse argument and document
         self.options = {}
         self.alias = {}
@@ -171,7 +171,7 @@ class ArgLoader(object):
 
                 _alias_str = ','.join(_alias)
 
-                _required_msg = " *" if _required else ""
+                _required_msg = " <arg>" if _required else ""
                 _msg = _actions if _actions else _opt
                 if _alias_str:
                     _msg += "," + _alias_str + _required_msg
