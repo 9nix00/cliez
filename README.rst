@@ -51,9 +51,8 @@ Demo
 
 I create demo for easier use this
 
-`Simple Style <>`_
-`Argparse Style <>`_
-
+`Simple Style <https://github.com/9nix00/cliez/blob/master/demo/simple_demo/simple.py>`_
+`Argparse Style <https://github.com/9nix00/cliez/blob/master/demo/argparse_demo/argparse_pkg/main.py>`_
 
 
 
