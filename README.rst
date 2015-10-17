@@ -1,30 +1,36 @@
 Cliez
 ==================
 
-Cliez is a Parser for command-line options,easier but limited than :py:class:`sys.argparse`
+make CLI-App easier.
 
 
 Quick links
 -----------
 
 * `Documentation <http://cliez.readthedocs.org/>`_
-* `Source (github) <https://github.com/nextoa/cliez>`_
-
+* `Source (github) <https://github.com/9nix00/cliez>`_
 
 Why Cliez
 ------------------------------------------------------------------------------------------------
 
-python :py:class:`sys.argparse` is powerful,but it's a little complex in most case when we create a small CLI-APP.
+python `argparser <https://docs.python.org/3/library/argparse.html>`_ is powerful,
+but it's a little complex in most case when we create a small CLI-APP,like `ls`.
 we just need recognize which param is option,action or just a argv parameter. and can publish with a simple manual.
 
-the below command syntax is support:
 
-.. code-block:: shell
+In other case. when we need to create complex CLI-App. like `git`,
+use `argparser` is a good way,but we still need to write some code by ourselves.
+for new python guy. you may make your code style looks ugly.
 
-    git clone URL
 
-    curl -d OPTION ARGV
+that's why I create cliez. make simple is simple. complex is elegant.
 
+
+
+Limit
+------------------------------------------------------------------------------------------------
+
+For simple style.
 
 the below syntax is not support:
 
@@ -35,46 +41,18 @@ the below syntax is not support:
     command --a=1 --a=2
 
 
+For argparse style.
 
-A Demo
+currently, argparse mode doesn't support installed package. I will add this feature in my spare time.
+
+
+Demo
 ------------
 
-Here is a simple "How to use" example for Cliez
+I create demo for easier use this
 
-.. code-block:: python
-
-    from cliez.loader import ArgLoader
-
-    useage = (
-        "Useage  COMMAND [options]  arguments",
-        "",
-        "document line1",
-        "document line2",
-        "",  # blank line
-        "Options:",
-        ("--opt1", "comment for opt", '-a'),
-        ("--opt2:", "comment for opt", '-b'),
-        "Actions",
-        ("@hello", "call hello"),
-        "",
-        ("--help", "print help document", '-h'),
-        ("--debug", "debug mode"),
-    )
-
-
-    a = ArgLoader(options=options)
-
-    print "****This is used for document****"
-    print(a)
-    #
-    print("****This is used for debug****")
-    print(repr(a))
-
-    print(a.options,a.actions,a.argv)
-
-
-
-
+`Simple Style <>`_
+`Argparse Style <>`_
 
 
 
@@ -92,19 +70,19 @@ it includes demo applications.
 
 
 **Manual installation**: Download the latest source from `Github
-<http://www.github.com/nextoa/cliez/>`_.
+<http://www.github.com/9nix00/cliez/>`_.
 
 .. parsed-literal::
 
-    git clone  https://github.com/nextoa/cliez.git
+    git clone  https://github.com/9nix00/cliez.git
     cd cliez
     python setup.py build
     sudo python setup.py install
 
 The Cliez source code is `hosted on GitHub
-<https://github.com/nextoa/cliez/>`_.
+<https://github.com/9nix00/cliez/>`_.
 
-**Prerequisites**: Cliez was only test on Python 2.7.  It may be runs on
+**Prerequisites**: Cliez was only test on Python 3.4.  But it should be runs on
 all Python versions.
 
 
@@ -112,8 +90,7 @@ Discussion and support
 ----------------------
 
 You can discuss and report bugs on
-the `GitHub issue tracker
-<https://github.com/nextoa/cliez/issues>`_.
+the `GitHub issue tracker <https://github.com/9nix00/cliez/issues>`_.
 
 
 This web site and all documentation is licensed under `Creative Commons 3.0 <http://creativecommons.org/licenses/by/3.0/>`_.
