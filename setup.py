@@ -1,11 +1,11 @@
-from setuptools import setup
+from distutils.core import setup
 
 import cliez
 
 setup(
     name='cliez',
     version=cliez.version,
-    packages=['cliez'],
+    packages=['cliez','cliez.base'],
     url='https://github.com/9nix00/cliez',
     download_url='https://github.com/9nix00/cliez/tarball/master',
     license='http://opensource.org/licenses/MIT',
