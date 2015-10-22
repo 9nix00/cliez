@@ -2,7 +2,7 @@
 
 import pkg_resources
 import os
-
+import sys
 
 class Component(object):
     def __init__(self, parser=None):
@@ -17,6 +17,25 @@ class Component(object):
         :return:
         """
         return self.parser._print_message(message, file)
+
+    def print_loading(self, wait, message):
+        """
+        print loading message,this only display in stdout
+        :param wait:
+        :param message:
+        :return:
+        """
+        tags = ['\\', '|', '/', '-']
+
+        for i in range(wait):
+            time.sleep(0.25)
+            sys.stdout.write("{}... {}\r".format(message, tags[i % 4]))
+            sys.stdout.flush()
+            pass
+
+        sys.stdout.write("{}... Done...\n".format(message))
+        sys.stdout.flush()
+        pass
 
     def error(self, message):
         """

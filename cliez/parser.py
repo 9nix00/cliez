@@ -49,7 +49,8 @@ def parse(parser, argv=sys.argv):
     else:
         sub_parsers = parser.add_subparsers()
         class_name = argv[1].capitalize() + 'Component'
-        mod = importlib.import_module('component.{}'.format(argv[1]), package=os.path.basename(PACKAGE_ROOT))
+        sys.path.append(os.path.dirname(PACKAGE_ROOT))
+        mod = importlib.import_module('{}.component.{}'.format(os.path.basename(PACKAGE_ROOT), argv[1]))
         klass = getattr(mod, class_name)
         klass.append_arguments(sub_parsers)
         pass
