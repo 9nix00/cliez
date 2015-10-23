@@ -31,6 +31,7 @@ def parse(parser, argv=sys.argv, settings_module=None):
 
     from cliez.conf import PACKAGE_ROOT
     commands = command_list(PACKAGE_ROOT)
+    settings = None if not settings_module else Settings.bind(settings_module)
 
     # skip load all component to improve performance
     if not argv:
@@ -56,7 +57,7 @@ def parse(parser, argv=sys.argv, settings_module=None):
         klass.append_arguments(sub_parsers)
         pass
     options = parser.parse_args(argv[1:])
-    obj = klass(parser, settings=None if not settings_module else Settings.bind(settings_module))
+    obj = klass(parser, settings=settings)
     obj.run(options)
 
     # easier to create unittest case
