@@ -5,6 +5,14 @@ import importlib
 PACKAGE_ROOT = None
 
 
+def settings():
+    """
+    a wrapper for Settings._wrapped
+    :return:
+    """
+    return Settings._wrapped
+
+
 class Settings(object):
     _path = None
     _wrapped = None
