@@ -26,9 +26,14 @@ class NormalTest(TestCase):
             pass
         pass
 
-    # def test_ok(self):
-    #     sys.path.append(conf.PACKAGE_ROOT)
-    #     parser.parse(self.parser, argv=['command', 'init'])
-    #     pass
+    def test_ok(self):
+        parser.parse(self.parser, argv=['command', 'init'])
+        pass
+
+    def test_ok_with_config(self):
+        from cliez.conf import Settings
+        obj = parser.parse(self.parser, argv=['command', 'init'], settings_module='cliez.loader')
+        self.assertEqual(True, isinstance(obj.settings, Settings))
+        pass
 
     pass

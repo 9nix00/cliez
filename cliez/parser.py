@@ -3,6 +3,7 @@
 import sys
 import os
 import importlib
+from cliez.conf import Settings
 
 
 def command_list(root):
@@ -20,7 +21,7 @@ def command_list(root):
     return [f[:-3] for f in path if f.endswith('.py') and f != '__init__.py']
 
 
-def parse(parser, argv=sys.argv):
+def parse(parser, argv=sys.argv, settings_module=None):
     """
     ...todo::
         support pkg_resources
@@ -55,6 +56,8 @@ def parse(parser, argv=sys.argv):
         klass.append_arguments(sub_parsers)
         pass
     options = parser.parse_args(argv[1:])
-    obj = klass(parser)
+    obj = klass(parser, settings=None if not settings_module else Settings.bind(settings_module))
     obj.run(options)
-    pass
+
+    # easier to create unittest case
+    return obj

@@ -1,4 +1,4 @@
 # -*- coding: utf-8 -*-
 
-version = "1.2"
-version_info = (1, 2, 0)
+version = "1.3"
+version_info = (1, 3, 0)

@@ -4,9 +4,11 @@ import pkg_resources
 import os
 import sys
 
+
 class Component(object):
-    def __init__(self, parser=None):
+    def __init__(self, parser=None, settings=None, *args, **kwargs):
         self.parser = parser
+        self.settings = settings
         pass
 
     def print_message(self, message, file=None):
