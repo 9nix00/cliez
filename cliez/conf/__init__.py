@@ -17,9 +17,6 @@ class Settings(object):
         except ImportError:
             raise
 
-        Settings._path = mod_path
-        Settings._wrapped = mod
-
         settings = Settings()
 
         for v in dir(mod):
@@ -27,6 +24,9 @@ class Settings(object):
                 continue
             setattr(settings, v, getattr(mod, v))
             pass
+
+        Settings._path = mod_path
+        Settings._wrapped = settings
 
         return settings
 
