@@ -4,6 +4,8 @@ import pkg_resources
 import os
 import sys
 
+import termcolor
+
 
 class Component(object):
     def __init__(self, parser=None, settings=None, *args, **kwargs):
@@ -37,6 +39,17 @@ class Component(object):
 
         sys.stdout.write("{}... Done...\n".format(message))
         sys.stdout.flush()
+        pass
+
+    def warn(self, message, file=None, prefix="[warn]:", suffix="..."):
+
+        msg = prefix + message + suffix
+
+        if file is sys.stdout:
+            termcolor.cprint(msg, color="yellow")
+        else:
+            print(msg)
+
         pass
 
     def error(self, message):

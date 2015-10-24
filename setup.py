@@ -5,6 +5,7 @@ import cliez
 setup(
     name='cliez',
     version=cliez.version,
+    install_requires=['termcolor'],
     packages=['cliez', 'cliez.base', 'cliez.conf'],
     url='https://github.com/9nix00/cliez',
     download_url='https://github.com/9nix00/cliez/tarball/master',
