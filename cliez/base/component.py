@@ -5,10 +5,21 @@ import os
 import sys
 
 import termcolor
+import time
 
 
 class Component(object):
+
     def __init__(self, parser=None, settings=None, *args, **kwargs):
+        """
+        component base class
+        :param parser:
+        :param settings:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+
         self.parser = parser
         self.settings = settings
         pass
@@ -20,7 +31,7 @@ class Component(object):
         :param file:
         :return:
         """
-        return self.parser._print_message(message, file)
+        return self.parser._print_message(message+"\n", file)
 
     def print_loading(self, wait, message):
         """
