@@ -2,8 +2,6 @@
 
 import importlib
 
-PACKAGE_ROOT = None
-
 
 def settings():
     """
