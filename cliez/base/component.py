@@ -147,7 +147,11 @@ class Component(object):
         try:
             buf = open(os.path.join(root, path)).read()
         except (IOError, FileNotFoundError):
-            full_path = root + path
+            if root:
+                full_path = root + '/' + path.strip('/')
+            else:
+                full_path = path
+
             pkg, path = full_path.split('/', 1)
             buf = pkg_resources.resource_string(pkg, path)
         return buf
