@@ -57,7 +57,7 @@ def parse(parser, argv=sys.argv, settings_module=None):
         klass.append_arguments(sub_parsers)
         pass
     options = parser.parse_args(argv[1:])
-    obj = klass(parser, settings=settings)
+    obj = klass(parser, options=options, settings=settings)
     obj.run(options)
 
     # easier to create unittest case

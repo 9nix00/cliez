@@ -9,8 +9,7 @@ import time
 
 
 class Component(object):
-
-    def __init__(self, parser=None, settings=None, *args, **kwargs):
+    def __init__(self, parser=None, options=None, settings=None, *args, **kwargs):
         """
         component base class
         :param parser:
@@ -31,7 +30,7 @@ class Component(object):
         :param file:
         :return:
         """
-        return self.parser._print_message(message+"\n", file)
+        return self.parser._print_message(message + "\n", file)
 
     def print_loading(self, wait, message):
         """
