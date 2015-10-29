@@ -9,7 +9,7 @@ Cliez 中文文档
 
 * `Documentation <http://cliez.readthedocs.org/>`_
 * `Source (github) <https://github.com/9nix00/cliez>`_
-* `Chinese Documentation (github) <https://github.com/9nix00/cliez/tree/master/docs/i18n/zh_cn>`_
+* `Chinese Documentation <http://cliez.readthedocs.org/en/latest/i18n/zh_cn/>`_
 
 
 为什么使用Cliez
