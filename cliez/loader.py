@@ -8,7 +8,7 @@ class Error(object):
 
 
 class ArgLoader(object):
-    def __init__(self, options=tuple(), sys_argv=None, docs=NotImplemented):
+    def __init__(self, options=tuple(), sys_argv=None):
         """Parse arguments from options argument.
 
         :param options: user defined options.something like this
@@ -32,12 +32,13 @@ class ArgLoader(object):
             )
 
 
-        :param sys_argv: argv input,use :py:obj:`sys.argv` if not set
-        :param docs: [plan] show a complex document by user defined instead print options
-
         .. note::
            `ArgLoader` will save value into: `self.actions`,`self.options` and `self.argv`.
            the value of self.argv and self.options with arguments will be treat as `str`
+
+
+        :param sys_argv: argv input,use :py:obj:`sys.argv` if not set
+        :type sys_argv: `list`
         """
 
         self.parse_args(options)
