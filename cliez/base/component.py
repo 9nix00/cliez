@@ -9,9 +9,14 @@ import time
 
 
 class Component(object):
+    """
+    Base Component
+    """
+
     def __init__(self, parser=None, options=None, settings=None, *args, **kwargs):
         """
         component base class
+
         :param parser:
         :param settings:
         :param args:
@@ -25,7 +30,7 @@ class Component(object):
 
     def print_message(self, message, file=None):
         """
-        a wrapper for `argparse.ArgumentParser._print_message()`
+        simple output
         :param message:
         :param file:
         :return:
@@ -64,28 +69,31 @@ class Component(object):
 
     def error(self, message):
         """
-        a wrapper for `argparse.ArgumentParser._print_message()`
+
         :param message:
         :return:
         """
         return self.parser.error(message)
 
     @staticmethod
-    def load_resource(path, root=None):
+    def load_resource(path, root=''):
         """
-        load resouces file
+        load resources file.
+        this is useful when we need to load files from package.
+        the below code can get same result
+
+
         :param path:
         :param root:
         :return:
         """
-        from cliez import conf
 
-        root = root or conf.PACKAGE_ROOT
-        # root = root or __file__.rsplit('/', 2)[0]
         try:
             buf = open(os.path.join(root, path)).read()
-        except IOError:
-            buf = pkg_resources.resource_string(os.path.dirname(root), path)
+        except (IOError, FileNotFoundError):
+            full_path = root + path
+            pkg, path = full_path.split('/', 1)
+            buf = pkg_resources.resource_string(pkg, path)
         return buf
 
     @staticmethod

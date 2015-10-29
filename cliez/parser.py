@@ -21,13 +21,17 @@ def command_list(root):
     return [f[:-3] for f in path if f.endswith('.py') and f != '__init__.py']
 
 
-def parse(parser, argv=sys.argv, settings_module=None):
+def parse(parser, argv=None, settings_module=None):
     """
-    ...todo::
-        support pkg_resources
+    parser cliez app
 
+    :param parser:
+    :param argv:
+    :param settings_module:
     :return:
     """
+
+    argv = argv or sys.argv
 
     from cliez.conf import PACKAGE_ROOT
     commands = command_list(PACKAGE_ROOT)
