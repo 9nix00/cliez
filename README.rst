@@ -9,7 +9,7 @@ Quick links
 
 * `Documentation <http://cliez.readthedocs.org/>`_
 * `Source (github) <https://github.com/9nix00/cliez>`_
-* `Chinese Document(github) <https://cliez.readthedocs.org/i18n/zh_cn/README.rst>`_
+* `Chinese Documentation(github) <https://github.com/9nix00/cliez/tree/master/docs/i18n/zh_cn>`_
 
 
 Why Cliez

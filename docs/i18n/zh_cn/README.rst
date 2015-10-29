@@ -9,7 +9,7 @@ Cliez 中文文档
 
 * `Documentation <http://cliez.readthedocs.org/>`_
 * `Source (github) <https://github.com/9nix00/cliez>`_
-* `Chinese Document <https://cliez.readthedocs.org/i18n/zh_cn/README.rst>`_
+* `Chinese Documentation(github) <https://github.com/9nix00/cliez/tree/master/docs/i18n/zh_cn>`_
 
 
 为什么使用Cliez
@@ -93,7 +93,7 @@ the `GitHub issue tracker <https://github.com/9nix00/cliez/issues>`_.
 贡献代码
 -----------
 
-目前为了提高开发速度,决定允许中文注释以及提交中文commit,但是在代码中的任何输出,必须使用英文.
+目前为了提高开发速度,决定允许中文注释以及提交中文commit(真相是其实我的英文水平实在不怎么滴),但是在代码中的任何输出,必须使用英文.
 
 
 Copyright
