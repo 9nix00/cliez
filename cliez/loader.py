@@ -33,7 +33,7 @@ class ArgLoader(object):
 
 
         .. note::
-           `ArgLoader` will save value into: `self.actions`,`self.options` and `self.argv`.
+           `ArgLoader` will save value into: `self.actions`, `self.options` and `self.argv`.
            the value of self.argv and self.options with arguments will be treat as `str`
 
 
@@ -79,11 +79,38 @@ class ArgLoader(object):
             self.argv = list(filter(lambda x: x is not False, self.argv))
 
     def error(self, a, value):
+        """
+        print requirement error and exit
+
+        otherwise exit directly.
+
+
+        :param a: `ArgLoader` object
+        :param value: `int` error value
+        :return: None
+        """
+
         if value == Error.required:
             print("Error:`", a, "' Require value")
-            os._exit(1)
+
+        sys.exit(1)
 
     def set_option(self, k, _opt, sys_argv, delete=True):
+        """
+        rebuild `self.options` and `self.argv`
+
+        .. note::
+
+            this is an inner method. don't use it directly
+
+
+        :param k:
+        :param _opt:
+        :param sys_argv:
+        :param delete:
+        :return:
+        """
+
         # process alias  first
         _refer = _opt
 
@@ -114,6 +141,19 @@ class ArgLoader(object):
                     self.argv[k] = False
 
     def set_action(self, k, _opt):
+        """
+        rebuild `self.action` and `self.argv`
+
+        .. note::
+
+            this is an inner method. don't use it directly
+
+
+        :param k:
+        :param _opt:
+        :return:
+        """
+
         if _opt in self.alias:
             _opt = self.alias[_opt]
 
@@ -122,6 +162,20 @@ class ArgLoader(object):
             self.argv[k] = False
 
     def __repr__(self):
+        """
+        print current data.
+        you can use
+        .. code-block:: python
+
+            repr(argloader_object)
+
+        get current data
+
+
+        :return: None
+        """
+
+
         return "Action List:\n {}\nOptions List:\n {}\nArguemnts List:\n {}\nAlias List:\n {}\nRequired List:\n {}\n".format(
             self.actions, \
             self.options, \
@@ -130,9 +184,37 @@ class ArgLoader(object):
             self.required)
 
     def __str__(self):
+        """
+        use below code can output document
+        .. code-block:: python
+
+            print(argloader_object)
+
+
+
+        :return: None
+        """
+
+
         return "\n" + self.__doc__
 
     def parse_args(self, options):
+        """
+
+        parse arguments
+
+
+        .. note::
+
+            this is an inner method. don't use it directly
+
+
+
+        :param options: user define useage. please see `__init__` demo
+        :return:None
+        """
+
+
         # parse argument and document
         self.options = {}
         self.alias = {}
