@@ -6,14 +6,23 @@ import importlib
 from cliez.conf import Settings
 
 
-def command_list(root):
+def command_list():
+    """
+    根据 `cliez.COMPONENT_ROOT` 查找所支持的完整 sub-parser 列表
+
+    :return: `list` 当前支持的组件列表
+    """
+    from cliez import COMPONENT_ROOT
+
+    root = COMPONENT_ROOT
+
     if root is None:
-        sys.stderr.write("cliez.conf.PACKAGE_ROOT not set.\n")
+        sys.stderr.write("cliez.COMPONENT_ROOT not set.\n")
         sys.exit(2)
         pass
 
     if not os.path.exists(root):
-        sys.stderr.write("please set a valid path for `cliez.conf.PACKAGE_ROOT`\n")
+        sys.stderr.write("please set a valid path for `cliez.COMPONENT_ROOT`\n")
         sys.exit(2)
         pass
 
@@ -25,16 +34,20 @@ def parse(parser, argv=None, settings_module=None):
     """
     parser cliez app
 
-    :param parser:
-    :param argv:
-    :param settings_module:
-    :return:
+    :param parser: 用户预定义的 parser
+    :type parser:  `argparse.ArgumentParser`
+    :param argv: 如果用户不指定,默认为 `sys.argv`
+    :type argv: `list` or `tuple`
+    :param settings_module: 模块名称, 指定后会将该模块中的变量绑定至全局 `cliez.conf.Settings`
+    :type settings_module: `str`
+    :return: `Component` 实际调用的组件,
+                *返回组件在运行中并没有太大意义,但是在做测试用例时,返回组件可以大大简化撰写测试用例的难度*
+
+
     """
 
     argv = argv or sys.argv
-
-    from cliez.conf import PACKAGE_ROOT
-    commands = command_list(PACKAGE_ROOT)
+    commands = command_list()
     settings = None if not settings_module else Settings.bind(settings_module)
 
     # skip load all component to improve performance
@@ -55,8 +68,9 @@ def parse(parser, argv=None, settings_module=None):
     else:
         sub_parsers = parser.add_subparsers()
         class_name = argv[1].capitalize() + 'Component'
-        sys.path.append(os.path.dirname(PACKAGE_ROOT))
-        mod = importlib.import_module('{}.component.{}'.format(os.path.basename(PACKAGE_ROOT), argv[1]))
+        from cliez import COMPONENT_ROOT
+        sys.path.insert(0, COMPONENT_ROOT)
+        mod = importlib.import_module('{}.component.{}'.format(os.path.basename(COMPONENT_ROOT), argv[1]))
         klass = getattr(mod, class_name)
         klass.append_arguments(sub_parsers)
         pass
