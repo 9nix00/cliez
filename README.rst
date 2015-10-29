@@ -1,7 +1,7 @@
 Cliez
 ==================
 
-make CLI-App easier.
+A Cli App framework to make CLI-App easier.
 
 
 Quick links
@@ -9,6 +9,8 @@ Quick links
 
 * `Documentation <http://cliez.readthedocs.org/>`_
 * `Source (github) <https://github.com/9nix00/cliez>`_
+* `Chinese Document(github) <https://cliez.readthedocs.org/i18n/zh_cn/README.rst>`_
+
 
 Why Cliez
 ------------------------------------------------------------------------------------------------
@@ -94,5 +96,15 @@ Discussion and support
 You can discuss and report bugs on
 the `GitHub issue tracker <https://github.com/9nix00/cliez/issues>`_.
 
+
+Contribute Code
+----------------------
+
+In order to obtain a faster development speed, now we accept Chinese comments.
+but the display tips in code *must* be english.
+
+
+Copyright
+-----------
 
 This web site and all documentation is licensed under `Creative Commons 3.0 <http://creativecommons.org/licenses/by/3.0/>`_.
