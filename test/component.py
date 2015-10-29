@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import unittest
-from cliez.conf import settings, Settings
 from cliez.base.component import Component
 
 

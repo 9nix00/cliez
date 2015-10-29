@@ -9,7 +9,7 @@ Cliez 中文文档
 
 * `Documentation <http://cliez.readthedocs.org/>`_
 * `Source (github) <https://github.com/9nix00/cliez>`_
-* `Chinese Documentation(github) <https://github.com/9nix00/cliez/tree/master/docs/i18n/zh_cn>`_
+* `Chinese Documentation (github) <https://github.com/9nix00/cliez/tree/master/docs/i18n/zh_cn>`_
 
 
 为什么使用Cliez
@@ -18,7 +18,7 @@ Cliez 中文文档
 python `argparser <https://docs.python.org/3/library/argparse.html>`_ 是一个非常方便的工具.
 但是在我们撰写CLI程序时,使用argparser有很明显的两个问题:
 
-- 如果我们的程序功能非常简单,用argparser其实是比较麻烦的.比如`ls`,在大多数情况下,我们只是需要一个帮助手册,能够解析参数,功能上足够了.
+- 如果我们的程序功能非常简单,用argparser其实是比较麻烦的.比如 `ls`,在大多数情况下,我们只是需要一个帮助手册,能够解析参数,功能上足够了.
 
 - 当我们在构造比较庞大的CLI-App程序时,argparser由于并不涉及到框架的层面,所以很多程序员特别是新手会把代码写的非常糟糕,只完成了功能,保证不了后续的可维护性.
 
@@ -31,13 +31,12 @@ python `argparser <https://docs.python.org/3/library/argparse.html>`_ 是一个�
 Demo
 ------------
 
-这里有两份Demo,供开发人员快速上手
 
+.. toctree::
 
-`简单模式 <https://github.com/9nix00/cliez/blob/master/demo/simple_demo/simple.py>`_
+   demo/simple.rst
+   demo/complex.rst
 
-
-`ArgParser模式 <https://github.com/9nix00/cliez/blob/master/demo/argparse_demo/argparse_pkg/main.py>`_
 
 
 

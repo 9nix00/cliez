@@ -12,17 +12,17 @@ def command_list():
 
     :return: `list` 当前支持的组件列表
     """
-    from cliez import COMPONENT_ROOT
+    from cliez.conf import COMPONENT_ROOT
 
     root = COMPONENT_ROOT
 
     if root is None:
-        sys.stderr.write("cliez.COMPONENT_ROOT not set.\n")
+        sys.stderr.write("cliez.conf.COMPONENT_ROOT not set.\n")
         sys.exit(2)
         pass
 
     if not os.path.exists(root):
-        sys.stderr.write("please set a valid path for `cliez.COMPONENT_ROOT`\n")
+        sys.stderr.write("please set a valid path for `cliez.conf.COMPONENT_ROOT`\n")
         sys.exit(2)
         pass
 
@@ -68,8 +68,8 @@ def parse(parser, argv=None, settings_module=None):
     else:
         sub_parsers = parser.add_subparsers()
         class_name = argv[1].capitalize() + 'Component'
-        from cliez import COMPONENT_ROOT
-        sys.path.insert(0, COMPONENT_ROOT)
+        from cliez.conf import COMPONENT_ROOT
+        sys.path.insert(0, os.path.dirname(COMPONENT_ROOT))
         mod = importlib.import_module('{}.component.{}'.format(os.path.basename(COMPONENT_ROOT), argv[1]))
         klass = getattr(mod, class_name)
         klass.append_arguments(sub_parsers)

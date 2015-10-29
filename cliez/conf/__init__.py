@@ -2,6 +2,8 @@
 
 import importlib
 
+COMPONENT_ROOT = None
+
 
 def settings():
     """
@@ -44,7 +46,6 @@ class Settings(object):
         :type mod_path: `str`
         :return: `settings`
         """
-
 
         try:
             mod = importlib.import_module(mod_path)

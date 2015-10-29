@@ -9,10 +9,14 @@ Contents:
 
 Translation
 --------------
-.. include:: ./i18n/zh_cn/README.rst
+
+.. toctree::
+   :maxdepth: 1
+
+   i18n/zh_cn/README.rst
 
 
-API[Chinese]
+API(Chinese)
 --------------
 
 .. toctree::
