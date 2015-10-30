@@ -77,7 +77,7 @@ class SSHClient(object):
 
     .. note::
 
-    目前我们只计划支持rsa验证方式,且为非交互式
+        目前我们只计划支持rsa验证方式,且为非交互式
 
     """
 
