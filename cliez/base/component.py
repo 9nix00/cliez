@@ -144,13 +144,14 @@ class Component(object):
         :return: `str` 读取的内容
         """
 
+        if root:
+            full_path = root + '/' + path.strip('/')
+        else:
+            full_path = path
+
         try:
-            buf = open(os.path.join(root, path)).read()
+            buf = open(full_path).read()
         except IOError:
-            if root:
-                full_path = root + '/' + path.strip('/')
-            else:
-                full_path = path
             pkg, path = full_path.split('/', 1)
             buf = pkg_resources.resource_string(pkg, path)
         return buf
