@@ -51,13 +51,16 @@ currently, argparse mode doesn't support installed package. I will add this feat
 Demo
 ------------
 
-I create demo for easier use this
+I create demo for easier use this, or you can use `cliez init` to touch them
 
 
 `Simple Style <https://github.com/9nix00/cliez/blob/master/demo/simple_demo/simple.py>`_
 
 
-`Argparse Style <https://github.com/9nix00/cliez/blob/master/demo/argparse_demo/argparse_pkg/main.py>`_
+`Argparse Style <https://github.com/9nix00/cliez/blob/master/demo/argparse_demo/argparse_pkg>`_
+
+
+`Flask(blueprint) Style <https://github.com/9nix00/cliez/blob/master/demo/blueprint_demo/>`_
 
 
 
