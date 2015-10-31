@@ -93,5 +93,6 @@ def parse(parser, argv=None, settings_module=None, active_one=None):
     options = parser.parse_args(argv[1:])
     if active_one:
         return active_one(options)
-
+    else:
+        parser._print_message("nothing to do...\n")
     pass
