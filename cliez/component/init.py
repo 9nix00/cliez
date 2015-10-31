@@ -222,14 +222,14 @@ app.run()
 
 ''')
 
-        open(os.path.join(blueprint_path, 'demo.py'), 'w').write('''# -*- coding: utf-8 -*-
+        open(os.path.join(blueprint_path, 'api.py'), 'w').write('''# -*- coding: utf-8 -*-
 from flask import Blueprint
 
-demo_api = Blueprint('demo_api', __name__)
+api = Blueprint('api', __name__)
 
 
-@demo_api.route('/')
-def demo():
+@api.route('/')
+def api():
     return "hello,world", 200, {"Content-Type": "text/html"}
 
 ''')
@@ -244,8 +244,8 @@ except AttributeError:
     app = conf.settings('{0}.settings' , __file__).app
 
 
-from {0}.blueprint.demo import demo_api
-app.register_blueprint(demo_api,url_prefix='/demo')
+from {0}.blueprint.api import api
+app.register_blueprint(api,url_prefix='/api')
 
 
 def run(options):
