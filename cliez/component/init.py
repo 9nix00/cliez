@@ -107,7 +107,7 @@ from cliez import conf, version
 try:
     app = conf.settings().app
 except AttributeError:
-    conf.Settings.bind('{0}.settings')
+    conf.Settings.bind('{0}.settings', __file__)
     app = conf.settings().app
 
 
@@ -242,7 +242,7 @@ from cliez import conf, version
 try:
     app = conf.settings().app
 except AttributeError:
-    conf.Settings.bind('{0}.settings')
+    conf.Settings.bind('{0}.settings' , __file__)
     app = conf.settings().app
 
 

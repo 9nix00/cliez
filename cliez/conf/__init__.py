@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import os
+import sys
 import importlib
 
 COMPONENT_ROOT = None
@@ -27,7 +29,7 @@ class Settings(object):
     _wrapped = None
 
     @staticmethod
-    def bind(mod_path):
+    def bind(mod_path, with_path=None):
         """
         绑定用户的settings至全局
 
@@ -44,8 +46,21 @@ class Settings(object):
 
         :param mod_path: 模块路径, *使用标准的模块语法 'mod.mod1' 而不是文件路径 'mod/mod1' *
         :type mod_path: `str`
+        :param str with_path: 如果指定是文件,则设置上级目录的上级目录为path,如果是目录则直接指定
+
+            ..todo::
+                需要关注在多依赖环境下,是否重复插入
+
         :return: `settings`
         """
+
+        if with_path:
+            if os.path.isdir(with_path):
+                sys.path.insert(0, with_path)
+            else:
+                sys.path.insert(0, with_path.rsplit('/', 2)[0])
+            pass
+
 
         try:
             mod = importlib.import_module(mod_path)

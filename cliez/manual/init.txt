@@ -1,0 +1,6 @@
+A Cli App framework to make CLI-App easier.
+
+
+
+init        create cli-app quickly.
+
