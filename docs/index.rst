@@ -22,7 +22,7 @@ API(Chinese)
 .. toctree::
    :maxdepth: 2
 
-   api/cliez.rst
+   api/modules.rst
 
 
 Indices and tables

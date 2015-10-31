@@ -46,7 +46,7 @@ def parse(parser, argv=None, settings_module=None, active_one=None):
     :param object active_one: 如果指定该参数,当用户不设置任何参数时,执行,多用于兼容flask模式
 
     .. note::
-        当指定active_one时候,只有全局参数会生效,同时请记住在文档中说明该特性
+        当指定active_one时候,只有全局参数会生效,同时如果文档为手工撰写,请同时更新文档说明
 
     :return: `Component` 实际调用的组件,
                 *返回组件在运行中并没有太大意义,但是在做测试用例时,返回组件可以大大简化撰写测试用例的难度*
