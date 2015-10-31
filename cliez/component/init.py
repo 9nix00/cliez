@@ -101,7 +101,7 @@ THE SOFTWARE.
         :return:
         """
         open(os.path.join(self.pkg_path, 'main.py'), 'w').write('''# -*- coding: utf-8 -*-
-from cliez import conf,version
+from cliez import conf, version
 
 
 try:
@@ -122,22 +122,19 @@ def hello():
     return "hello,world", 200, {{"Content-Type": "text/html"}}
 
 
-def main(options):
-
+def run(options):
     if options.testing:
         app.config.from_object(conf.settings().TestingConfig)
     elif options.production:
         app.config.from_object(conf.settings().ProductionConfig)
     else:
         app.config.from_object(conf.settings().DevelopmentConfig)
-
     app.run(port=options.port)
     pass
 
-if __name__ == '__main__':
-
-    import argparse
+def main():
     import os
+    import argparse
     from cliez.parser import parse
 
     conf.COMPONENT_ROOT = os.path.dirname(__file__)
@@ -149,7 +146,12 @@ if __name__ == '__main__':
     parser.add_argument('--port', nargs='?', type=int, default=8000)
     parser.add_argument('--testing', action='store_true', help='use testing config instead development config.')
     parser.add_argument('--production', action='store_true', help='use production config instead development config.')
-    parse(parser, active_one=main)
+    parse(parser, active_one=run)
+    pass
+
+if __name__ == '__main__':
+    main()
+
 
 '''.format(options.name))
 
@@ -204,6 +206,83 @@ app.run()
         pass
 
     def create_blueprint(self, options):
+        """
+        一个blueprint本质上也是一个flask应用.
+        所以我们先调用flask进行创建,然后对不一样的文件进行覆写
+
+        :param options:
+        :return:
+        """
+
+        self.create_flask(options)
+
+        blueprint_path = os.path.join(self.pkg_path, 'blueprint')
+        os.mkdir(blueprint_path)
+
+        open(os.path.join(blueprint_path, '__init__.py'), 'w').write('''# -*- coding: utf-8 -*-
+
+''')
+
+        open(os.path.join(blueprint_path, 'demo.py'), 'w').write('''# -*- coding: utf-8 -*-
+from flask import Blueprint
+
+demo_api = Blueprint('demo_api', __name__)
+
+
+@demo_api.route('/')
+def demo():
+    return "hello,world", 200, {"Content-Type": "text/html"}
+
+''')
+
+        open(os.path.join(self.pkg_path, 'main.py'), 'w').write('''# -*- coding: utf-8 -*-
+from cliez import conf, version
+
+
+try:
+    app = conf.settings().app
+except AttributeError:
+    conf.Settings.bind('{0}.settings')
+    app = conf.settings().app
+
+
+from {0}.blueprint.demo import demo_api
+app.register_blueprint(demo_api,url_prefix='/demo')
+
+
+def run(options):
+    if options.testing:
+        app.config.from_object(conf.settings().TestingConfig)
+    elif options.production:
+        app.config.from_object(conf.settings().ProductionConfig)
+    else:
+        app.config.from_object(conf.settings().DevelopmentConfig)
+    app.run(port=options.port)
+    pass
+
+def main():
+    import os
+    import argparse
+    from cliez.parser import parse
+
+    conf.COMPONENT_ROOT = os.path.dirname(__file__)
+
+    parser = argparse.ArgumentParser(
+        epilog='You can submit issues at: https://www.github.com/<project-address>',
+    )
+    parser.add_argument('--version', action='version', version='%(prog)s v{{}}'.format(version))
+    parser.add_argument('--port', nargs='?', type=int, default=8000)
+    parser.add_argument('--testing', action='store_true', help='use testing config instead development config.')
+    parser.add_argument('--production', action='store_true', help='use production config instead development config.')
+    parse(parser, active_one=run)
+    pass
+
+if __name__ == '__main__':
+    main()
+
+
+'''.format(options.name))
+
         pass
 
     def create_dispatcher(self, options):
@@ -274,10 +353,14 @@ Hello,{}
         * blueprint 模式. 创建一个 flask blueprint 应用
         * dispatcher 模式, 创建一个并发调度器类型的应用
 
+        .. note::
+            文件名会将大写和减号自动转换为小写和下划线
 
         :param argparser options:
         :return: None
         """
+
+        options.name = options.name.lower().replace('-', '_')
 
         self.path = os.path.join(options.dir, options.name)
         self.pkg_path = os.path.join(self.path, options.name)
