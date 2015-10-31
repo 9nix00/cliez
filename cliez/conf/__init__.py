@@ -7,13 +7,17 @@ import importlib
 COMPONENT_ROOT = None
 
 
-def settings():
+def settings(path=None, with_path=None):
     """
     a wrapper for `Settings._wrapped`
 
 
     :return: `Settings`
     """
+
+    if path:
+        Settings.bind(path, with_path=with_path)
+
     return Settings._wrapped
 
 
@@ -60,7 +64,6 @@ class Settings(object):
             else:
                 sys.path.insert(0, with_path.rsplit('/', 2)[0])
             pass
-
 
         try:
             mod = importlib.import_module(mod_path)
