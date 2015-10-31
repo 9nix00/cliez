@@ -26,8 +26,11 @@ def command_list():
         sys.exit(2)
         pass
 
-    path = os.listdir(os.path.join(root, 'component'))
-    return [f[:-3] for f in path if f.endswith('.py') and f != '__init__.py']
+    try:
+        path = os.listdir(os.path.join(root, 'component'))
+        return [f[:-3] for f in path if f.endswith('.py') and f != '__init__.py']
+    except FileNotFoundError:
+        return []
 
 
 def parse(parser, argv=None, settings_module=None, active_one=None):
@@ -64,7 +67,7 @@ def parse(parser, argv=None, settings_module=None, active_one=None):
 
     assert type(argv) in [list, tuple], TypeError("argv only can be list or tuple")
 
-    if len(argv) == 2 and argv[1] in commands:
+    if len(argv) >= 2 and argv[1] in commands:
         sub_parsers = parser.add_subparsers()
         class_name = argv[1].capitalize() + 'Component'
         from cliez.conf import COMPONENT_ROOT
