@@ -88,7 +88,7 @@ class SSHClient(object):
     server_pub_key = None
     private_key = None
     known_host = None
-    client_ip=None
+    client_ip = None
 
     sftp = None
     session = None
@@ -415,7 +415,11 @@ class SSHClient(object):
                             self.open_session()
                             break
                         if not silent:
-                            output.write(x)
+                            try:
+                                output.write(x)
+                            except UnicodeEncodeError:
+                                output.write("Interactive Choice.Block.\r\n")
+                                pass
                             output.flush()
                     except socket.timeout:
                         raise SessionException("Timeout")
