@@ -107,8 +107,7 @@ from cliez import conf, version
 try:
     app = conf.settings().app
 except AttributeError:
-    conf.Settings.bind('{0}.settings', __file__)
-    app = conf.settings().app
+    app = conf.settings('{0}.settings', __file__).app
 
 
 @app.route('/', methods=['GET'])
@@ -242,8 +241,7 @@ from cliez import conf, version
 try:
     app = conf.settings().app
 except AttributeError:
-    conf.Settings.bind('{0}.settings' , __file__)
-    app = conf.settings().app
+    app = conf.settings('{0}.settings' , __file__).app
 
 
 from {0}.blueprint.demo import demo_api
