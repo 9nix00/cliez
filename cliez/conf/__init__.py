@@ -30,6 +30,8 @@ class Settings(object):
     """
 
     _path = None
+    _db_patch_path = None
+
     _wrapped = None
 
     @staticmethod
@@ -48,11 +50,14 @@ class Settings(object):
             只有在撰写自定义测试用例时,为了区分环境,我们才需要手动声明
 
 
-        :param mod_path: 模块路径, *使用标准的模块语法 'mod.mod1' 而不是文件路径 'mod/mod1' *
-        :type mod_path: `str`
+        :param `str` mod_path: 模块路径, *使用标准的模块语法 'mod.mod1' 而不是文件路径 'mod/mod1' *
+
+            .. note::
+                db_patch必须与setting放置在同一目录,设置settings时,会同时设置db_patch路径
+
         :param str with_path: 如果指定是文件,则设置上级目录的上级目录为path,如果是目录则直接指定
 
-            ..todo::
+            .. todo::
                 需要关注在多依赖环境下,是否重复插入
 
         :return: `settings`
@@ -79,6 +84,7 @@ class Settings(object):
             pass
 
         Settings._path = mod_path
+        Settings._db_patch_path = mod_path.rsplit('.', 1)[0] + '.db_patch'
         Settings._wrapped = settings
 
         return settings
