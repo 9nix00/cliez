@@ -215,14 +215,16 @@ app.run()
 
         self.create_flask(options)
 
-        blueprint_path = os.path.join(self.pkg_path, 'blueprint')
-        os.mkdir(blueprint_path)
+        # blueprint_path = os.path.join(self.pkg_path, 'blueprint')
+        # os.mkdir(blueprint_path)
 
-        open(os.path.join(blueprint_path, '__init__.py'), 'w').write('''# -*- coding: utf-8 -*-
+        # open(os.path.join(blueprint_path, '__init__.py'), 'w').write('''# -*- coding: utf-8 -*-
+        #
+        # ''')
 
-''')
+        blueprint_path = self.pkg_path
 
-        open(os.path.join(blueprint_path, 'api.py'), 'w').write('''# -*- coding: utf-8 -*-
+        open(os.path.join(blueprint_path, 'apis.py'), 'w').write('''# -*- coding: utf-8 -*-
 from flask import Blueprint
 
 api = Blueprint('api', __name__)
@@ -244,7 +246,7 @@ except AttributeError:
     app = conf.settings('{0}.settings' , __file__).app
 
 
-from {0}.blueprint.api import api
+from {0}.api import api
 app.register_blueprint(api,url_prefix='/api')
 
 
