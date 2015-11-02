@@ -13,11 +13,18 @@
 
 """
 
+import unittest
+from cliez.conf import settings, Settings
+
 
 class TestCase(unittest.TestCase):
     db = None
     db_type = None
     db_name = None
+
+    settings = None
+    app_binding = None
+    blueprint_binding = None
 
     @classmethod
     def setUpClass(cls):
@@ -35,9 +42,30 @@ class TestCase(unittest.TestCase):
 
         super(TestCase, cls).setUpClass()
 
-        app = settings().app
+        app = settings(cls.settings).app
         app.config.from_object(settings().DevelopmentConfig)
         app.config['TESTING'] = True
+
+        if cls.app_binding:
+            try:
+                print("todo feature")
+            except ImportError:
+
+                pass
+            pass
+
+        if cls.blueprint_binding:
+            import importlib
+            try:
+                mod_name, entry_name = cls.blueprint_binding.rsplit('.', 1)
+                mod = importlib.import_module(mod_name)
+                app.register_blueprint(getattr(mod, entry_name))
+                print("register")
+                pass
+            except ImportError:
+                raise ImportError("can't find blueprint:{}".format(cls.blurprint_binding))
+                pass
+            pass
 
         db = app.config.get('DATABASE')
         cls.app = app.test_client()
