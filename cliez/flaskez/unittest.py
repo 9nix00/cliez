@@ -92,7 +92,7 @@ class TestCase(unittest.TestCase):
                     pass
 
                 pass
-            elif cls.db.__module__ == 'pymongo.mongo_client':
+            elif cls.db.__class__.__module__ == 'pymongo.mongo_client':
                 import mongoengine
                 mongo_settings = mongoengine.connection._connection_settings.get('default')
                 if mongo_settings:
