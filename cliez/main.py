@@ -11,6 +11,7 @@ conf.COMPONENT_ROOT = os.path.dirname(__file__)
 
 def main():
     parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
         description=Component.load_description('cliez/manual/main.txt'),
         epilog='You can submit issues at: https://www.github.com/9nix00/cliez',
     )
