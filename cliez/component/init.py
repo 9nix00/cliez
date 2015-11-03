@@ -139,6 +139,7 @@ def main():
     conf.COMPONENT_ROOT = os.path.dirname(__file__)
 
     parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog='You can submit issues at: https://www.github.com/<project-address>',
     )
     parser.add_argument('--version', action='version', version='%(prog)s v{{}}'.format(version))
@@ -268,6 +269,7 @@ def main():
     conf.COMPONENT_ROOT = os.path.dirname(__file__)
 
     parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog='You can submit issues at: https://www.github.com/<project-address>',
     )
     parser.add_argument('--version', action='version', version='%(prog)s v{{}}'.format(version))
@@ -310,6 +312,7 @@ conf.COMPONENT_ROOT = os.path.dirname(__file__)
 
 def main():
     parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
         description=Component.load_description('{0}/manual/main.txt'),
         epilog='You can submit issues at: https://www.github.com/<project-address>',
     )
