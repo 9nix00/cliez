@@ -18,13 +18,14 @@ from cliez.conf import settings, Settings
 
 
 class TestCase(unittest.TestCase):
-    db = None
-    db_type = None
-    db_name = None
+    _db = None
+    _db_type = None
+    _db_name = None
 
     settings = None
     app_binding = None
     blueprint_binding = None
+    db_node = None
 
     @classmethod
     def setUpClass(cls):
@@ -67,17 +68,17 @@ class TestCase(unittest.TestCase):
                 pass
             pass
 
-        db = app.config.get('DATABASE')
+        db = app.config.get('DATABASE')[cls.db_node] if cls.db_node else app.config.get('DATABASE')
         cls.app = app.test_client()
 
         if db:
             if db.__class__.__module__ == 'peewee' and db.__class__.__name__ == 'MySQLDatabase':
-                cls.db_type = 'mysql'
-                cls.db = db
-                cls.db_name = db.database + '_test'
-                db.database = cls.db_name
+                cls._db_type = 'mysql'
+                cls._db = db
+                cls._db_name = db.database + '_test'
+                db.database = cls._db_name
 
-                app.config['DATABASE'] = cls.db
+                app.config['DATABASE'] = cls._db
 
                 try:
                     import importlib
@@ -92,7 +93,7 @@ class TestCase(unittest.TestCase):
                     pass
 
                 pass
-            elif cls.db.__class__.__module__ == 'pymongo.mongo_client':
+            elif cls._db.__class__.__module__ == 'pymongo.mongo_client':
                 import mongoengine
                 mongo_settings = mongoengine.connection._connection_settings.get('default')
                 if mongo_settings:
@@ -100,9 +101,9 @@ class TestCase(unittest.TestCase):
                     mongodb_handler = mongoengine.connect(**mongo_settings)
                     mongodb_use_db = mongo_settings['name']
                     mongodb_handler.drop_database(mongodb_use_db)
-                    cls.db = mongodb_handler
-                    cls.db_type = 'mongodb'
-                    cls.db_name = mongodb_use_db
+                    cls._db = mongodb_handler
+                    cls._db_type = 'mongodb'
+                    cls._db_name = mongodb_use_db
                 pass
             pass
         pass
@@ -120,9 +121,9 @@ class TestCase(unittest.TestCase):
         :return:
         """
 
-        if cls.db_type == 'mongodb':
-            cls.db.drop_database(cls.db_name)
-        elif cls.db_type == 'mysql':
+        if cls._db_type == 'mongodb':
+            cls._db.drop_database(cls._db_name)
+        elif cls._db_type == 'mysql':
             try:
                 import importlib
                 mod = importlib.import_module(Settings._db_patch_path)
