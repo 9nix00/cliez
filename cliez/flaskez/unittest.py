@@ -3,18 +3,20 @@
 """
 基于此例测试用例的使用限制
 
-* 每一个测试用例只能支持一种数据库,也就是说,在我们规划blueprint或者flask app时,只能存在一个数据源.
-    多个数据源的场景,只能要分割为多个bluesprint. 这总体是可接受的,至少对我来说是可接受的
+* 目前只支持对peewee和mongoengine的数据库自动化测试.
 
+    * 使用mongoengine无限制,策略为直接创建和删除数据库
+    * 使用peewee限制为:
 
-* 目前只支持对peewee和mongoengine的数据库自动化测试,加载方法:
-    需要创建自身的database和database_test
+        * 目前只支持一个database.
+        * 目前一个测试用例只支持一种db连接
 
 
 """
 
 import unittest
 from cliez.conf import settings, Settings
+from builtins import dict
 
 
 class TestCase(unittest.TestCase):
@@ -26,6 +28,17 @@ class TestCase(unittest.TestCase):
     app_binding = None
     blueprint_binding = None
     db_node = None
+
+
+
+    @classmethod
+    def _replaceDatabaseHandler(self,handlers):
+
+
+        pass
+
+
+
 
     @classmethod
     def setUpClass(cls):
@@ -61,15 +74,29 @@ class TestCase(unittest.TestCase):
                 mod_name, entry_name = cls.blueprint_binding.rsplit('.', 1)
                 mod = importlib.import_module(mod_name)
                 app.register_blueprint(getattr(mod, entry_name))
-                print("register")
                 pass
             except ImportError:
                 raise ImportError("can't find blueprint:{}".format(cls.blurprint_binding))
                 pass
             pass
 
-        db = app.config.get('DATABASE')[cls.db_node] if cls.db_node else app.config.get('DATABASE')
+        db = app.config.get('DATABASE')
         cls.app = app.test_client()
+
+
+
+        # if isinstance(db, dict):
+        #
+        #     for v in db.values():
+        #
+        #         pass
+        #
+        #     pass
+        #
+        # else:
+        #
+
+
 
         if db:
             if db.__class__.__module__ == 'peewee' and db.__class__.__name__ == 'MySQLDatabase':
