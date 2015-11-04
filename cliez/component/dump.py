@@ -52,7 +52,11 @@ class DumpComponent(Component):
 
         module_name = options.module_name
 
-        app = settings(module_name + '.settings').app
+        if options.settings:
+            app = settings(options.settings).app
+        else:
+            app = settings(module_name + '.settings').app
+
         app.config.from_object(settings().DevelopmentConfig)
 
         try:
@@ -211,6 +215,7 @@ class DumpComponent(Component):
         sub_parser.add_argument('module_name', help='cliez style flask module')
         sub_parser.add_argument('output', help='file write path')
         sub_parser.add_argument('--replace', action='store_true', help='force rewrite allow file')
+        sub_parser.add_argument('--settings', help='set cliez-flask settings')
         pass
 
     pass
