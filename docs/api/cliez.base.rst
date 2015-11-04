@@ -12,6 +12,14 @@ cliez.base.component module
     :undoc-members:
     :show-inheritance:
 
+cliez.base.mail module
+----------------------
+
+.. automodule:: cliez.base.mail
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 cliez.base.ssh module
 ---------------------
 

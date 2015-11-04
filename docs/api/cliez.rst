@@ -10,6 +10,7 @@ Subpackages
     cliez.component
     cliez.conf
     cliez.flaskez
+    cliez.peeweez
 
 Submodules
 ----------
