@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
-import peewee
 from flask import Flask
+import mongoengine
 
 
 class Config(object):
@@ -12,7 +12,7 @@ class Config(object):
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    DATABASE = peewee.MySQLDatabase('test', host='127.0.0.1', user='root', passwd='')
+    DATABASE = mongoengine.connect('test', host='mongodb://127.0.0.1')
     pass
 
 
