@@ -97,6 +97,14 @@ THE SOFTWARE.
         """
         创建flask应用
 
+        相比于无约束的flask,使用框架将会创建
+
+        main.py 用于直接使用时启动
+        wsgi.py 用于wsgi方式启动
+        settings.py  flask配置
+
+
+
         :param options:
         :return:
         """
@@ -209,6 +217,8 @@ app.run()
         """
         一个blueprint本质上也是一个flask应用.
         所以我们先调用flask进行创建,然后对不一样的文件进行覆写
+
+
 
         :param options:
         :return:
