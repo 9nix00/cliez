@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -*-
 
 import os
-from datetime import datetime
 from cliez.base.component import Component
+from cliez.conf import settings
 import importlib
+import inspect
+from builtins import dict
+import json
 
 
 class DumpComponent(Component):
+    models = None
+
     def run(self, options):
         """
-        输出关于web model的前端验证策略
-
         该模式灵感来源于在对django和flask的思考.
 
 
@@ -42,31 +45,172 @@ class DumpComponent(Component):
         尝试解析内部的model类型,目前支持 peewee 和 mongoengine 两种
         生成json文件至指定的目录
 
+
         :param argparser options:
         :return: None
         """
 
-        load_models = options.path
+        module_name = options.module_name
+
+        app = settings(module_name + '.settings').app
+        app.config.from_object(settings().DevelopmentConfig)
 
         try:
-            models = importlib.import_module(load_models)
+            models = importlib.import_module(module_name + '.models')
         except ImportError:
-            self.error("can't find models.path:{}", options.path)
+            self.error("can't find models.path:`{}`".format(options.path))
             pass
 
+        classes = inspect.getmembers(models, inspect.isclass)
 
+        models = self.filter_peewee_models(classes)
+        models += self.filter_mongoengine_models(classes)
+        # models += self.filter_django_models(models)
 
+        fields = self.parse(models)
 
+        buffer = json.dumps(fields)
+
+        # open(options.output,'w').write(buffer)
+
+        real_path = os.path.expanduser(options.output)
+
+        if os.path.exists(real_path) and not options.replace:
+            self.error("file exist. if you want to replace it. please add `--relace` option")
+            pass
+
+        open(real_path, 'w').write(buffer)
         pass
+
+    def filter_peewee_models(self, models):
+        import peewee
+        return [('peewee', v[1]) for v in models if issubclass(v[1], peewee.Model) and v[1] != peewee.Model]
+
+    # def filter_django_models(self, models):
+    #     from django.db.models import Model
+    #     data = [('django', v[1]) for v in models if issubclass(v[1], Model) and v[1] != Model]
+    #
+    #     print(data)
+    #
+    #     return []
+
+    def filter_mongoengine_models(self, models):
+        import mongoengine
+        return [('mongo', v[1]) for v in models if issubclass(v[1], mongoengine.Document) and v[1] not in [mongoengine.Document, mongoengine.DynamicDocument]]
+
+    def parse(self, models):
+        """
+
+        策略:
+
+        - 调用能识别的依赖
+        - 筛选出所有非方法字段\隐藏字段\tuple数据结构
+        - 遍历数据生成关注列表,目前关注的项目
+
+            - name:用于提交字段
+            - verbose_name: 显示名称,用于组合错误提示
+            - max_length: 仅在字符串类型时出现
+            - choices: 选项列表
+            - help_text:帮助消息
+            - api_unique:唯一字段时,如果指定了api接口出现
+
+
+        :param models: 数据模型
+        :return:
+        """
+
+        data = {}
+
+        for type_name, model in models:
+            method = getattr(self, 'parse_{}'.format(type_name))
+            data[model.__name__] = method(model)
+            pass
+
+        return data
+
+    def parse_peewee(self, model):
+        """
+        peewee 分类
+        处理单个model,并获取最终的fields
+
+        :param model:
+        :return:
+        """
+
+        data = {}
+        data_variable = [v for v in dir(model) if not v.startswith('_') \
+                         and not callable(getattr(model, v)) \
+                         and not isinstance(v, tuple)
+                         ]
+
+        for field_name in data_variable:
+
+            field = getattr(model, field_name)
+
+            if hasattr(field, 'name') and field.name != 'id':
+                tmp = dict(
+                    verbose_name=field.verbose_name,
+                    name=field.name,
+                    help_text=field.help_text,
+                    choices=field.choices,
+                    max_length=field.max_length if hasattr(field, 'max_length') else None,
+                    type=getattr(field, 'extra_type', field.db_field),
+                    api_unique=getattr(field, 'api_unique', None) if field.unique else None
+                )
+
+                tmp = dict((k, v) for k, v in tmp.items() if v is not None)
+                data[field_name] = tmp
+                pass
+
+            pass
+
+        return data
+
+    def parse_mongo(self, model):
+        """
+
+        处理单个model,并获取最终的fields
+
+        :param model:
+        :return:
+        """
+
+        data = {}
+        data_variable = [v for v in dir(model) if not v.startswith('_') \
+                         and not callable(getattr(model, v)) \
+                         and not isinstance(getattr(model, v), tuple) \
+                         and v != 'STRICT'
+                         ]
+
+        for field_name in data_variable:
+
+            field = getattr(model, field_name)
+
+            if hasattr(field, 'name') and field.name != 'id' and field.name != 'pk':
+                tmp = dict(
+                    verbose_name=field.verbose_name,
+                    name=field.name,
+                    help_text=field.help_text,
+                    choices=field.choices,
+                    max_length=field.max_length if hasattr(field, 'max_length') else None,
+                    type=getattr(field, 'extra_type', field.db_field),
+                    api_unique=getattr(field, 'api_unique', None) if field.unique else None
+                )
+
+                tmp = dict((k, v) for k, v in tmp.items() if v is not None)
+                data[field_name] = tmp
+                pass
+
+            pass
+
+        return data
 
     @staticmethod
     def append_arguments(sub_parsers):
         sub_parser = sub_parsers.add_parser('dump', help='dump json from web models')
-        sub_parser.add_argument('path', help='python models full-name.e.g: pkg.module.models')
-
-        sub_parser.add_argument('--output', action='store_true', help='create cli-app with simple mode')
-        sub_parser.add_argument('--prefix', nargs='?', help='replace package prefix to null')
-        sub_parser.description = InitComponent.load_description('cliez/manual/main.txt')
+        sub_parser.add_argument('module_name', help='cliez style flask module')
+        sub_parser.add_argument('output', help='file write path')
+        sub_parser.add_argument('--replace', action='store_true', help='force rewrite allow file')
         pass
 
     pass
