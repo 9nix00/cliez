@@ -41,9 +41,19 @@ class DumpComponent(Component):
 
         策略:
 
-        加载指定的models文件,python 做 import
-        尝试解析内部的model类型,目前支持 peewee 和 mongoengine 两种
-        生成json文件至指定的目录
+        * 根据选项装载环境,目前支持django和flask
+
+            模拟链接:
+
+                * peewee 严格算并不依赖于数据库链接,但是因为我们框架中默认实现了db的加载方式,所以强制需要链接
+                * mongoengine 使用model强制依赖链接
+
+
+        * 加载指定的models文件,python 做 import
+
+        * 尝试解析内部的model类型,目前支持 peewee 和 mongoengine 两种
+
+        * 生成json文件至指定的目录
 
 
         :param argparser options:
@@ -52,12 +62,28 @@ class DumpComponent(Component):
 
         module_name = options.module_name
 
-        if options.settings:
-            app = settings(options.settings).app
-        else:
-            app = settings(module_name + '.settings').app
+        if options.flask:
+            if options.settings:
+                app = settings(options.settings).app
+            else:
+                app = settings(module_name + '.settings').app
 
-        app.config.from_object(settings().DevelopmentConfig)
+            app.config.from_object(settings().DevelopmentConfig)
+
+        elif options.django:
+
+            if not options.settings:
+                self.error("when you use django mode,you must set `--settings` to DJANGO_SETTINGS_MODULE")
+
+            os.environ.setdefault('DJANGO_SETTINGS_MODULE', options.settings)
+
+            # try:
+            #     importlib.import_module(options.settings)
+            # except ImportError:
+            #     self.error("can't find config.path:`{}`".format(options.path))
+            # pass
+
+        pass
 
         try:
             models = importlib.import_module(module_name + '.models')
@@ -69,7 +95,7 @@ class DumpComponent(Component):
 
         models = self.filter_peewee_models(classes)
         models += self.filter_mongoengine_models(classes)
-        # models += self.filter_django_models(models)
+        models += self.filter_django_models(classes)
 
         fields = self.parse(models)
 
@@ -80,7 +106,7 @@ class DumpComponent(Component):
         real_path = os.path.expanduser(options.output)
 
         if os.path.exists(real_path) and not options.replace:
-            self.error("file exist. if you want to replace it. please add `--relace` option")
+            self.error("file exist. if you want to replace it. please add `--replace` option")
             pass
 
         open(real_path, 'w').write(buffer)
@@ -90,13 +116,24 @@ class DumpComponent(Component):
         import peewee
         return [('peewee', v[1]) for v in models if issubclass(v[1], peewee.Model) and v[1] != peewee.Model]
 
-    # def filter_django_models(self, models):
-    #     from django.db.models import Model
-    #     data = [('django', v[1]) for v in models if issubclass(v[1], Model) and v[1] != Model]
-    #
-    #     print(data)
-    #
-    #     return []
+    def filter_django_models(self, models):
+        """
+        Django Model 过滤规则说明:
+
+        - 过滤掉了基类
+        - 过滤掉结尾为Mixin的类
+
+
+        :param models:
+        :return:
+        """
+        from django.db.models import Model
+
+        return [('django', v[1]) for v in models if issubclass(v[1], Model) \
+                and v[1] != Model \
+                and not v[1].__name__.endswith('Mixin') \
+                and v[1]._meta.abstract is False
+                ]
 
     def filter_mongoengine_models(self, models):
         import mongoengine
@@ -170,6 +207,63 @@ class DumpComponent(Component):
 
         return data
 
+    def convert_django_to_type(self, field):
+
+        from django.db import models
+
+        if field in (models.BigIntegerField, models.IntegerField):
+            return 'int'
+        elif field in (models.CharField,):
+            return 'string'
+        elif field in (models.URLField,):
+            return 'url'
+        elif field in (models.EmailField,):
+            return 'email'
+
+        pass
+
+    def parse_django(self, model):
+        """
+        处理django的model
+
+        .. todo::
+           目前不支持的选项是verbose_name因为django底层使用了translate. 而这个proxy又依赖AppRegistry,导致转换失败.
+           暂时使用filed.name替代
+
+
+        :param model:
+        :return:
+        """
+
+        import django
+        django.setup()
+
+        data = {}
+        model = model._meta.get_fields()
+
+        data_variable = [v for v in model]
+
+        for field in data_variable:
+
+            if hasattr(field, 'name') and field.name != 'id' and field.name != 'pk':
+                tmp = dict(
+                    verbose_name=str(field.name),
+                    name=field.name,
+                    help_text=str(field.help_text),
+                    choices=field._choices if field._choices else None,
+                    max_length=field.max_length if hasattr(field, 'max_length') else None,
+                    type=self.convert_django_to_type(field),
+                    api_unique=getattr(field, 'api_unique', None) if field.unique else None
+                )
+
+                tmp = dict((k, v) for k, v in tmp.items() if v is not None)
+                data[field.name] = tmp
+                pass
+
+            pass
+
+        return data
+
     def parse_mongo(self, model):
         """
 
@@ -216,6 +310,8 @@ class DumpComponent(Component):
         sub_parser.add_argument('output', help='file write path')
         sub_parser.add_argument('--replace', action='store_true', help='force rewrite allow file')
         sub_parser.add_argument('--settings', help='set cliez-flask settings')
+        sub_parser.add_argument('--flask', action='store_true', help='init flask config resource')
+        sub_parser.add_argument('--django', action='store_true', help='init django config resource')
         pass
 
     pass

@@ -12,6 +12,7 @@ setup(
     download_url='https://github.com/9nix00/cliez/tarball/master',
     license='http://opensource.org/licenses/MIT',
     author='WANG WENPEI',
+    zip_safe=False,
     author_email='wangwenpei@nextoa.com',
     description='make CLI-App easier',
     keywords='cli',
