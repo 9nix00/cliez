@@ -79,7 +79,7 @@ class Mail(object):
         msg['To'] = Header(COMMASPACE.join(send_to), 'utf-8')
         return msg
 
-    def send(self, to_addrs, msg, timeout=None, user_action=None):
+    def send(self, to_addrs, msg, timeout=None, logger_action=None):
         """
         发送邮件
 
@@ -87,7 +87,7 @@ class Mail(object):
         :param to_addrs:
         :param msg:
         :param timeout:
-        :param user_action: 用户自定义action名称,该名称会记录到日志中
+        :param logger_action: 用户自定义action名称,该名称会记录到日志中
         :return:
         """
 
@@ -97,7 +97,7 @@ class Mail(object):
             server.quit()
         except socket.timeout:
             logger.error("timeout:%d", timeout, extra={
-                'action': user_action,
+                'action': logger_action,
                 'to_mails': ','.join(to_addrs)
             })
             pass
