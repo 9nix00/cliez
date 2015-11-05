@@ -41,7 +41,7 @@ class Mail(object):
         self.server = server
         pass
 
-    def touch(self, send_to, subject, body=None, template=None, prefix=None, attachments=None):
+    def touch(self, send_to, subject, body=None, template=None, prefix=None, attachments=None, html=None):
         """
         :param send_to:
         :param subject:
@@ -57,9 +57,16 @@ class Mail(object):
 
         if template:
             assert len(template) == 2, "tpl must contain (tpl_path,(replace tuple))"
-            body = reduce(lambda a, kv: a.replace(*kv), template[1], open(os.path.expanduser(template[0]), 'r').read())
+            body = reduce(lambda a, kv: a.replace(kv[0], str(kv[1])), template[1], open(os.path.expanduser(template[0]), 'r').read())
 
-        msg.attach(MIMEText(body))
+        msg.attach(MIMEText(body, 'plain'))
+
+        if html:
+            assert len(html) == 2, "html must contain (tpl_path,(replace tuple))"
+            html_body = reduce(lambda a, kv: a.replace(kv[0], str(kv[1])), html[1], open(os.path.expanduser(html[0]), 'r').read())
+
+            html_msg = MIMEText(html_body, 'html')
+            msg.attach(html_msg)
 
         for f in attachments or []:
             part = MIMEBase('application', "octet-stream")
