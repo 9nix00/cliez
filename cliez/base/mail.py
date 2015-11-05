@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import socket
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
@@ -10,6 +11,13 @@ from email.header import Header
 from functools import reduce
 
 import smtplib
+
+import logging
+
+logger = logging.getLogger(__name__)
+
+LOGGING_FORMAT = "%(levelname)s %(asctime)-15s %(message)s %(action)s %(to_mails)-8s"
+logging.basicConfig(format=LOGGING_FORMAT)
 
 
 class Mail(object):
@@ -64,10 +72,28 @@ class Mail(object):
         msg['To'] = Header(COMMASPACE.join(send_to), 'utf-8')
         return msg
 
-    def send(self, to_addrs, msg):
-        server = smtplib.SMTP(self.server)
-        server.sendmail(self.send_from, to_addrs, msg)
-        server.quit()
+    def send(self, to_addrs, msg, timeout=None, user_action=None):
+        """
+        发送邮件
+
+
+        :param to_addrs:
+        :param msg:
+        :param timeout:
+        :param user_action: 用户自定义action名称,该名称会记录到日志中
+        :return:
+        """
+
+        try:
+            server = smtplib.SMTP(self.server, timeout=timeout)
+            server.sendmail(self.send_from, to_addrs, msg)
+            server.quit()
+        except socket.timeout:
+            logger.error("timeout:%d", timeout, extra={
+                'action': user_action,
+                'to_mails': ','.join(to_addrs)
+            })
+            pass
         pass
 
     pass
