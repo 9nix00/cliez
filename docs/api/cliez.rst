@@ -7,7 +7,10 @@ Subpackages
 .. toctree::
 
     cliez.base
+    cliez.component
     cliez.conf
+    cliez.flaskez
+    cliez.peeweez
 
 Submodules
 ----------
@@ -16,6 +19,14 @@ cliez.loader module
 -------------------
 
 .. automodule:: cliez.loader
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+cliez.main module
+-----------------
+
+.. automodule:: cliez.main
     :members:
     :undoc-members:
     :show-inheritance:

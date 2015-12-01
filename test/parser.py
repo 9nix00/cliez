@@ -20,14 +20,38 @@ class NormalTest(TestCase):
             pass
         pass
 
-    def test_none(self):
-        with self.assertRaises(ImportError):
-            parser.parse(self.parser, argv=[])
-            pass
-        pass
+    # 测试用例参数通常会>2
+    # def test_none(self):
+    #     with self.assertRaises(Exception):
+    #         parser.parse(self.parser, argv=[])
+    #         pass
+    #     pass
 
     def test_ok(self):
         parser.parse(self.parser, argv=['command', 'init'])
+        pass
+
+    def test_allow_show_version(self):
+        with self.assertRaises(SystemExit):  # "will call parser.exit"
+            parser.parse(self.parser, argv=['command', '--version'])
+        pass
+
+    def test_no_value(self):
+        with self.assertRaises(AttributeError):
+            result = parser.parse(self.parser, argv=['command'], active_one=lambda option: option.version)
+            pass
+        pass
+
+    def test_active_one(self):
+        self.parser.add_argument('--port', nargs='?', type=int, default=8000)
+        result = parser.parse(self.parser, argv=['command'], active_one=lambda option: option.port)
+        self.assertEqual(result, 8000)
+        pass
+
+    def test_active_show_invalid(self):
+        with self.assertRaises(SystemExit):  # "unknow params"
+            result = parser.parse(self.parser, argv=['command', '--port'])
+            self.assertEqual(result, version)
         pass
 
     def test_ok_with_config(self):

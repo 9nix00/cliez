@@ -137,6 +137,11 @@ class Component(object):
 
 
 
+        .. note::
+
+            如果是python3版本,则文档编码格式必须为utf-8
+
+
         :param path: 文件路径
         :type path: `str`
         :param root: 根目录,默认为空字符串
@@ -154,6 +159,12 @@ class Component(object):
         except IOError:
             pkg, path = full_path.split('/', 1)
             buf = pkg_resources.resource_string(pkg, path)
+
+            # compatible python3 and only support utf-8
+            if type(buf) != str:
+                buf = buf.decode('utf-8')
+                pass
+
         return buf
 
     @staticmethod

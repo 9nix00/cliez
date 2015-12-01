@@ -36,6 +36,8 @@ Demo
 
    demo/simple.rst
    demo/complex.rst
+   demo/flask.rst
+
 
 
 
