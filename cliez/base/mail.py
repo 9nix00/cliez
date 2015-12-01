@@ -16,8 +16,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-LOGGING_FORMAT = "%(levelname)s %(asctime)-15s %(message)s %(action)s %(to_mails)-8s"
-logging.basicConfig(format=LOGGING_FORMAT)
+
+# LOGGING_FORMAT = "%(levelname)s %(asctime)-15s %(message)s %(action)s %(to_mails)-8s"
+# logging.basicConfig(format=LOGGING_FORMAT)
 
 
 class Mail(object):
@@ -95,11 +96,14 @@ class Mail(object):
             server = smtplib.SMTP(self.server, timeout=timeout)
             server.sendmail(self.send_from, to_addrs, msg)
             server.quit()
-        except socket.timeout:
-            logger.error("timeout:%d", timeout, extra={
-                'action': logger_action,
-                'to_mails': ','.join(to_addrs)
-            })
+        except (socket.timeout, TimeoutError, smtplib.SMTPServerDisconnected):
+            logger.error("timeout:%d %s %s", timeout, logger_action, ','.join(to_addrs))
+
+            # 暂时关闭,对django支持不是很友好
+            # extra={
+            #     'action': logger_action,
+            #     'to_mails': ','.join(to_addrs)
+            # }
             pass
         pass
 
