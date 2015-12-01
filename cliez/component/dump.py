@@ -1,18 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import os
-<<<<<<< HEAD
-from datetime import datetime
-from cliez.base.component import Component
-import importlib
-
-
-class DumpComponent(Component):
-    def run(self, options):
-        """
-        输出关于web model的前端验证策略
-
-=======
 from cliez.base.component import Component
 from cliez.conf import settings
 import importlib
@@ -26,7 +14,6 @@ class DumpComponent(Component):
 
     def run(self, options):
         """
->>>>>>> dev
         该模式灵感来源于在对django和flask的思考.
 
 
@@ -54,11 +41,6 @@ class DumpComponent(Component):
 
         策略:
 
-<<<<<<< HEAD
-        加载指定的models文件,python 做 import
-        尝试解析内部的model类型,目前支持 peewee 和 mongoengine 两种
-        生成json文件至指定的目录
-=======
         * 根据选项装载环境,目前支持django和flask
 
             模拟链接:
@@ -73,35 +55,11 @@ class DumpComponent(Component):
 
         * 生成json文件至指定的目录
 
->>>>>>> dev
 
         :param argparser options:
         :return: None
         """
 
-<<<<<<< HEAD
-        load_models = options.path
-
-        try:
-            models = importlib.import_module(load_models)
-        except ImportError:
-            self.error("can't find models.path:{}", options.path)
-            pass
-
-
-
-
-        pass
-
-    @staticmethod
-    def append_arguments(sub_parsers):
-        sub_parser = sub_parsers.add_parser('dump', help='dump json from web models')
-        sub_parser.add_argument('path', help='python models full-name.e.g: pkg.module.models')
-
-        sub_parser.add_argument('--output', action='store_true', help='create cli-app with simple mode')
-        sub_parser.add_argument('--prefix', nargs='?', help='replace package prefix to null')
-        sub_parser.description = InitComponent.load_description('cliez/manual/main.txt')
-=======
         module_name = options.module_name
 
         if options.flask:
@@ -354,7 +312,6 @@ class DumpComponent(Component):
         sub_parser.add_argument('--settings', help='set cliez-flask settings')
         sub_parser.add_argument('--flask', action='store_true', help='init flask config resource')
         sub_parser.add_argument('--django', action='store_true', help='init django config resource')
->>>>>>> dev
         pass
 
     pass
