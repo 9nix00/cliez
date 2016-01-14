@@ -93,213 +93,6 @@ THE SOFTWARE.
     def create_simple(self, options):
         pass
 
-    def create_flask(self, options):
-        """
-        创建flask应用
-
-        相比于无约束的flask,使用框架将会创建
-
-        main.py 用于直接使用时启动
-        wsgi.py 用于wsgi方式启动
-        settings.py  flask配置
-
-
-
-        :param options:
-        :return:
-        """
-        open(os.path.join(self.pkg_path, 'main.py'), 'w').write('''# -*- coding: utf-8 -*-
-from cliez import conf, version
-
-
-try:
-    app = conf.settings().app
-except AttributeError:
-    app = conf.settings('{0}.settings', __file__).app
-
-
-@app.route('/', methods=['GET'])
-def hello():
-    """
-    hello world demo
-
-    :return:
-    """
-
-    return "hello,world", 200, {{"Content-Type": "text/html"}}
-
-
-def run(options):
-    if options.testing:
-        app.config.from_object(conf.settings().TestingConfig)
-    elif options.production:
-        app.config.from_object(conf.settings().ProductionConfig)
-    else:
-        app.config.from_object(conf.settings().DevelopmentConfig)
-    app.run(port=options.port)
-    pass
-
-def main():
-    import os
-    import argparse
-    from cliez.parser import parse
-
-    conf.COMPONENT_ROOT = os.path.dirname(__file__)
-
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog='You can submit issues at: https://www.github.com/<project-address>',
-    )
-    parser.add_argument('--version', action='version', version='%(prog)s v{{}}'.format(version))
-    parser.add_argument('--port', nargs='?', type=int, default=8000)
-    parser.add_argument('--testing', action='store_true', help='use testing config instead development config.')
-    parser.add_argument('--production', action='store_true', help='use production config instead development config.')
-    parse(parser, active_one=run)
-    pass
-
-if __name__ == '__main__':
-    main()
-
-
-'''.format(options.name))
-
-        open(os.path.join(self.pkg_path, 'settings.py'), 'w').write('''# -*- coding: utf-8 -*-
-import sys
-from flask import Flask
-
-class Config(object):
-    DEBUG=False
-    TESTING=False
-    pass
-
-
-class DevelopmentConfig(Config):
-    DEBUG=True
-    pass
-
-
-class TestingConfig(Config):
-    TESTING=True
-    pass
-
-
-class ProductionConfig(Config):
-    DEBUG=False
-    TESTING=False
-    pass
-
-
-app = Flask(__name__)
-
-
-'''.format(options.name))
-
-        open(os.path.join(self.pkg_path, 'wsgi.py'), 'w').write('''# -*- coding: utf-8 -*-
-from werkzeug.contrib.fixers import LighttpdCGIRootFix
-from .main import app
-
-
-if '--dev' in sys.argv:
-    app.config.from_object('{0}.settings.DevelopmentConfig')
-elif '--testing' in sys.argv:
-    app.config.from_object('{0}.settings.TestingConfig')
-else:
-    app.config.from_object('{0}.settings.ProductionConfig')
-
-app.wsgi_app = LighttpdCGIRootFix(app.wsgi_app)
-app.run()
-
-'''.format(options.name))
-
-        pass
-
-    def create_blueprint(self, options):
-        """
-        一个blueprint本质上也是一个flask应用.
-        所以我们先调用flask进行创建,然后对不一样的文件进行覆写
-
-
-
-        :param options:
-        :return:
-        """
-
-        self.create_flask(options)
-
-        # blueprint_path = os.path.join(self.pkg_path, 'blueprint')
-        # os.mkdir(blueprint_path)
-
-        # open(os.path.join(blueprint_path, '__init__.py'), 'w').write('''# -*- coding: utf-8 -*-
-        #
-        # ''')
-
-        blueprint_path = self.pkg_path
-
-        open(os.path.join(blueprint_path, 'apis.py'), 'w').write('''# -*- coding: utf-8 -*-
-from flask import Blueprint
-
-api = Blueprint('api', __name__)
-
-
-@api.route('/')
-def api():
-    return "hello,world", 200, {"Content-Type": "text/html"}
-
-''')
-
-        open(os.path.join(self.pkg_path, 'main.py'), 'w').write('''# -*- coding: utf-8 -*-
-from cliez import conf, version
-
-
-try:
-    app = conf.settings().app
-except AttributeError:
-    app = conf.settings('{0}.settings' , __file__).app
-
-
-from {0}.api import api
-app.register_blueprint(api,url_prefix='/api')
-
-
-def run(options):
-    if options.testing:
-        app.config.from_object(conf.settings().TestingConfig)
-    elif options.production:
-        app.config.from_object(conf.settings().ProductionConfig)
-    else:
-        app.config.from_object(conf.settings().DevelopmentConfig)
-    app.run(port=options.port)
-    pass
-
-def main():
-    import os
-    import argparse
-    from cliez.parser import parse
-
-    conf.COMPONENT_ROOT = os.path.dirname(__file__)
-
-    parser = argparse.ArgumentParser(
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog='You can submit issues at: https://www.github.com/<project-address>',
-    )
-    parser.add_argument('--version', action='version', version='%(prog)s v{{}}'.format(version))
-    parser.add_argument('--port', nargs='?', type=int, default=8000)
-    parser.add_argument('--testing', action='store_true', help='use testing config instead development config.')
-    parser.add_argument('--production', action='store_true', help='use production config instead development config.')
-    parse(parser, active_one=run)
-    pass
-
-if __name__ == '__main__':
-    main()
-
-
-'''.format(options.name))
-
-        pass
-
-    def create_dispatcher(self, options):
-        pass
-
     def create_complex(self, options):
         """
         创建复杂模式类型应用
@@ -362,9 +155,6 @@ Hello,{}
 
         * complex 模式. 此模式为默认模式,创建一个基于 argparser 的cli应用
         * simple 模式.  创建一个简单应用
-        * flask 模式. 创建一个 flask应用
-        * blueprint 模式. 创建一个 flask blueprint 应用
-        * dispatcher 模式, 创建一个并发调度器类型的应用
 
         .. note::
             文件名会将大写和减号自动转换为小写和下划线
@@ -396,29 +186,14 @@ Hello,{}
             pass
 
         self.create_base(options)
-
-        if options.flask:
-            self.create_flask(options)
-            pass
-
-        elif options.blueprint:
-            self.create_blueprint(options)
-            pass
-
-        else:
-            self.create_complex(options)
-            pass
-
+        self.create_complex(options)
         pass
 
-    @staticmethod
-    def append_arguments(sub_parsers):
+    @classmethod
+    def append_arguments(cls, sub_parsers):
         sub_parser = sub_parsers.add_parser('init', help='init project')
         sub_parser.add_argument('name', help='project name')
-        sub_parser.add_argument('--simple', action='store_true', help='create cli-app with simple mode')
-        sub_parser.add_argument('--flask', action='store_true', help='create a flask app')
-        sub_parser.add_argument('--blueprint', action='store_true', help='create a flask blueprint app')
-        sub_parser.add_argument('--dispatcher', action='store_true', help='create a dispatcher app')
+        # sub_parser.add_argument('--simple', action='store_true', help='create cli-app with simple mode')
         sub_parser.add_argument('--force', action='store_true', help='force rewrite app')
         sub_parser.description = InitComponent.load_description('cliez/manual/main.txt')
         pass

@@ -17,7 +17,6 @@ class InitComponent(Component):
     @staticmethod
     def append_arguments(sub_parsers):
         sub_parser = sub_parsers.add_parser('init', help='init project')
-
         sub_parser.description = InitComponent.load_description('argparser_pkg/manual/init.txt')
         pass
 

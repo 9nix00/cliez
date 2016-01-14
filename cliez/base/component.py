@@ -3,9 +3,12 @@
 import pkg_resources
 import os
 import sys
+import signal
 
 import termcolor
 import time
+import threading
+from time import sleep
 
 
 class Component(object):
@@ -25,6 +28,7 @@ class Component(object):
         """
 
         self.parser = parser
+        self.options = options
         self.settings = settings
         pass
 
@@ -136,7 +140,6 @@ class Component(object):
             a.load_resource(__file__.rsplit('/', 2)[0] + '/cliez/base/component.py')
 
 
-
         .. note::
 
             如果是python3版本,则文档编码格式必须为utf-8
@@ -191,5 +194,118 @@ class Component(object):
             pass
 
         return desc
+
+    pass
+
+
+class SlotComponent(Component):
+    slot_class = None
+    entry_name = None
+    entry_help = 'run component as service'
+
+    def get_slot_class(self):
+        """
+        返回slot类
+        :return:
+        """
+        return self.slot_class(self)
+
+    def set_signal(self):
+        """
+        设置信号处理
+
+        默认直接中断,考虑到一些场景用户需要等待线程结束.
+        可在此自定义操作
+
+        :return:
+        """
+
+        def signal_handle(signum, frame):
+            self.error("User interrupt.kill threads.")
+            sys.exit(-1)
+            pass
+
+        signal.signal(signal.SIGINT, signal_handle)
+        pass
+
+    def run(self, options):
+        """
+        对于大多数场景,用户并不需要覆写此函数
+
+        :param options:
+        :return:
+        """
+
+        if not self.slot_class:
+            raise NotImplementedError('please set your `cls.slot_class` attribute.')
+
+        self.set_signal()
+
+        slot = self.get_slot_class()
+
+        # start thread
+        i = 0
+        while i < options.threads:
+            t = threading.Thread(target=self.worker, args=[slot])
+            # only set daemon when once is False
+            if options.once is True or options.no_daemon is True:
+                t.daemon = False
+            else:
+                t.daemon = True
+
+            t.start()
+            i += 1
+
+        # waiting thread
+        if options.once is False:
+            while True:
+                if threading.active_count() > 1:
+                    sleep(1)
+                else:
+                    if threading.current_thread().name == "MainThread":
+                        sys.exit(0)
+
+        pass
+
+    def worker(self, iterator):
+        t = self.options.sleep
+
+        while True:
+            with iterator as result:
+                if result is not False:
+                    iterator.slot(result)
+                    t = self.options.sleep
+                else:
+                    # if set options.once,exit.
+                    if self.options.once is True:
+                        sys.exit(0)
+
+                    t += self.options.sleep
+                    if t > self.options.sleep_max_time:
+                        t = self.options.sleep
+                    sleep(t)
+                    # else:
+                    #     print("User interrupt on thread:", threading.current_thread())
+                    #     sys.exit(0)
+
+    @classmethod
+    def append_slot_arguments(cls, sub_parser):
+        return None
+
+    @classmethod
+    def append_arguments(cls, sub_parsers):
+        if not cls.entry_name:
+            raise NotImplementedError('please set your `CLASS.entry_name` attribute')
+
+        sub_parser = sub_parsers.add_parser(cls.entry_name, help=cls.entry_help)
+        sub_parser.add_argument('--once', action='store_true', help='execute once and exit.')
+        sub_parser.add_argument('--no-daemon', action='store_true', help='set service works in no daemon mode.')
+        sub_parser.add_argument('--sleep', nargs='?', type=int, default=2, help='set sleep time,default is 2s.')
+        sub_parser.add_argument('--sleep-max-time', nargs='?', type=int, default=60, help='set max sleep time, default is 60s.')
+        sub_parser.add_argument('--thread-sleep', nargs='?', default='0', help='set thread sleep time.')
+        sub_parser.add_argument('--threads', nargs='?', type=int, default=10, help='set slot threads num,default is 10.')
+
+        cls.append_slot_arguments(sub_parser)
+        pass
 
     pass

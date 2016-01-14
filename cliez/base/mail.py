@@ -97,7 +97,7 @@ class Mail(object):
             server.sendmail(self.send_from, to_addrs, msg)
             server.quit()
         except (socket.timeout, TimeoutError, smtplib.SMTPServerDisconnected):
-            logger.error("timeout:%d %s %s", timeout, logger_action, ','.join(to_addrs))
+            logger.error("[EZ-Mail]: timeout:%d %s %s", timeout, logger_action, ','.join(to_addrs))
 
             # 暂时关闭,对django支持不是很友好
             # extra={
