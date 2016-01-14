@@ -14,6 +14,13 @@ class DumpComponent(Component):
 
     def run(self, options):
         """
+        ...experimental::
+
+            实验性质的内容,目前并不太确定还要不要继续
+
+            实际的体验,SPA的模式也有SPA的问题,相比我更喜欢传统的模式
+
+
         该模式灵感来源于在对django和flask的思考.
 
 
