@@ -60,7 +60,7 @@ I create demo for easier use this, or you can use `cliez init` to touch them
 `Argparse Style <https://github.com/9nix00/cliez/blob/master/demo/argparse_demo/argparse_pkg>`_
 
 
-`Flask(blueprint) Style <https://github.com/9nix00/cliez/blob/master/demo/blueprint_demo/>`_
+`Daemon Style <https://github.com/9nix00/cliez/blob/master/demo/slot_demo/slot_pkg>`_
 
 
 
