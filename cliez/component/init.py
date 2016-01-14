@@ -193,6 +193,7 @@ Hello,{}
     def append_arguments(cls, sub_parsers):
         sub_parser = sub_parsers.add_parser('init', help='init project')
         sub_parser.add_argument('name', help='project name')
+        # disable simple mode
         # sub_parser.add_argument('--simple', action='store_true', help='create cli-app with simple mode')
         sub_parser.add_argument('--force', action='store_true', help='force rewrite app')
         sub_parser.description = InitComponent.load_description('cliez/manual/main.txt')
