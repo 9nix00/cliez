@@ -302,7 +302,10 @@ class SlotComponent(Component):
         sub_parser.add_argument('--no-daemon', action='store_true', help='set service works in no daemon mode.')
         sub_parser.add_argument('--sleep', nargs='?', type=int, default=2, help='set sleep time,default is 2s.')
         sub_parser.add_argument('--sleep-max-time', nargs='?', type=int, default=60, help='set max sleep time, default is 60s.')
-        sub_parser.add_argument('--thread-sleep', nargs='?', default='0', help='set thread sleep time.')
+        sub_parser.add_argument('--thread-sleep-time', nargs='?', type=int, default=0, help='set thread sleep min time.')
+        sub_parser.add_argument('--thread-sleep-range', nargs='?', type=int, default=0,
+                                help='when set thread-sleep-time, pickup a random value from ${thread-sleep-time} to ${thread-sleep-time}+range')
+
         sub_parser.add_argument('--threads', nargs='?', type=int, default=10, help='set slot threads num,default is 10.')
 
         cls.append_slot_arguments(sub_parser)

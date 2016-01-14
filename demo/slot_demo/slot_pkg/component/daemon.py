@@ -20,11 +20,10 @@ class TodoSlot(Slot):
 
     def __enter__(self):
         if not self.todo_list:
-            self.component.print_message("{}:No todo data found, waiting {}s...".format(threading.current_thread().name, self.component.options.sleep))
+            self.component.print_message("{}:No todo data found, waiting {}s...".format(threading.current_thread().name, self.options.sleep))
             return False
         else:
             return self.todo_list.pop()
-
     pass
 
 

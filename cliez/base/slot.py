@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import random
+from time import sleep
+
+
 class Slot(object):
     """
     To use slot, you should create a python module file. we named *slot*.
@@ -31,6 +35,7 @@ class Slot(object):
         :return:
         """
         self.component = component
+        self.options = component.options
         self.initialize()
 
     def initialize(self):
@@ -43,10 +48,12 @@ class Slot(object):
 
             class UserSlot(Slot):
                 def initialize(self):
-                    self.threads_num = 10
+                    ...
+                    pass
 
                 def slot(self, result):
                     ...
+                    pass
 
         """
         pass
@@ -65,7 +72,18 @@ class Slot(object):
         """
         When slot done, will call this method.
         """
-        # print("You should override __exit__ method by subclass")
+
+        if self.options.thread_sleep_time:
+
+            if self.options.thread_sleep_range:
+                sleep_time = random.randint(self.options.thread_sleep_time, self.options.thread_sleep_time + self.options.thread_sleep_range)
+                pass
+            else:
+                sleep_time = self.options.thread_sleep_time
+                pass
+
+            sleep(sleep_time)
+
         pass
 
     def slot(self, msg):
