@@ -211,7 +211,7 @@ class SlotComponent(Component):
         if not self.slot_class:
             raise NotImplementedError('please set your `cls.slot_class` attribute.')
 
-        return self.slot_class(self)
+        return self.slot_class
 
     def set_signal(self):
         """
@@ -241,7 +241,7 @@ class SlotComponent(Component):
 
         self.set_signal()
 
-        slot = self.get_slot_class()
+        slot = self.get_slot_class()(self)
 
         # start thread
         i = 0
