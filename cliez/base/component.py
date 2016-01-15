@@ -208,6 +208,9 @@ class SlotComponent(Component):
         返回slot类
         :return:
         """
+        if not self.slot_class:
+            raise NotImplementedError('please set your `cls.slot_class` attribute.')
+
         return self.slot_class(self)
 
     def set_signal(self):
@@ -235,9 +238,6 @@ class SlotComponent(Component):
         :param options:
         :return:
         """
-
-        if not self.slot_class:
-            raise NotImplementedError('please set your `cls.slot_class` attribute.')
 
         self.set_signal()
 
