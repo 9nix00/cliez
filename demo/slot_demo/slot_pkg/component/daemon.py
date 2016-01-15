@@ -34,8 +34,8 @@ class DaemonComponent(SlotComponent):
     slot_class = TodoSlot
     entry_name = 'daemon'
 
-    @classmethod
-    def append_slot_arguments(cls, sub_parser):
+    @staticmethod
+    def append_slot_arguments(sub_parser):
         sub_parser.description = DaemonComponent.load_description('slot_pkg/manual/daemon.txt')
         sub_parser.add_argument('--small', action='store_true', help='set list from 0 to 10')
         pass
