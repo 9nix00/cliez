@@ -65,7 +65,7 @@ class Slot(object):
 
         The return value will be used in `Slot.slot`
         """
-        self.component.print_warn("no data found. will sleep {}s.".format(self.component.options.sleep))
+        self.component.warn("no data found. will sleep {}s.".format(self.component.options.sleep))
         return False
 
     def __exit__(self, exc_type, exc_val, exc_tb):
