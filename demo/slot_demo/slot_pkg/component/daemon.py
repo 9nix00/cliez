@@ -4,6 +4,7 @@ from cliez.base.component import SlotComponent
 from cliez.base.slot import Slot
 
 import threading
+from time import sleep
 
 
 class TodoSlot(Slot):
@@ -16,6 +17,7 @@ class TodoSlot(Slot):
 
     def slot(self, msg):
         self.component.print_message("{}:Get todo id:{}".format(threading.current_thread().name, msg))
+        sleep(1)
         pass
 
     def __enter__(self):

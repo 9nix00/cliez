@@ -4,6 +4,7 @@ from cliez.base.component import SlotComponent
 from cliez.base.slot import Slot
 
 import threading
+from time import sleep
 
 
 class threadsafe_iter:
@@ -44,7 +45,10 @@ class TodoSlot(Slot):
         self.lock = None
         self.todo_list = threadsafe_iter(iter(self.generate_todo_list()), self.lock)
 
-        self.todo_list1 = self.generate_todo_list()
+        self.todo_list1 = iter(self.generate_todo_list())
+
+        self.i = 0
+        self.ending = False
 
         pass
 
@@ -52,12 +56,18 @@ class TodoSlot(Slot):
         if self.component.options.small:
             return list(range(0, 10))
         else:
-            return list(range(0, 20))
-
+            return list(range(0, 40))
         pass
 
     def slot(self, msg):
-        self.component.print_message("{}:Get todo id:{}".format(threading.current_thread().name, msg))
+
+        self.i += 1
+
+        if threading.current_thread().name in ['Thread-8', 'Thread-1']:
+            self.component.print_message("{}:Get todo id:{},self.i is {}".format(threading.current_thread().name, msg, self.i))
+            pass
+
+        # sleep(1)
         pass
 
     def __enter__(self):
@@ -65,7 +75,14 @@ class TodoSlot(Slot):
             return next(self.todo_list1)
             # return self.todo_list.next()
         except StopIteration:
-            self.todo_list1 = self.generate_todo_list()
+            # if not self.todo_list1:
+            if self.ending is False:
+                self.ending = True
+                self.component.print_message("{}:execute {} times... this message should show only once.".format(threading.current_thread().name, self.i))
+
+            if not self.options.once and not self.todo_list1:
+                self.todo_list1 = iter(self.generate_todo_list())
+                self.i = 0
             # self.todo_list = threadsafe_iter(iter(self.generate_todo_list()), self.lock)
             # self.component.print_message("{}:No todo data found, waiting {}s...".format(threading.current_thread().name, self.options.sleep))
             return False

@@ -231,6 +231,44 @@ class SlotComponent(Component):
         signal.signal(signal.SIGINT, signal_handle)
         pass
 
+    def check_exclusive_mode(self):
+        """
+        检查是否是独占模式
+
+        参数顺序必须一致,也就是说如果参数顺序不一致,则判定为是两个不同的进程
+        这么设计是考虑到:
+
+        - 一般而言,排他模式的服务启动都是crontab等脚本来完成的,不存在顺序变更的可能
+        - 这在调试的时候可以帮助我们不需要结束原有进程就可以继续调试
+
+        :return:
+        """
+
+        if self.options.exclusive_mode:
+            import psutil
+            current_pid = os.getpid()
+            current = psutil.Process(current_pid).cmdline()
+
+            for pid in psutil.pids():
+                p = psutil.Process(pid)
+                try:
+
+                    if current_pid != pid and current == p.cmdline():
+                        self.error("process exist. pid:{}".format(p.pid))
+                        sys.exit(-1)
+                        pass
+
+                except psutil.ZombieProcess:
+                    # 僵尸进程,无视
+                    pass
+                except psutil.AccessDenied:
+                    # 不具备用户权限
+                    pass
+                pass
+            pass
+
+        pass
+
     def run(self, options):
         """
         对于大多数场景,用户并不需要覆写此函数
@@ -240,6 +278,7 @@ class SlotComponent(Component):
         """
 
         self.set_signal()
+        self.check_exclusive_mode()
 
         slot = self.get_slot_class()(self)
 
@@ -299,6 +338,7 @@ class SlotComponent(Component):
 
         sub_parser = sub_parsers.add_parser(cls.entry_name, help=cls.entry_help)
         sub_parser.add_argument('--once', action='store_true', help='execute once and exit.')
+        sub_parser.add_argument('--exclusive-mode', action='store_true', help='open this will only allow one progress to work.')
         sub_parser.add_argument('--no-daemon', action='store_true', help='set service works in no daemon mode.')
         sub_parser.add_argument('--sleep', nargs='?', type=int, default=2, help='set sleep time,default is 2s.')
         sub_parser.add_argument('--sleep-max-time', nargs='?', type=int, default=60, help='set max sleep time, default is 60s.')

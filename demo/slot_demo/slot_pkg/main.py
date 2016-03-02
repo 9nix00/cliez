@@ -7,10 +7,13 @@ from cliez import conf
 import argparse
 import os
 import sys
+sys.path.insert(0, __file__.rsplit('/', 2)[0])
 
 import slot_pkg
-
 conf.COMPONENT_ROOT = os.path.dirname(__file__)
+
+
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
