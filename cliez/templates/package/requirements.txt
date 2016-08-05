@@ -1,0 +1,5 @@
+## syntax
+##
+## packagename
+## name==1.0
+## name>=1.0

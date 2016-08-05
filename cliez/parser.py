@@ -3,7 +3,8 @@
 import sys
 import os
 import importlib
-from cliez.conf import Settings
+
+from . import  settings
 
 
 def command_list():
@@ -54,9 +55,11 @@ def parse(parser, argv=None, settings_module=None, active_one=None):
 
     """
 
+    from . import conf
+
     argv = argv or sys.argv
     commands = command_list()
-    settings = None if not settings_module else Settings.bind(settings_module)
+    settings = conf
 
     #: 细节分支:
     #:
