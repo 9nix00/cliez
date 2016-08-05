@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, main
 import argparse
 import os
 import cliez
@@ -61,3 +61,7 @@ class NormalTest(TestCase):
         pass
 
     pass
+
+
+if __name__ == '__main__':
+    main()
