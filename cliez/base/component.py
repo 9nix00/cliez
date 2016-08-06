@@ -71,7 +71,7 @@ class Component(object):
         sys.stdout.flush()
         pass
 
-    def warn(self, message, file=None, prefix="[warn]:", suffix="..."):
+    def warn_message(self, message, file=None, prefix="[warn]:", suffix="..."):
         """
         输出警告信息
         当输出为 `sys.stdout` 时,以彩色方式输出
@@ -99,7 +99,44 @@ class Component(object):
 
         pass
 
-    def error(self, message):
+    def warn(self, *args, **kwargs):
+        """
+        alias for `warn_message`
+        :param args:
+        :param kwargs:
+        :return:
+        """
+
+        return self.warn_message(*args, **kwargs)
+
+    def error_message(self, message, file=None, prefix="[error]:", suffix="..."):
+        """
+        输出错误信息
+        当输出为 `sys.stderr` 时,以彩色方式输出
+
+        :param message: 警告信息
+        :type message: `str`
+        :param file: 输出的文件符,默认为 `sys.stdout`
+        :type file: fd
+        :param prefix: 显示前缀,默认为 [warn]
+        :type prefix: `str`
+        :param suffix: 显示后缀,默认为 ...
+        :type suffix: `str`
+        :return: None
+        """
+
+        msg = prefix + message + suffix
+
+        file = file or sys.stderr
+
+        if file is sys.stderr:
+            termcolor.cprint(msg, color="red")
+        else:
+            file.write(msg)
+
+        pass
+
+    def error(self, message=''):
         """
         输出错误消息并退出,退出状态位为2
 
@@ -109,6 +146,7 @@ class Component(object):
 
         :return:None
         """
+
         return self.parser.error(message)
 
     @staticmethod
