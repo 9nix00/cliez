@@ -81,9 +81,7 @@ def parse(parser, argv=None, settings_module=None, active_one=None):
         # easier to create unittest case
         return obj
 
-    #: 暂时关闭对usage的显示优化,因为场景略复杂
-    #  parser.usage = '{} [options] <command>'.format(os.path.basename(argv[0]))
-    #: 如果未指定文档,且存在子parser,则尝试加载文档
+    # 如果未指定文档,且存在默认显示子parser选项
     if not parser.description and len(commands):
         sub_parsers = parser.add_subparsers()
         [sub_parsers.add_parser(v) for v in commands]

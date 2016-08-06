@@ -9,6 +9,7 @@ import termcolor
 import time
 import threading
 from time import sleep
+from cliez import conf
 
 
 class Component(object):
@@ -124,10 +125,9 @@ class Component(object):
             open('../conf/__init__.py').read()
 
 
+        这种方法会带了一个明显的问题是,如果我们的运行目录发生了变化,..的解释不同的.
 
-        这种写法会带了一个明显的问题是,如果我们的运行目录发生了变化,..的解释不同的.
-
-        load_resource用来解决这个问题,只要是在package中的内容,当前进程能够正常获取到package,即能被正常加载.
+        load_resource用来简化这个问题,只要是在package中的内容,当前进程能够正常获取到package,即能被正常加载.
 
         以下代码都是等价的
         .. code-block:: python
@@ -194,6 +194,39 @@ class Component(object):
             pass
 
         return desc
+
+    @staticmethod
+    def hump_to_underscore(name):
+        new_name = ''
+
+        pos = 0
+        for c in name:
+            if pos == 0:
+                new_name = c.lower()
+            elif 65 <= ord(c) <= 90:
+                new_name += '_' + c.lower()
+                pass
+            else:
+                new_name += c
+            pos += 1
+            pass
+        return new_name
+
+    @classmethod
+    def append_arguments(cls, sub_parsers):
+        entry_name = cls.hump_to_underscore(cls.__name__).replace('_component', '')
+        epilog = conf.EPILOG if conf.EPILOG else 'This tool generate by `cliez` https://www.github.com/9nix00/cliez'
+
+        sub_parser = sub_parsers.add_parser(entry_name, help=cls.__doc__, epilog=epilog)
+        sub_parser.description = cls.add_arguments.__doc__
+        cls.add_arguments(sub_parser)
+        for v in conf.GENERAL_ARGUMENTS:
+            sub_parser.add_argument(*v[0], **v[1])
+        pass
+
+    @classmethod
+    def add_arguments(cls, sub_parser):
+        pass
 
     pass
 
@@ -333,6 +366,7 @@ class SlotComponent(Component):
 
     @classmethod
     def append_arguments(cls, sub_parsers):
+
         if not cls.entry_name:
             raise NotImplementedError('please set your `CLASS.entry_name` attribute')
 

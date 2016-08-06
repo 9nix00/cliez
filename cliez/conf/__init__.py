@@ -5,7 +5,8 @@ import sys
 import importlib
 
 COMPONENT_ROOT = None
-
+GENERAL_ARGUMENTS = []
+EPILOG = None
 
 def settings(path=None, with_path=None):
     """

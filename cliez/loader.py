@@ -175,13 +175,12 @@ class ArgLoader(object):
         :return: None
         """
 
-
         return "Action List:\n {}\nOptions List:\n {}\nArguemnts List:\n {}\nAlias List:\n {}\nRequired List:\n {}\n".format(
-            self.actions, \
-            self.options, \
-            self.argv, \
-            self.alias, \
-            self.required)
+                self.actions,
+                self.options,
+                self.argv,
+                self.alias,
+                self.required)
 
     def __str__(self):
         """
@@ -194,7 +193,6 @@ class ArgLoader(object):
 
         :return: None
         """
-
 
         return "\n" + self.__doc__
 
@@ -215,7 +213,6 @@ class ArgLoader(object):
 
 
         """
-
 
         # parse argument and document
         self.options = {}
@@ -304,5 +301,3 @@ class ArgLoader(object):
                 self.__doc__ += line
 
             self.__doc__ += "\n"
-
-
