@@ -3,10 +3,13 @@
 import shutil
 import termcolor
 
-from cliez.base.component import Component
+from cliez.component import Component
 
 
 class CheckComponent(Component):
+
+    exclude_global_option = True
+
     def run(self, options):
         """
         检查依赖环境

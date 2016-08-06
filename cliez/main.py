@@ -8,8 +8,10 @@ from cliez.parser import parse
 conf.COMPONENT_ROOT = os.path.dirname(__file__)
 conf.GENERAL_ARGUMENTS = [
     (('--dir',), dict(nargs='?', default=os.getcwd(), help='set working directory')),
+    (('--debug',), dict(action='store_true', help='open debug mode')),
 ]
 conf.EPILOG = 'You can submit issues at: https://www.github.com/9nix00/cliez'
+
 
 def main():
     parser = argparse.ArgumentParser(

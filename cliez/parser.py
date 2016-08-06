@@ -27,13 +27,13 @@ def command_list():
         pass
 
     try:
-        path = os.listdir(os.path.join(root, 'component'))
+        path = os.listdir(os.path.join(root, 'components'))
         return [f[:-3] for f in path if f.endswith('.py') and f != '__init__.py']
     except FileNotFoundError:
         return []
 
 
-def parse(parser, argv=None, settings_module=None, active_one=None):
+def parse(parser, argv=None, settings_module=None, no_args_func=None):
     """
     parser cliez app
 
@@ -43,14 +43,10 @@ def parse(parser, argv=None, settings_module=None, active_one=None):
     :type argv: `list` or `tuple`
     :param settings_module: 模块名称, 指定后会将该模块中的变量绑定至全局 `cliez.conf.Settings`
     :type settings_module: `str`
-    :param object active_one: 如果指定该参数,当用户不设置任何参数时,执行,多用于兼容flask模式
-
-    .. note::
-        当指定active_one时候,只有全局参数会生效,同时如果文档为手工撰写,请同时更新文档说明
+    :param function no_args_func: 如果指定该参数,当用户不设置任何参数时,执行,适用于简单脚本
 
     :return: `Component` 实际调用的组件,
                 *返回组件在运行中并没有太大意义,但是在做测试用例时,返回组件可以大大简化撰写测试用例的难度*
-
 
     """
 
@@ -72,7 +68,7 @@ def parse(parser, argv=None, settings_module=None, active_one=None):
         class_name = argv[1].capitalize() + 'Component'
         from cliez.conf import COMPONENT_ROOT
         sys.path.insert(0, os.path.dirname(COMPONENT_ROOT))
-        mod = importlib.import_module('{}.component.{}'.format(os.path.basename(COMPONENT_ROOT), argv[1]))
+        mod = importlib.import_module('{}.components.{}'.format(os.path.basename(COMPONENT_ROOT), argv[1]))
         klass = getattr(mod, class_name)
         klass.append_arguments(sub_parsers)
         options = parser.parse_args(argv[1:])
@@ -89,8 +85,8 @@ def parse(parser, argv=None, settings_module=None, active_one=None):
     pass
 
     options = parser.parse_args(argv[1:])
-    if active_one:
-        return active_one(options)
+    if no_args_func:
+        return no_args_func(options)
     else:
         parser._print_message("nothing to do...\n")
     pass

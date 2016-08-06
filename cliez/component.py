@@ -13,6 +13,8 @@ from cliez import conf
 
 
 class Component(object):
+    exclude_global_option = False
+
     def __init__(self, parser=None, options=None, settings=None, *args, **kwargs):
         """
         组件基础类
@@ -257,14 +259,20 @@ class Component(object):
 
         sub_parser = sub_parsers.add_parser(entry_name, help=cls.__doc__, epilog=epilog)
         sub_parser.description = cls.add_arguments.__doc__
-        cls.add_arguments(sub_parser)
-        for v in conf.GENERAL_ARGUMENTS:
+        user_arguments = cls.add_arguments()
+
+        for v in user_arguments:
             sub_parser.add_argument(*v[0], **v[1])
+
+        if not cls.exclude_global_option:
+            for v in conf.GENERAL_ARGUMENTS:
+                sub_parser.add_argument(*v[0], **v[1])
+
         pass
 
     @classmethod
-    def add_arguments(cls, sub_parser):
-        pass
+    def add_arguments(cls):
+        return []
 
     pass
 
