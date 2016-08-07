@@ -255,6 +255,14 @@ class Component(object):
 
         sub_parser = sub_parsers.add_parser(entry_name, help=cls.__doc__, epilog=epilog)
         sub_parser.description = cls.add_arguments.__doc__
+
+        if hasattr(cls, 'add_slot_args'):
+            slot_args = cls.add_slot_args() or []
+            for v in slot_args:
+                sub_parser.add_argument(*v[0], **v[1])
+            sub_parser.description = cls.add_slot_args.__doc__
+            pass
+
         user_arguments = cls.add_arguments() or []
 
         for v in user_arguments:

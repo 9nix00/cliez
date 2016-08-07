@@ -1,5 +1,0 @@
-Add custom document
-
-command list:
-    init    hello demo
-    ...
