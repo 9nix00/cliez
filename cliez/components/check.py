@@ -12,10 +12,8 @@ class CheckComponent(Component):
 
     def run(self, options):
         """
-        检查依赖环境
-
         ..todo:
-            对网络环境进行检查,如果是离线,则给出警告
+            check network connection
 
         :param options:
         :return:

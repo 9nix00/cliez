@@ -13,14 +13,14 @@ class Component(object):
 
     def __init__(self, parser=None, options=None, settings=None, *args, **kwargs):
         """
-        组件基础类
 
-        用于在argparser加载subparser后的逻辑执行
-        上层继承该类后,业务逻辑覆写在 `run()`
+        Don't overwrite this method.
+
+        in most case,you should custom  `run()` method
 
         :param parser:
         :type parser:  `argparse.ArgumentParser`
-        :param settings: 由 `cliez.parser.parse` 传入 package.settings
+        :param settings: a settings created by `cliez.parser.parse`
         :type settings: module
         :param args: `tuple`
         :param kwargs: `dict`
@@ -33,11 +33,11 @@ class Component(object):
 
     def print_message(self, message, file=None):
         """
-        输出消息
+        print message
 
-        :param message: 显示的信息
+        :param message: message to print
         :type message: `str`
-        :param file: 如果不指定则默认为 `sys.stdout`
+        :param file: file to write,default is  `sys.stdout`
         :type file: fd
         :return: None
         """
@@ -45,15 +45,15 @@ class Component(object):
 
     def print_loading(self, wait, message):
         """
-        在 `wait` 之内显示加载中的提示
+        print loading message on screen
 
         .. note::
-            loading只写入到 `sys.stdout` 中
+            loading message only write to `sys.stdout`
 
 
-        :param wait: 等待时间
+        :param wait: wait seconds
         :type wait: `int`
-        :param message: 显示消息
+        :param message: message to print
         :type message: `str`
         :return: None
         """
@@ -71,17 +71,17 @@ class Component(object):
 
     def warn_message(self, message, file=None, prefix="[warn]:", suffix="..."):
         """
-        输出警告信息
-        当输出为 `sys.stdout` 时,以彩色方式输出
+        print warn type message
+        if file handle is `sys.stdout`, print color message
 
 
-        :param message: 警告信息
+        :param message: message to print
         :type message: `str`
-        :param file: 输出的文件符,默认为 `sys.stdout`
+        :param file: file handle,default is `sys.stdout`
         :type file: fd
-        :param prefix: 显示前缀,默认为 [warn]
+        :param prefix: message prefix,default is `[warn]`
         :type prefix: `str`
-        :param suffix: 显示后缀,默认为 ...
+        :param suffix: message suffix ,default is `...`
         :type suffix: `str`
         :return: None
         """
@@ -109,16 +109,16 @@ class Component(object):
 
     def error_message(self, message, file=None, prefix="[error]:", suffix="..."):
         """
-        输出错误信息
-        当输出为 `sys.stderr` 时,以彩色方式输出
+        print error type message
+        if file handle is `sys.stderr`, print color message
 
-        :param message: 警告信息
+        :param message: message to print
         :type message: `str`
-        :param file: 输出的文件符,默认为 `sys.stdout`
+        :param file: file handle, default is  `sys.stdout`
         :type file: fd
-        :param prefix: 显示前缀,默认为 [warn]
+        :param prefix: message prefix,default is `[error]`
         :type prefix: `str`
-        :param suffix: 显示后缀,默认为 ...
+        :param suffix: message suffix ,default is `...`
         :type suffix: `str`
         :return: None
         """
@@ -136,10 +136,13 @@ class Component(object):
 
     def error(self, message=''):
         """
-        输出错误消息并退出,退出状态位为2
+        print error message and exit.
 
+        this method call `argparser.error`
 
-        :param message:消息体
+        the default exit status is 2
+
+        :param message: message to print
         :type message: `str`
 
         :return:None
@@ -150,42 +153,46 @@ class Component(object):
     @staticmethod
     def load_resource(path, root=''):
         """
-        装载资源文件,通常用于提升加载包和待安装包的兼容性.
+        load resource file in package. 
+        
+        this method is used to load file easier in different environment.
 
-        举例说明:
+        e.g:
 
-        比如如果我们在当前文件,需要加载 `cliez.conf` 包中的 __init__.py 文件.最常用的做法是:
+        if we need load resource file `resource.io` from package `cliez.conf` .the easiest way may like this:
 
         .. code-block:: python
 
-            open('../conf/__init__.py').read()
+            open('../conf/resource.io').read()
+
+        
+        An obvious question is if we change working directory. `..` is relative path. it will cause error.
+
+        `load_resource` is designed for solve this problem.
 
 
-        这种方法会带了一个明显的问题是,如果我们的运行目录发生了变化,..的解释不同的.
-
-        load_resource用来简化这个问题,只要是在package中的内容,当前进程能够正常获取到package,即能被正常加载.
-
-        以下代码都是等价的
+        The following code are equivalent:
+        
         .. code-block:: python
 
             a = Component()
-            a.load_resource('component.py', root='cliez/base')
-            a.load_resource('base/component.py', root='cliez')
-            a.load_resource('/base/component.py', root='cliez')
-            a.load_resource('cliez/base/component.py')
-            a.load_resource(__file__.rsplit('/', 2)[0] + '/cliez/base/component.py')
+            a.load_resource('resource.io', root='cliez/base')
+            a.load_resource('base/resource.io', root='cliez')
+            a.load_resource('/base/resource.io', root='cliez')
+            a.load_resource('cliez/base/resource.io')
+            a.load_resource(__file__.rsplit('/', 2)[0] + '/cliez/base/resource.io')
 
 
         .. note::
 
-            如果是python3版本,则文档编码格式必须为utf-8
+            if you use python3, the document charset *must* be utf-8
 
 
-        :param path: 文件路径
+        :param path: file path
         :type path: `str`
-        :param root: 根目录,默认为空字符串
+        :param root: root path
         :type root: `str`
-        :return: `str` 读取的内容
+        :return: `str`
         """
 
         if root:
@@ -209,18 +216,13 @@ class Component(object):
     @staticmethod
     def load_description(name, root=''):
         """
-        读取文档
+        load resource file as description but ignore `IOError` and `ImportError`
 
-        该方法底层调用 `self.load_resource`
-
-        不同的是当文件不存在时,该方法不会抛出异常而是
-
-
-        :param path: 文件路径
+        :param path: name resource path
         :type path: `str`
-        :param root: 根目录,默认为空字符串
+        :param root: same as `load_resource()` root
         :type root: `str`
-        :return: `str` 返回描述
+        :return: `str`
         """
         desc = ''
 

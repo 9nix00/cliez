@@ -8,9 +8,10 @@ from cliez.conf import Settings
 
 def command_list():
     """
-    根据 `cliez.COMPONENT_ROOT` 查找所支持的完整 sub-parser 列表
+    find sub-parser full list.
+    depends on `cliez.COMPONENT_ROOT` path
 
-    :return: `list` 当前支持的组件列表
+    :return: `list` matched sub-parser
     """
     from cliez.conf import COMPONENT_ROOT
 
@@ -37,16 +38,15 @@ def parse(parser, argv=None, settings_module=None, no_args_func=None):
     """
     parser cliez app
 
-    :param parser: 用户预定义的 parser
+    :param parser: an instance of argparse.ArgumentParser
     :type parser:  `argparse.ArgumentParser`
-    :param argv: 如果用户不指定,默认为 `sys.argv`
+    :param argv: argument list,default is `sys.argv`
     :type argv: `list` or `tuple`
-    :param settings_module: 模块名称, 指定后会将该模块中的变量绑定至全局 `cliez.conf.Settings`
+    :param settings_module: settings class name, default is `cliez.conf.Settings`
     :type settings_module: `str`
-    :param function no_args_func: 如果指定该参数,当用户不设置任何参数时,执行,适用于简单脚本
+    :param function no_args_func: execute when no argument apply.
 
-    :return: `Component` 实际调用的组件,
-                *返回组件在运行中并没有太大意义,但是在做测试用例时,返回组件可以大大简化撰写测试用例的难度*
+    :return: `Component`
 
     """
 
@@ -54,15 +54,9 @@ def parse(parser, argv=None, settings_module=None, no_args_func=None):
     commands = command_list()
     settings = None if not settings_module else Settings.bind(settings_module)
 
-    #: 细节分支:
-    #:
-    #: * 当没有参数时,抛出异常,通常是因为测试用例忘记添加参数
-    #: * 当有两个参数时,如果第二个参数不是 option 类型,则尝试使用subparser模式加载,不匹配则加载文档,退出
-    #: * 当为其他场景时,直接尝试做parser.
-    #: * 如果指定了active_one,则调用active_one
-
     assert type(argv) in [list, tuple], TypeError("argv only can be list or tuple")
 
+    # match sub-parser
     if len(argv) >= 2 and argv[1] in commands:
         sub_parsers = parser.add_subparsers()
         class_name = argv[1].capitalize() + 'Component'
@@ -77,7 +71,6 @@ def parse(parser, argv=None, settings_module=None, no_args_func=None):
         # easier to create unittest case
         return obj
 
-    # 如果未指定文档,且存在默认显示子parser选项
     if not parser.description and len(commands):
         sub_parsers = parser.add_subparsers()
         [sub_parsers.add_parser(v) for v in commands]

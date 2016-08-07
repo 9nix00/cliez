@@ -32,7 +32,7 @@ class SlotComponent(Component):
 
         def __init__(self, component):
             """
-            Don't override this method unless what you're doing.
+            Don't override this method unless you know what you're doing.
             :param component:
             :return:
             """
@@ -140,7 +140,7 @@ class SlotComponent(Component):
 
     def run(self, options):
         """
-        对于大多数场景,用户并不需要覆写此函数
+        In general, you don't need to overwrite this method.
 
         :param options:
         :return:
