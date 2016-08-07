@@ -44,7 +44,7 @@ class CheckComponent(Component):
         pass
 
     @classmethod
-    def add_arguments(cls, parser):
+    def add_arguments(cls):
         """
         check cliez depends envrioument
         """

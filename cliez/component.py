@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import pkg_resources
-import os
 import sys
-import signal
+import pkg_resources
 
 import termcolor
 import time
-import threading
-from time import sleep
 from cliez import conf
 
 
@@ -259,7 +255,7 @@ class Component(object):
 
         sub_parser = sub_parsers.add_parser(entry_name, help=cls.__doc__, epilog=epilog)
         sub_parser.description = cls.add_arguments.__doc__
-        user_arguments = cls.add_arguments()
+        user_arguments = cls.add_arguments() or []
 
         for v in user_arguments:
             sub_parser.add_argument(*v[0], **v[1])
@@ -272,163 +268,6 @@ class Component(object):
 
     @classmethod
     def add_arguments(cls):
-        return []
-
-    pass
-
-
-class SlotComponent(Component):
-    slot_class = None
-    entry_name = None
-    entry_help = 'run component as service'
-
-    def get_slot_class(self):
-        """
-        返回slot类
-        :return:
-        """
-        if not self.slot_class:
-            raise NotImplementedError('please set your `cls.slot_class` attribute.')
-
-        return self.slot_class
-
-    def set_signal(self):
-        """
-        设置信号处理
-
-        默认直接中断,考虑到一些场景用户需要等待线程结束.
-        可在此自定义操作
-
-        :return:
-        """
-
-        def signal_handle(signum, frame):
-            self.error("User interrupt.kill threads.")
-            sys.exit(-1)
-            pass
-
-        signal.signal(signal.SIGINT, signal_handle)
-        pass
-
-    def check_exclusive_mode(self):
-        """
-        检查是否是独占模式
-
-        参数顺序必须一致,也就是说如果参数顺序不一致,则判定为是两个不同的进程
-        这么设计是考虑到:
-
-        - 一般而言,排他模式的服务启动都是crontab等脚本来完成的,不存在顺序变更的可能
-        - 这在调试的时候可以帮助我们不需要结束原有进程就可以继续调试
-
-        :return:
-        """
-
-        if self.options.exclusive_mode:
-            import psutil
-            current_pid = os.getpid()
-            current = psutil.Process(current_pid).cmdline()
-
-            for pid in psutil.pids():
-                p = psutil.Process(pid)
-                try:
-
-                    if current_pid != pid and current == p.cmdline():
-                        self.error("process exist. pid:{}".format(p.pid))
-                        sys.exit(-1)
-                        pass
-
-                except psutil.ZombieProcess:
-                    # 僵尸进程,无视
-                    pass
-                except psutil.AccessDenied:
-                    # 不具备用户权限
-                    pass
-                pass
-            pass
-
-        pass
-
-    def run(self, options):
-        """
-        对于大多数场景,用户并不需要覆写此函数
-
-        :param options:
-        :return:
-        """
-
-        self.set_signal()
-        self.check_exclusive_mode()
-
-        slot = self.get_slot_class()(self)
-
-        # start thread
-        i = 0
-        while i < options.threads:
-            t = threading.Thread(target=self.worker, args=[slot])
-            # only set daemon when once is False
-            if options.once is True or options.no_daemon is True:
-                t.daemon = False
-            else:
-                t.daemon = True
-
-            t.start()
-            i += 1
-
-        # waiting thread
-        if options.once is False:
-            while True:
-                if threading.active_count() > 1:
-                    sleep(1)
-                else:
-                    if threading.current_thread().name == "MainThread":
-                        sys.exit(0)
-
-        pass
-
-    def worker(self, iterator):
-        t = self.options.sleep
-
-        while True:
-            with iterator as result:
-                if result is not False:
-                    iterator.slot(result)
-                    t = self.options.sleep
-                else:
-                    # if set options.once,exit.
-                    if self.options.once is True:
-                        sys.exit(0)
-
-                    t += self.options.sleep
-                    if t > self.options.sleep_max_time:
-                        t = self.options.sleep
-                    sleep(t)
-                    # else:
-                    #     print("User interrupt on thread:", threading.current_thread())
-                    #     sys.exit(0)
-
-    @classmethod
-    def append_slot_arguments(cls, sub_parser):
-        return None
-
-    @classmethod
-    def append_arguments(cls, sub_parsers):
-
-        if not cls.entry_name:
-            raise NotImplementedError('please set your `CLASS.entry_name` attribute')
-
-        sub_parser = sub_parsers.add_parser(cls.entry_name, help=cls.entry_help)
-        sub_parser.add_argument('--once', action='store_true', help='execute once and exit.')
-        sub_parser.add_argument('--exclusive-mode', action='store_true', help='open this will only allow one progress to work.')
-        sub_parser.add_argument('--no-daemon', action='store_true', help='set service works in no daemon mode.')
-        sub_parser.add_argument('--sleep', nargs='?', type=int, default=2, help='set sleep time,default is 2s.')
-        sub_parser.add_argument('--sleep-max-time', nargs='?', type=int, default=60, help='set max sleep time, default is 60s.')
-        sub_parser.add_argument('--thread-sleep-time', nargs='?', type=int, default=0, help='set thread sleep min time.')
-        sub_parser.add_argument('--thread-sleep-range', nargs='?', type=int, default=0,
-                                help='when set thread-sleep-time, pickup a random value from ${thread-sleep-time} to ${thread-sleep-time}+range')
-
-        sub_parser.add_argument('--threads', nargs='?', type=int, default=10, help='set slot threads num,default is 10.')
-
-        cls.append_slot_arguments(sub_parser)
         pass
 
     pass
