@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import sys
 import logging
 import pkg_resources
@@ -49,7 +50,9 @@ class Component(object):
         :type file: fd
         :return: None
         """
-        self.logger.info(message)
+        if message.strip():
+            self.logger.info(message)
+
         if self.logger.level != logging.INFO:
             return self.parser._print_message(message + "\n", file)
         pass
@@ -170,15 +173,15 @@ class Component(object):
 
         return self.parser.error(message)
 
-    def system(self, fake_code=0):
+    def system(self, cmd, fake_code=0):
         if self.options.dry_run:
             def fake_system(cmd):
                 self.print_message(cmd)
                 return fake_code
 
-            return fake_system
+            return fake_system(cmd)
 
-        return os.system
+        return os.system(cmd)
 
     @staticmethod
     def load_resource(path, root=''):
