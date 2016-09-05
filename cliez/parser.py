@@ -3,6 +3,7 @@
 import sys
 import os
 import importlib
+import logging
 from cliez.conf import Settings
 
 
@@ -66,6 +67,22 @@ def parse(parser, argv=None, settings_module=None, no_args_func=None):
         klass = getattr(mod, class_name)
         klass.append_arguments(sub_parsers)
         options = parser.parse_args(argv[1:])
+
+        logging.basicConfig(format='[%(levelname)s]:%(message)s', level=logging.ERROR)
+
+        if hasattr(options, 'debug') and options.debug:
+            logging.basicConfig(format='[%(levelname)s]:%(message)s', level=logging.DEBUG)
+            pass
+
+        if hasattr(options, 'verbose'):
+            if options.verbose == 1:
+                logging.basicConfig(format='[%(levelname)s]:%(message)s', level=logging.CRITICAL)
+            elif options.verbose == 2:
+                logging.basicConfig(format='[%(levelname)s]:%(message)s', level=logging.WARNING)
+            elif options.verbose == 3:
+                logging.basicConfig(format='[%(levelname)s]:%(message)s', level=logging.INFO)
+            pass
+
         obj = klass(parser, options=options, settings=settings)
         obj.run(options)
         # easier to create unittest case

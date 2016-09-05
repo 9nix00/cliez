@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import logging
 import pkg_resources
 
 import termcolor
@@ -10,6 +11,8 @@ from cliez import conf
 
 class Component(object):
     exclude_global_option = False
+    logger_name = None
+    logger = None
 
     def __init__(self, parser=None, options=None, settings=None, *args, **kwargs):
         """
@@ -29,6 +32,11 @@ class Component(object):
         self.parser = parser
         self.options = options
         self.settings = settings
+
+        if not self.logger_name:
+            self.logger_name = self.__class__.__name__.lower().replace('component', '')
+
+        self.logger = logging.getLogger(self.logger_name)
         pass
 
     def print_message(self, message, file=None):
