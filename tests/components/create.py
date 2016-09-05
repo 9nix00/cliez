@@ -2,6 +2,7 @@
 
 import unittest
 import argparse
+import os
 
 import tempfile
 from cliez import parser
@@ -14,7 +15,7 @@ class CreateComponentTestCase(unittest.TestCase):
 
     def test_missing(self):
         """
-        缺失参数
+        missing argument
         :return:
         """
 
@@ -25,31 +26,36 @@ class CreateComponentTestCase(unittest.TestCase):
 
     def test_github_mode(self):
         """
-        github模式
+        github mode
         :return:
         """
 
-        with tempfile.TemporaryDirectory() as dp:
-            os.chdir(dp)
-            parser.parse(argparse.ArgumentParser(), argv=['command', 'create', '9nix00/cliez'])
+        with self.assertRaises(SystemExit):
+            with tempfile.TemporaryDirectory() as dp:
+                os.chdir(dp)
+                parser.parse(argparse.ArgumentParser(), argv=['command', 'create', '9nix00/cliez',
+                                                              '--dir', os.getcwd(),  # you must be specify `--dir` option in testcase
+                                                              '--debug'])
             pass
 
         pass
 
     def test_local_mode(self):
         """
-        本地模式
+        local mode
         :return:
         """
-
-        with tempfile.TemporaryDirectory() as dp:
-            parser.parse(argparse.ArgumentParser(), argv=['command', 'create', __file__.rsplit('/', 3)[0], dp, '--local'])
-            pass
+        with self.assertRaises(SystemExit):
+            with tempfile.TemporaryDirectory() as dp:
+                parser.parse(argparse.ArgumentParser(), argv=['command', 'create', __file__.rsplit('/', 3)[0], dp,
+                                                              '--dir', os.getcwd(),  # you must be specify `--dir` option in testcase
+                                                              '--local'])
+                pass
         pass
 
     def test_bitbucket_mode(self):
         """
-        本地模式
+        bitbucket first-order mode
         :return:
         """
 

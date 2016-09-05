@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
+import logging
+
 from cliez.component import Component
 
 
@@ -21,7 +23,7 @@ class CreateComponent(Component):
         if options.local:
             orders.insert(0, 'localhost')
 
-        project_root = os.path.join(options.dir, options.name)
+        project_root = os.path.join(options.dir, options.name) if options.name else options.dir
 
         if options.debug:
             self.print_message("project will clone to %s" % project_root)
@@ -33,16 +35,25 @@ class CreateComponent(Component):
             if v == 'localhost':
                 if os.path.exists(repo_path) \
                         and os.path.exists(os.path.join(repo_path, '.git')):
+                    self.logger.debug('try clone from %s' % repo_path)
                     rtn = system_call('git clone {} {}'.format(repo_path, project_root))
                 break
             pass
 
             if v == 'github':
-                rtn = system_call('git clone ssh:git@github.com:{}.git {}'.format(repo_path, project_root))
+
+                repo_path = 'git clone ssh:git@github.com:{}.git {}'.format(repo_path, project_root)
+
+                rtn = system_call(repo_path)
+                self.logger.debug('try clone from %s' % repo_path)
                 if rtn == 0:
                     break
 
-                rtn = system_call('git clone https://github.com/{}.git {}'.format(repo_path, project_root))
+                repo_path = 'git clone https://github.com/{}.git {}'.format(repo_path, project_root)
+
+                rtn = system_call(repo_path)
+                self.logger.debug('try clone from %s' % repo_path)
+
                 if rtn == 0:
                     break
 
@@ -80,7 +91,7 @@ class CreateComponent(Component):
         """
         return [
             (('repo',), dict(help='repo path.')),
-            (('name',), dict(nargs='?', default='.', help='project name.')),
+            (('name',), dict(nargs='?', default='', help='project name.')),
             (('--local',), dict(action='store_true', help='try load repo local path.')),
             (('--bitbucket',), dict(action='store_true', help='search bitbucket first.')),
         ]
