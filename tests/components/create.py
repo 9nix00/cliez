@@ -33,7 +33,7 @@ class CreateComponentTestCase(unittest.TestCase):
         with self.assertRaises(SystemExit):
             with tempfile.TemporaryDirectory() as dp:
                 os.chdir(dp)
-                parser.parse(argparse.ArgumentParser(), argv=['command', 'create', '9nix00/cliez',
+                parser.parse(argparse.ArgumentParser(), argv=['command', 'create', '9nix00/cliez-kickstart',
                                                               '--dir', os.getcwd(),  # you must be specify `--dir` option in testcase
                                                               '--debug'])
             pass
