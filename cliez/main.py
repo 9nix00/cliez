@@ -9,6 +9,7 @@ conf.COMPONENT_ROOT = os.path.dirname(__file__)
 conf.GENERAL_ARGUMENTS = [
     (('--dir',), dict(nargs='?', default=os.getcwd(), help='set working directory')),
     (('--debug',), dict(action='store_true', help='open debug mode')),
+    (('--dry-run',), dict(action='store_true', help='print command instead execute it')),
     (('--verbose', '-v'), dict(action='count')),
 ]
 conf.EPILOG = 'You can submit issues at: https://www.github.com/9nix00/cliez'

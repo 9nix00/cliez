@@ -41,7 +41,7 @@ class Component(object):
 
     def print_message(self, message, file=None):
         """
-        print message
+        print message when user logging level is not INFO
 
         :param message: message to print
         :type message: `str`
@@ -49,7 +49,10 @@ class Component(object):
         :type file: fd
         :return: None
         """
-        return self.parser._print_message(message + "\n", file)
+        self.logger.info(message)
+        if self.logger.level != logging.INFO:
+            return self.parser._print_message(message + "\n", file)
+        pass
 
     def print_loading(self, wait, message):
         """
@@ -98,8 +101,11 @@ class Component(object):
 
         file = file or sys.stdout
 
+        self.logger.warn(message)
+
         if file is sys.stdout:
-            termcolor.cprint(msg, color="yellow")
+            if self.logger.level != logging.WARNING:
+                termcolor.cprint(msg, color="yellow")
         else:
             file.write(msg)
 
@@ -135,8 +141,11 @@ class Component(object):
 
         file = file or sys.stderr
 
+        self.logger.CRITICAL(message)
+
         if file is sys.stderr:
-            termcolor.cprint(msg, color="red")
+            if self.logger.level != logging.CRITICAL:
+                termcolor.cprint(msg, color="red")
         else:
             file.write(msg)
 
@@ -156,7 +165,20 @@ class Component(object):
         :return:None
         """
 
+        if self.logger.handlers:
+            self.logger.error(message)
+
         return self.parser.error(message)
+
+    def system(self, fake_code=0):
+        if self.options.dry_run:
+            def fake_system(cmd):
+                self.print_message(cmd)
+                return fake_code
+
+            return fake_system
+
+        return os.system
 
     @staticmethod
     def load_resource(path, root=''):
