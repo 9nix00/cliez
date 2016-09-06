@@ -61,8 +61,10 @@ Quick Start
 .. parsed-literal::
 
     cliez check                                                                 # check cliez depends
+
     cd /tmp                                                                     # change to tmp directory
     cliez create 9nix00/cliez-kickstart cli-app                                 # clone project from github
+
     cd cli-app                                                                  # change into cli-app directory
     cliez init cli-app                                                          # replace template variables
 
@@ -75,13 +77,6 @@ Discussion and support
 
 You can discuss and report bugs on
 the `GitHub issue tracker <https://github.com/9nix00/cliez/issues>`_.
-
-
-Contribute Code
----------------
-
-In order to obtain a faster development speed, now we accept Chinese comments in code.
-but the document,program's output and git-comment *must* be english.
 
 
 Copyright

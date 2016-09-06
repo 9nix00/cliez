@@ -2,6 +2,7 @@
 
 import os
 import sys
+import shutil
 from cliez.component import Component
 
 try:
@@ -20,6 +21,8 @@ except (NameError, ImportError):
 
 
 class InitComponent(Component):
+    exclude_directories = ['.git', '.hg']
+
     def load_gitconfig(self):
         gitconfig_path = os.path.expanduser('~/.gitconfig')
 
@@ -32,10 +35,66 @@ class InitComponent(Component):
         pass
 
     def render(self, match_string, new_string):
-        print("replace {} to {}".format(match_string, new_string))
 
+        current_dir = self.options.dir
 
+        if os.path.expanduser(current_dir) in ['/', os.path.expanduser("~")]:
+            self.error_message("invalid directory")
+            sys.exit(-1)
+            pass
 
+        # .git or .hg may not exist before init execute.
+        # if not os.path.exists('.git') and not os.path.exists('.hg'):
+        #     self.error_message("invalid directory")
+        #     sys.exit(-1)
+        #     pass
+
+        def match_directory(path):
+            skip = False
+            for include_dir in ['/{}/'.format(s) for s in self.exclude_directories]:
+                if path.find(include_dir) > -1:
+                    skip = True
+                    break
+                pass
+            return skip
+
+        # handle files
+        for v in os.walk(current_dir):
+            # skip exclude directories
+            if os.path.basename(v[0]) in self.exclude_directories:
+                continue
+            if match_directory(v[0]):
+                continue
+
+            for base_name in v[2]:
+                file_name = os.path.join(v[0], base_name)
+
+                buffer = ''
+                with open(file_name, 'r') as fh:
+                    buffer = fh.read()
+                    buffer = buffer.replace(match_string, new_string)
+                    pass
+
+                with open(file_name, 'w') as fh:
+                    fh.write(buffer)
+                    pass
+
+                pass
+            pass
+
+        # handle directory
+        redo_directories = []
+
+        for v in os.walk(current_dir):
+            if match_string in v[1]:
+                redo_directories.append(os.path.join(v[0], match_string))
+                pass
+            pass
+
+        redo_directories.reverse()
+        for v in redo_directories:
+            shutil.move(v, v.replace(match_string, new_string))
+            pass
 
         pass
 
@@ -99,7 +158,7 @@ class InitComponent(Component):
 
     def render_confirm(self):
 
-        self.warn_message("this tool will delete your repo")
+        self.warn_message("this tool may destroy current code")
 
         while True:
             k = input("continue?[yes/no]:")
@@ -125,6 +184,15 @@ class InitComponent(Component):
         self.render_pkg()
         self.render_author()
         self.render_email()
+
+        for v in options.variable:
+            try:
+                key, value = v.split(':')
+            except ValueError:
+                continue
+            self.render('___{}___'.format(key), value)
+            pass
+
         pass
 
     @classmethod
@@ -133,7 +201,8 @@ class InitComponent(Component):
         Init project.
         """
         return [
-            (('--yes',), dict(action='store_true', help='clean .git repo'))
+            (('--yes',), dict(action='store_true', help='clean .git repo')),
+            (('--variable', '-s'), dict(nargs='+', help='set extra variable,format is name:value'))
         ]
 
     pass

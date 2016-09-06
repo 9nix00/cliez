@@ -181,6 +181,7 @@ class Component(object):
 
             return fake_system(cmd)
 
+        self.logger.debug(cmd)
         return os.system(cmd)
 
     @staticmethod
