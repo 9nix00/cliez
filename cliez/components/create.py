@@ -9,10 +9,7 @@ from cliez.component import Component
 class CreateComponent(Component):
     def run(self, options):
 
-        system_call = os.system
-
-        if options.debug:
-            system_call = lambda x: print(x) or 0
+        system_call = self.system
 
         orders = ['github', 'bitbucket']
 
@@ -42,17 +39,16 @@ class CreateComponent(Component):
 
             if v == 'github':
 
-                repo_path = 'git clone ssh:git@github.com:{}.git {}'.format(repo_path, project_root)
+                cmd_path = 'git clone ssh:git@github.com:{}.git {}'.format(repo_path, project_root)
+                self.logger.debug('try clone from %s' % cmd_path)
+                rtn = system_call(cmd_path)
 
-                rtn = system_call(repo_path)
-                self.logger.debug('try clone from %s' % repo_path)
                 if rtn == 0:
                     break
 
-                repo_path = 'git clone https://github.com/{}.git {}'.format(repo_path, project_root)
-
-                rtn = system_call(repo_path)
-                self.logger.debug('try clone from %s' % repo_path)
+                cmd_path = 'git clone https://github.com/{}.git {}'.format(repo_path, project_root)
+                self.logger.debug('try clone from %s' % cmd_path)
+                rtn = system_call(cmd_path)
 
                 if rtn == 0:
                     break
@@ -60,7 +56,9 @@ class CreateComponent(Component):
                 break
 
             if v == 'bitbucket':
-                rtn = system_call('hg clone hg@bitbucket.org/{}.git {}'.format(repo_path, project_root))
+                cmd_path = 'hg clone hg@bitbucket.org/{}.git {}'.format(repo_path, project_root)
+                self.logger.debug('try clone from %s' % cmd_path)
+                rtn = system_call(cmd_path)
                 if rtn == 0:
                     break
 
