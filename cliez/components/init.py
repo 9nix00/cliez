@@ -70,14 +70,18 @@ class InitComponent(Component):
                 file_name = os.path.join(v[0], base_name)
 
                 buffer = ''
-                with open(file_name, 'r') as fh:
-                    buffer = fh.read()
-                    buffer = buffer.replace(match_string, new_string)
-                    pass
+                # ignore binary files
+                try:
+                    with open(file_name, 'r') as fh:
+                        buffer = fh.read()
+                        buffer = buffer.replace(match_string, new_string)
+                        pass
 
-                with open(file_name, 'w') as fh:
-                    fh.write(buffer)
-                    pass
+                    with open(file_name, 'w') as fh:
+                        fh.write(buffer)
+                        pass
+                except UnicodeDecodeError:
+                    continue
 
                 pass
             pass
@@ -151,7 +155,7 @@ class InitComponent(Component):
         while True:
             pkg = input("package name:")
             if pkg:
-                self.render('___pkg___', pkg)
+                self.render('pkg_demo', pkg)
                 break
             pass
         pass
@@ -184,6 +188,8 @@ class InitComponent(Component):
         self.render_pkg()
         self.render_author()
         self.render_email()
+
+        options.variable = options.variable or []
 
         for v in options.variable:
             try:

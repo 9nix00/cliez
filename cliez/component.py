@@ -144,7 +144,7 @@ class Component(object):
 
         file = file or sys.stderr
 
-        self.logger.CRITICAL(message)
+        self.logger.critical(message)
 
         if file is sys.stderr:
             if self.logger.level != logging.CRITICAL:
