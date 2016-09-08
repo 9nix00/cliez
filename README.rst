@@ -11,7 +11,7 @@ A framework to make CLI-App easier.
 Quick links
 -----------
 
-* `Documentation <http://cliez.nextoa.com/>`_
+* `Documentation <https://cliez.readthedocs.io/>`_
 * `Source (github) <https://github.com/9nix00/cliez>`_
 * `cliez-kickstart source code(github) <https://github.com/9nix00/cliez-kickstart>`_
 
