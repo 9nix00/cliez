@@ -3,3 +3,4 @@ future
 psutil
 mock
 tox
+coverage
