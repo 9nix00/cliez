@@ -70,6 +70,35 @@ Quick Start
 
 
 
+More tips
+-----------
+
+Although `cliez` is designed to create a cli app. but you can use it to create any project from github or bitbucket more easier.
+
+you can create your own kickstart project to clone it and replace it.
+
+* create a project from bitbucket
+
+.. parsed-literal::
+
+    cliez create  <bitbucket-team>/<project>  local-project-name  --bitbucket
+
+
+* create a project from local repository,support Git and Mercurial
+
+.. parsed-literal::
+
+    cliez create  <local-path>  local-project-name
+
+
+
+* init code with custom variable,the template variable name must be prefix 3 underline `___` and suffix `___`, like this: `___NAME___`
+
+.. parsed-literal::
+
+    cliez init -s NAME:Jack -s SEXY:male
+
+
 
 
 Discussion and support
