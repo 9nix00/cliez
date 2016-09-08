@@ -42,39 +42,39 @@ class CreateComponentTestCase(unittest.TestCase):
     pass
 
 
-class CreateComponentTestCase2(unittest.TestCase):
-
-    def test_local_mode(self):
-        """
-        local mode
-        :return:
-        """
-
-        with tempfile.TemporaryDirectory() as dp:
-            parser.parse(argparse.ArgumentParser(), argv=['command', 'create', __file__.rsplit('/', 3)[0], dp,
-                                                          '--dir', dp,  # you must be specify `--dir` option in testcase
-                                                          '--local'])
-            pass
-        pass
-
-    pass
-
-
-class CreateComponentTestCase3(unittest.TestCase):
-
-    def test_bitbucket_mode(self):
-        """
-        bitbucket first-order mode
-        :return:
-        """
-
-        with tempfile.TemporaryDirectory() as dp:
-            parser.parse(argparse.ArgumentParser(), argv=['command', 'create', 'nextoa/cliez-kickstart',
-                                                          '--dir', dp,  # you must be specify `--dir` option in testcase
-                                                          '--debug', '--bitbucket'])
-            pass
-        pass
-
-    pass
-
+# class CreateComponentTestCase2(unittest.TestCase):
+#
+#     def test_local_mode(self):
+#         """
+#         local mode
+#         :return:
+#         """
+#
+#         with tempfile.TemporaryDirectory() as dp:
+#             parser.parse(argparse.ArgumentParser(), argv=['command', 'create', __file__.rsplit('/', 3)[0], dp,
+#                                                           '--dir', dp,  # you must be specify `--dir` option in testcase
+#                                                           '--local'])
+#             pass
+#         pass
+#
+#     pass
+#
+#
+# class CreateComponentTestCase3(unittest.TestCase):
+#
+#     def test_bitbucket_mode(self):
+#         """
+#         bitbucket first-order mode
+#         :return:
+#         """
+#
+#         with tempfile.TemporaryDirectory() as dp:
+#             parser.parse(argparse.ArgumentParser(), argv=['command', 'create', 'nextoa/cliez-kickstart',
+#                                                           '--dir', dp,  # you must be specify `--dir` option in testcase
+#                                                           '--debug', '--bitbucket'])
+#             pass
+#         pass
+#
+#     pass
+#
 
