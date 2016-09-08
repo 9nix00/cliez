@@ -36,6 +36,14 @@ class CreateComponentTestCase(unittest.TestCase):
                                                           '--debug'])
         pass
 
+
+
+
+    pass
+
+
+class CreateComponentTestCase2(unittest.TestCase):
+
     def test_local_mode(self):
         """
         local mode
@@ -48,6 +56,11 @@ class CreateComponentTestCase(unittest.TestCase):
                                                           '--local'])
             pass
         pass
+
+    pass
+
+
+class CreateComponentTestCase3(unittest.TestCase):
 
     def test_bitbucket_mode(self):
         """
@@ -63,3 +76,5 @@ class CreateComponentTestCase(unittest.TestCase):
         pass
 
     pass
+
+
