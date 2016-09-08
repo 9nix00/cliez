@@ -55,7 +55,7 @@ The cliez source code is `hosted on GitHub
 **Prerequisites**: cliez depends on Git and Mercurial.
 
 
-**Important Note**: cliez 2.0 is not compatible forward.
+**Important Note**: cliez 2.0 is not compatible forward and only works on python3+.
 
 
 
