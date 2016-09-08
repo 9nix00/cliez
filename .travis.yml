@@ -10,4 +10,6 @@ install:
   - "pip install -r requirements.txt"
 # command to run tests
 script:
+  - "ssh-keyscan github.com >> ~/.ssh/known_hosts"
+  - "ssh-keyscan bitbucket.org >> ~/.ssh/known_hosts"
   - "python setup.py test"
