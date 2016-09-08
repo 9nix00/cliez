@@ -30,14 +30,10 @@ class CreateComponentTestCase(unittest.TestCase):
         :return:
         """
 
-        with self.assertRaises(SystemExit):
-            with tempfile.TemporaryDirectory() as dp:
-                os.chdir(dp)
-                parser.parse(argparse.ArgumentParser(), argv=['command', 'create', '9nix00/cliez-kickstart',
-                                                              '--dir', os.getcwd(),  # you must be specify `--dir` option in testcase
-                                                              '--debug'])
-            pass
-
+        with tempfile.TemporaryDirectory() as dp:
+            parser.parse(argparse.ArgumentParser(), argv=['command', 'create', '9nix00/cliez-kickstart',
+                                                          '--dir', dp,  # you must be specify `--dir` option in testcase
+                                                          '--debug'])
         pass
 
     def test_local_mode(self):
@@ -45,12 +41,12 @@ class CreateComponentTestCase(unittest.TestCase):
         local mode
         :return:
         """
-        with self.assertRaises(SystemExit):
-            with tempfile.TemporaryDirectory() as dp:
-                parser.parse(argparse.ArgumentParser(), argv=['command', 'create', __file__.rsplit('/', 3)[0], dp,
-                                                              '--dir', os.getcwd(),  # you must be specify `--dir` option in testcase
-                                                              '--local'])
-                pass
+
+        with tempfile.TemporaryDirectory() as dp:
+            parser.parse(argparse.ArgumentParser(), argv=['command', 'create', __file__.rsplit('/', 3)[0], dp,
+                                                          '--dir', dp,  # you must be specify `--dir` option in testcase
+                                                          '--local'])
+            pass
         pass
 
     def test_bitbucket_mode(self):
@@ -60,7 +56,9 @@ class CreateComponentTestCase(unittest.TestCase):
         """
 
         with tempfile.TemporaryDirectory() as dp:
-            parser.parse(argparse.ArgumentParser(), argv=['command', 'create', __file__.rsplit('/', 3)[0], dp, '--bitbucket'])
+            parser.parse(argparse.ArgumentParser(), argv=['command', 'create', 'nextoa/cliez-kickstart',
+                                                          '--dir', dp,  # you must be specify `--dir` option in testcase
+                                                          '--debug', '--bitbucket'])
             pass
         pass
 

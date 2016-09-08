@@ -21,11 +21,6 @@ class InitComponentTestCase(unittest.TestCase):
         pass
 
     def test_ok(self):
-        """
-        缺失参数
-        :return:
-        """
-
         dp = tempfile.TemporaryDirectory()
         parser.parse(argparse.ArgumentParser(), argv=['command', 'create', '9nix00/cliez-kickstart', '--dir', dp.name, '--debug'])
 
@@ -36,15 +31,15 @@ class InitComponentTestCase(unittest.TestCase):
 
     def test_with_variables(self):
         """
-        缺失参数
+        custom variable
         :return:
         """
 
-        dp = tempfile.TemporaryDirectory()
-        parser.parse(argparse.ArgumentParser(), argv=['command', 'create', '9nix00/cliez-kickstart', '--dir', dp.name, '--debug'])
+        with tempfile.TemporaryDirectory() as dp:
+            parser.parse(argparse.ArgumentParser(), argv=['command', 'create', '9nix00/cliez-kickstart', '--dir', dp, '--debug'])
 
-        with mock.patch(mock_input, side_effect=['yes', 'pkg_demo', "\n", "\n"]):
-            parser.parse(argparse.ArgumentParser(), argv=['command', 'init', '--dir', dp.name, '--debug', '-s', 'keywords:a-keyword'])
+            with mock.patch(mock_input, side_effect=['yes', 'pkg_demo', "\n", "\n"]):
+                parser.parse(argparse.ArgumentParser(), argv=['command', 'init', '--dir', dp, '--debug', '-s', 'keywords:a-keyword'])
 
         pass
 
@@ -68,16 +63,15 @@ class InitComponentTestCase(unittest.TestCase):
         缺失参数
         :return:
         """
-        os.chdir('/')
 
         with self.assertRaises(SystemExit):
             with mock.patch(mock_input, side_effect=['yes', 'pkg_demo', "\n", "\n"]):
-                parser.parse(argparse.ArgumentParser(), argv=['command', 'init'])
+                parser.parse(argparse.ArgumentParser(), argv=['command', 'init', '--dir', '/'])
 
         os.chdir(os.path.expanduser('~'))
         with self.assertRaises(SystemExit):
             with mock.patch(mock_input, side_effect=['yes', 'pkg_demo', "\n", "\n"]):
-                parser.parse(argparse.ArgumentParser(), argv=['command', 'init'])
+                parser.parse(argparse.ArgumentParser(), argv=['command', 'init', '--dir', '/'])
 
         pass
 
@@ -85,11 +79,10 @@ class InitComponentTestCase(unittest.TestCase):
         """
         :return:
         """
-        dp = tempfile.TemporaryDirectory()
-        os.chdir(dp.name)
 
-        with mock.patch(mock_input, side_effect=['pkg_demo', "\n", "\n"]):
-            parser.parse(argparse.ArgumentParser(), argv=['command', 'init', '--yes'])
+        with tempfile.TemporaryDirectory() as dp:
+            with mock.patch(mock_input, side_effect=['pkg_demo', "\n", "\n"]):
+                parser.parse(argparse.ArgumentParser(), argv=['command', 'init', '--yes', '--dir', dp])
 
         pass
 

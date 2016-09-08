@@ -22,7 +22,7 @@ class ModelTestCase(unittest.TestCase):
     def test_ok(self):
         a = Model()
         self.assertEqual(None, a.config_none)
-        self.assertEqual(None, a.config.PACKAGE_ROOT)
+        self.assertEqual(Settings, a.config.__class__)
         pass
 
     pass
