@@ -109,7 +109,7 @@ class InitComponent(Component):
         try:
             default_email = parser['user']['email']
         except (AttributeError, KeyError):
-            default_email = ''
+            default_email = 'mail@example.com'
 
         while True:
             if default_email:
@@ -133,7 +133,7 @@ class InitComponent(Component):
         try:
             default_user = parser['github']['user']
         except (AttributeError, KeyError):
-            default_user = ''
+            default_user = 'username'
 
         while True:
             if default_user:
