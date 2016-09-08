@@ -2,12 +2,12 @@ language: python
 python:
   - "3.4"
   - "3.5"
-#  - "3.5-dev" # 3.5 development branch
-#  - "nightly" # currently points to 3.6-dev
+  - "3.5-dev" # 3.5 development branch
+  - "nightly" # currently points to 3.6-dev
+  - "pypy3"
 # command to install dependencies
 install:
-  - "pip install pyenv tox tox-travis"
+  - "pip install requirements.txt"
 # command to run tests
 script:
-  - "pyenv global 3.5.1 3.4.4"
-  - "tox"
+  - "python setup.py test"

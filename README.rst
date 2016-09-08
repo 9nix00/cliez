@@ -4,6 +4,10 @@ cliez
 A framework to make CLI-App easier.
 
 
+|build-status| |coverage| |license| |pyimp|
+
+
+
 Quick links
 -----------
 
@@ -96,7 +100,7 @@ you can create your own kickstart project to clone it and replace it.
 
 .. parsed-literal::
 
-    cliez init -s NAME:Jack -s SEXY:male
+    cliez init -s NAME:Jack -s SEX:male
 
 
 
@@ -112,3 +116,31 @@ Copyright
 ---------
 
 This web site and all documentation is licensed under `Creative Commons 3.0 <http://creativecommons.org/licenses/by/3.0/>`_.
+
+
+
+
+.. |build-status| image:: https://secure.travis-ci.org/9nix00/cliez.png?branch=master
+    :alt: Build status
+    :target: https://travis-ci.org/9nix00/cliez
+
+.. |coverage| image:: https://codecov.io/github/9nix00/cliez/coverage.svg?branch=master
+    :target: https://codecov.io/github/9nix00/cliez?branch=master
+
+.. |license| image:: https://img.shields.io/pypi/l/cliez.svg
+    :alt: MIT License
+    :target: https://opensource.org/licenses/MIT
+
+.. |wheel| image:: https://img.shields.io/pypi/wheel/cliez.svg
+    :alt: Cliez can be installed via wheel
+    :target: http://pypi.python.org/pypi/cliez/
+
+.. |pyversion| image:: https://img.shields.io/pypi/pyversions/cliez.svg
+    :alt: Supported Python versions.
+    :target: http://pypi.python.org/pypi/cliez/
+
+.. |pyimp| image:: https://img.shields.io/pypi/implementation/cliez.svg
+    :alt: Support Python implementations.
+    :target: http://pypi.python.org/pypi/cliez/
+
+
