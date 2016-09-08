@@ -30,14 +30,23 @@ class CreateComponent(Component):
 
         for v in orders:
             if v == 'localhost':
-                if os.path.exists(repo_path) \
-                        and os.path.exists(os.path.join(repo_path, '.git')):
+                if os.path.exists(repo_path):
                     self.logger.debug('try clone from %s' % repo_path)
-                    rtn = system_call('git clone {} {}'.format(repo_path, project_root))
-                break
-            pass
 
-            if v == 'github':
+                    if os.path.exists(os.path.join(repo_path, '.git')):
+                        rtn = system_call('git clone {} {}'.format(repo_path, project_root))
+
+                        if rtn == 0:
+                            break
+                        pass
+                    elif os.path.exists(os.path.join(repo_path, '.hg')):
+                        rtn = system_call('hg clone {} {}'.format(repo_path, project_root))
+
+                        if rtn == 0:
+                            break
+                        pass
+
+            elif v == 'github':
 
                 cmd_path = 'git clone ssh:git@github.com:{}.git {}'.format(repo_path, project_root)
                 self.logger.debug('try clone from %s' % cmd_path)
@@ -53,16 +62,16 @@ class CreateComponent(Component):
                 if rtn == 0:
                     break
 
-                break
+                pass
 
-            if v == 'bitbucket':
-                cmd_path = 'hg clone hg@bitbucket.org/{}.git {}'.format(repo_path, project_root)
+            elif v == 'bitbucket':
+                cmd_path = 'hg clone ssh://hg@bitbucket.org/{} {}'.format(repo_path, project_root)
                 self.logger.debug('try clone from %s' % cmd_path)
                 rtn = system_call(cmd_path)
                 if rtn == 0:
                     break
 
-                break
+                pass
             pass
 
         if rtn != 0:
@@ -95,5 +104,3 @@ class CreateComponent(Component):
         ]
 
         pass
-
-    pass
