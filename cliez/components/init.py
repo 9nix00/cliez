@@ -155,7 +155,7 @@ class InitComponent(Component):
         while True:
             pkg = input("package name:")
             if pkg:
-                self.render('pkg_demo', pkg)
+                self.render('pkg', pkg)
                 break
             pass
         pass
