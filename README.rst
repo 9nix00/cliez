@@ -64,13 +64,13 @@ Quick Start
 
 .. parsed-literal::
 
-    cliez check                                                                 # check cliez depends
+    cliez check                                                          # check cliez depends
 
-    cd /tmp                                                                     # change to tmp directory
-    cliez create 9nix00/cliez-kickstart cli-app                                 # clone project from github
+    cd /tmp                                                              # change to tmp directory
+    cliez create 9nix00/cliez-kickstart cli-app                          # clone project from github
 
-    cd cli-app                                                                  # change into cli-app directory
-    cliez init cli-app                                                          # replace template variables
+    cd cli-app                                                           # change into cli-app directory
+    cliez init                                                           # replace template variables
 
 
 
