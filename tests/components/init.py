@@ -43,6 +43,18 @@ class InitComponentTestCase(unittest.TestCase):
 
         pass
 
+    def test_skip_builtin(self):
+        """
+        custom variable
+        :return:
+        """
+
+        with tempfile.TemporaryDirectory() as dp:
+            parser.parse(argparse.ArgumentParser(), argv=['command', 'create', '9nix00/cliez-kickstart', '--dir', dp, '--debug'])
+            parser.parse(argparse.ArgumentParser(), argv=['command', 'init', '--dir', dp, '--debug', '-s', 'keywords:a-keyword', '--skip-builtin', '--yes'])
+
+        pass
+
     # def test_in_invalid_root(self):
     #     """
     #     missing argument

@@ -102,6 +102,9 @@ you can create your own kickstart project to clone it and replace it.
 
     cliez init -s NAME:Jack -s SEX:male
 
+    cliez init -s NAME:Jack -s SEX:male --skip-builtin --yes              # skip set builtin template variable.
+
+
 
 
 

@@ -185,9 +185,11 @@ class InitComponent(Component):
         if not options.yes:
             self.render_confirm()
 
-        self.render_pkg()
-        self.render_author()
-        self.render_email()
+        if not options.skip_builtin:
+            self.render_pkg()
+            self.render_author()
+            self.render_email()
+            pass
 
         options.variable = options.variable or []
 
@@ -208,7 +210,8 @@ class InitComponent(Component):
         """
         return [
             (('--yes',), dict(action='store_true', help='clean .git repo')),
-            (('--variable', '-s'), dict(nargs='+', help='set extra variable,format is name:value'))
+            (('--variable', '-s'), dict(nargs='+', help='set extra variable,format is name:value')),
+            (('--skip-builtin',), dict(action='store_true', help='skip replace builtin variable')),
         ]
 
     pass
