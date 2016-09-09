@@ -113,7 +113,7 @@ class InitComponent(Component):
 
         while True:
             if default_email:
-                t = input("email [%s]:" % default_email, default_email)
+                t = input("email [%s]:" % default_email)
             else:
                 t = input("email:")
 
@@ -137,7 +137,7 @@ class InitComponent(Component):
 
         while True:
             if default_user:
-                t = input("author [%s]:" % default_user, default_user)
+                t = input("author [%s]:" % default_user)
             else:
                 t = input("author:")
 
