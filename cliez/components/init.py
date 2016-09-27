@@ -3,6 +3,8 @@
 import os
 import sys
 import shutil
+import string
+import random
 from cliez.component import Component
 
 try:
@@ -160,6 +162,10 @@ class InitComponent(Component):
             pass
         pass
 
+    def render_random(self):
+        self.render('___random___', ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(64)))
+        pass
+
     def render_confirm(self):
 
         self.warn_message("this tool may destroy current code")
@@ -189,6 +195,7 @@ class InitComponent(Component):
             self.render_pkg()
             self.render_author()
             self.render_email()
+            self.render_random()
             pass
 
         options.variable = options.variable or []
