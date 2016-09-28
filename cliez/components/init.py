@@ -158,6 +158,8 @@ class InitComponent(Component):
             pkg = input("package name:")
             if pkg:
                 self.render('___pkg___', pkg)
+                self.render('___Pkg___', pkg[0].upper() + pkg[1:].lower())
+                self.render('___PKG___', pkg.upper())
                 break
             pass
         pass
