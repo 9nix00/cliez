@@ -3,8 +3,6 @@
 import os
 import sys
 import logging
-import pkg_resources
-
 import termcolor
 import time
 from cliez import conf
@@ -187,9 +185,17 @@ class Component(object):
     @staticmethod
     def load_resource(path, root=''):
         """
-        load resource file in package. 
-        
+
+        load resource file in package.
+
         this method is used to load file easier in different environment.
+
+
+        .. note::
+
+            experiment feature.
+            this feature only work in python3
+
 
         e.g:
 
@@ -199,14 +205,14 @@ class Component(object):
 
             open('../conf/resource.io').read()
 
-        
+
         An obvious question is if we change working directory. `..` is relative path. it will cause error.
 
         `load_resource` is designed for solve this problem.
 
 
         The following code are equivalent:
-        
+
         .. code-block:: python
 
             a = Component()
@@ -234,15 +240,21 @@ class Component(object):
         else:
             full_path = path
 
+        buf = ''
+
         try:
             buf = open(full_path).read()
         except IOError:
             pkg, path = full_path.split('/', 1)
-            buf = pkg_resources.resource_string(pkg, path)
-
-            # compatible python3 and only support utf-8
-            if type(buf) != str:
-                buf = buf.decode('utf-8')
+            try:
+                import pkg_resources
+                buf = pkg_resources.resource_string(pkg, path)
+                # compatible python3 and only support utf-8
+                if type(buf) != str:
+                    buf = buf.decode('utf-8')
+                    pass
+            except AttributeError:
+                buf = 'document not work in python2'
                 pass
 
         return buf
