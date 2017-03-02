@@ -31,7 +31,7 @@ class CreateComponentTestCase(unittest.TestCase):
         """
 
         with tempfile.TemporaryDirectory() as dp:
-            parser.parse(argparse.ArgumentParser(), argv=['command', 'create', '9nix00/cliez-kickstart',
+            parser.parse(argparse.ArgumentParser(), argv=['command', 'create', 'wangwenpei/cliez-kickstart',
                                                           '--dir', dp,  # you must be specify `--dir` option in testcase
                                                           '--debug'])
         pass

@@ -22,7 +22,7 @@ class InitComponentTestCase(unittest.TestCase):
 
     def test_ok(self):
         dp = tempfile.TemporaryDirectory()
-        parser.parse(argparse.ArgumentParser(), argv=['command', 'create', '9nix00/cliez-kickstart', '--dir', dp.name, '--debug'])
+        parser.parse(argparse.ArgumentParser(), argv=['command', 'create', 'wangwenpei/cliez-kickstart', '--dir', dp.name, '--debug'])
 
         with mock.patch(mock_input, side_effect=['yes', 'pkg_demo', "\n", "\n"]):
             parser.parse(argparse.ArgumentParser(), argv=['command', 'init', '--dir', dp.name, '--debug'])
@@ -36,7 +36,7 @@ class InitComponentTestCase(unittest.TestCase):
         """
 
         with tempfile.TemporaryDirectory() as dp:
-            parser.parse(argparse.ArgumentParser(), argv=['command', 'create', '9nix00/cliez-kickstart', '--dir', dp, '--debug'])
+            parser.parse(argparse.ArgumentParser(), argv=['command', 'create', 'wangwenpei/cliez-kickstart', '--dir', dp, '--debug'])
 
             with mock.patch(mock_input, side_effect=['yes', 'pkg_demo', "\n", "\n"]):
                 parser.parse(argparse.ArgumentParser(), argv=['command', 'init', '--dir', dp, '--debug', '-s', 'keywords:a-keyword'])
@@ -50,7 +50,7 @@ class InitComponentTestCase(unittest.TestCase):
         """
 
         with tempfile.TemporaryDirectory() as dp:
-            parser.parse(argparse.ArgumentParser(), argv=['command', 'create', '9nix00/cliez-kickstart', '--dir', dp, '--debug'])
+            parser.parse(argparse.ArgumentParser(), argv=['command', 'create', 'wangwenpei/cliez-kickstart', '--dir', dp, '--debug'])
             parser.parse(argparse.ArgumentParser(), argv=['command', 'init', '--dir', dp, '--debug', '-s', 'keywords:a-keyword', '--skip-builtin', '--yes'])
 
         pass

@@ -12,8 +12,8 @@ Quick links
 -----------
 
 * `Documentation <https://cliez.readthedocs.io/>`_
-* `Source (github) <https://github.com/9nix00/cliez>`_
-* `cliez-kickstart source code(github) <https://github.com/9nix00/cliez-kickstart>`_
+* `Source (github) <https://github.com/wangwenpei/cliez>`_
+* `cliez-kickstart source code(github) <https://github.com/wangwenpei/cliez-kickstart>`_
 
 
 Why cliez
@@ -40,17 +40,17 @@ can be installed with ``pip``.
 
 
 **Manual installation**: Download the latest source from `Github
-<http://www.github.com/9nix00/cliez/>`_.
+<http://www.github.com/wangwenpei/cliez/>`_.
 
 .. parsed-literal::
 
-    git clone  https://github.com/9nix00/cliez.git
+    git clone  https://github.com/wangwenpei/cliez.git
     cd cliez
     python setup.py build
     sudo python setup.py install
 
 The cliez source code is `hosted on GitHub
-<https://github.com/9nix00/cliez/>`_.
+<https://github.com/wangwenpei/cliez/>`_.
 
 **Prerequisites**: cliez depends on Git and Mercurial.
 
@@ -67,7 +67,7 @@ Quick Start
     cliez check                                                          # check cliez depends
 
     cd /tmp                                                              # change to tmp directory
-    cliez create 9nix00/cliez-kickstart cli-app                          # clone project from github
+    cliez create wangwenpei/cliez-kickstart cli-app                          # clone project from github
 
     cd cli-app                                                           # change into cli-app directory
     cliez init                                                           # replace template variables
@@ -112,7 +112,7 @@ Discussion and support
 ----------------------
 
 You can discuss and report bugs on
-the `GitHub issue tracker <https://github.com/9nix00/cliez/issues>`_.
+the `GitHub issue tracker <https://github.com/wangwenpei/cliez/issues>`_.
 
 
 Copyright
@@ -123,12 +123,12 @@ This web site and all documentation is licensed under `Creative Commons 3.0 <htt
 
 
 
-.. |build-status| image:: https://secure.travis-ci.org/9nix00/cliez.png?branch=master
+.. |build-status| image:: https://secure.travis-ci.org/wangwenpei/cliez.png?branch=master
     :alt: Build status
-    :target: https://travis-ci.org/9nix00/cliez
+    :target: https://travis-ci.org/wangwenpei/cliez
 
-.. |coverage| image:: https://codecov.io/github/9nix00/cliez/coverage.svg?branch=master
-    :target: https://codecov.io/github/9nix00/cliez?branch=master
+.. |coverage| image:: https://codecov.io/github/wangwenpei/cliez/coverage.svg?branch=master
+    :target: https://codecov.io/github/wangwenpei/cliez?branch=master
 
 .. |license| image:: https://img.shields.io/pypi/l/cliez.svg
     :alt: MIT License

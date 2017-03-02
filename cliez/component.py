@@ -299,7 +299,7 @@ class Component(object):
     @classmethod
     def append_arguments(cls, sub_parsers):
         entry_name = cls.hump_to_underscore(cls.__name__).replace('_component', '')
-        epilog = conf.EPILOG if conf.EPILOG else 'This tool generate by `cliez` https://www.github.com/9nix00/cliez'
+        epilog = conf.EPILOG if conf.EPILOG else 'This tool generate by `cliez` https://www.github.com/wangwenpei/cliez'
 
         sub_parser = sub_parsers.add_parser(entry_name, help=cls.__doc__, epilog=epilog)
         sub_parser.description = cls.add_arguments.__doc__

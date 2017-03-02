@@ -12,7 +12,7 @@ conf.GENERAL_ARGUMENTS = [
     (('--dry-run',), dict(action='store_true', help='print command instead execute it')),
     (('--verbose', '-v'), dict(action='count')),
 ]
-conf.EPILOG = 'You can submit issues at: https://www.github.com/9nix00/cliez'
+conf.EPILOG = 'You can submit issues at: https://www.github.com/wangwenpei/cliez'
 
 
 def main():
