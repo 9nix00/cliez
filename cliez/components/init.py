@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import os
-import sys
+import random
 import shutil
 import string
-import random
+import sys
+
 from cliez.component import Component
 
 try:
@@ -23,7 +24,7 @@ except (NameError, ImportError):
 
 
 class InitComponent(Component):
-    exclude_directories = ['.git', '.hg']
+    exclude_directories = ['.git', '.hg', '__pycache__', '.idea']
 
     def load_gitconfig(self):
         gitconfig_path = os.path.expanduser('~/.gitconfig')
@@ -53,7 +54,8 @@ class InitComponent(Component):
 
         def match_directory(path):
             skip = False
-            for include_dir in ['/{}/'.format(s) for s in self.exclude_directories]:
+            for include_dir in ['/{}/'.format(s) for s in
+                                self.exclude_directories]:
                 if path.find(include_dir) > -1:
                     skip = True
                     break
@@ -90,14 +92,33 @@ class InitComponent(Component):
 
         # handle directory
         redo_directories = []
+        redo_files = []
 
         for v in os.walk(current_dir):
-            if match_string in v[1]:
-                redo_directories.append(os.path.join(v[0], match_string))
-                pass
+            if os.path.basename(v[0]) in self.exclude_directories:
+                continue
+            if match_directory(v[0]):
+                continue
+
+            for sub_dir in v[1]:
+                if match_string in sub_dir:
+                    redo_directories.append(os.path.join(v[0], sub_dir))
+                    pass
+
+            for f in v[2]:
+                if match_string in f:
+                    redo_files.append(os.path.join(v[0], f))
+                    pass
             pass
 
         redo_directories.reverse()
+        redo_files.reverse()
+
+        # redo files first
+        for v in redo_files:
+            shutil.move(v, v.replace(match_string, new_string))
+            pass
+
         for v in redo_directories:
             shutil.move(v, v.replace(match_string, new_string))
             pass
@@ -165,7 +186,8 @@ class InitComponent(Component):
         pass
 
     def render_random(self):
-        self.render('___random___', ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(64)))
+        self.render('___random___', ''.join(random.SystemRandom().choice(
+            string.ascii_uppercase + string.digits) for _ in range(64)))
         pass
 
     def render_confirm(self):
@@ -202,6 +224,11 @@ class InitComponent(Component):
 
         options.variable = options.variable or []
 
+        if options.debug:
+            print(options.variable)
+
+        self.logger.debug("user variable list:%s", options.variable)
+
         for v in options.variable:
             try:
                 key, value = v.split(':')
@@ -219,8 +246,10 @@ class InitComponent(Component):
         """
         return [
             (('--yes',), dict(action='store_true', help='clean .git repo')),
-            (('--variable', '-s'), dict(nargs='+', help='set extra variable,format is name:value')),
-            (('--skip-builtin',), dict(action='store_true', help='skip replace builtin variable')),
+            (('--variable', '-s'),
+             dict(nargs='+', help='set extra variable,format is name:value')),
+            (('--skip-builtin',),
+             dict(action='store_true', help='skip replace builtin variable')),
         ]
 
     pass
