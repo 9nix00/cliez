@@ -116,7 +116,11 @@ class InitComponent(Component):
 
         # redo files first
         for v in redo_files:
-            shutil.move(v, v.replace(match_string, new_string))
+            dir_name = os.path.dirname(v)
+            file_name = os.path.basename(v)
+            shutil.move(v, os.path.join(
+                dir_name,
+                file_name.replace(match_string, new_string)))
             pass
 
         for v in redo_directories:
