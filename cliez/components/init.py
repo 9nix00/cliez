@@ -5,6 +5,7 @@ import random
 import shutil
 import string
 import sys
+from datetime import datetime, timedelta
 
 from cliez.component import Component
 
@@ -194,6 +195,12 @@ class InitComponent(Component):
             string.ascii_uppercase + string.digits) for _ in range(64)))
         pass
 
+    def render_release_datetime(self):
+        self.render('___release-datetime___',
+                    (datetime.now() + timedelta(days=30)).strftime(
+                        '%Y-%m-%dT%H:%M:%s'))
+        pass
+
     def render_confirm(self):
 
         self.warn_message("this tool may destroy current code")
@@ -219,11 +226,13 @@ class InitComponent(Component):
         if not options.yes:
             self.render_confirm()
 
+        self.render_random()
+        self.render_pkg()
+        self.render_release_datetime()
+
         if not options.skip_builtin:
-            self.render_pkg()
             self.render_author()
             self.render_email()
-            self.render_random()
             pass
 
         options.variable = options.variable or []
