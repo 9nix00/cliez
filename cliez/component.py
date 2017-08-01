@@ -172,12 +172,15 @@ class Component(object):
         return self.parser.error(message)
 
     def system(self, cmd, fake_code=0):
-        if self.options.dry_run:
-            def fake_system(cmd):
-                self.print_message(cmd)
-                return fake_code
-
-            return fake_system(cmd)
+        try:
+            if self.options.dry_run:
+                def fake_system(cmd):
+                    self.print_message(cmd)
+                    return fake_code
+                return fake_system(cmd)
+        except AttributeError:
+            # options dry-run not exists
+            pass
 
         self.logger.debug(cmd)
         return os.system(cmd)

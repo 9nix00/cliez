@@ -179,9 +179,9 @@ class InitComponent(Component):
 
         pass
 
-    def render_pkg(self):
+    def render_pkg(self, pkg=None):
         while True:
-            pkg = input("package name:")
+            pkg = input("package name:") if pkg == '' else pkg
             if pkg:
                 self.render('___pkg___', pkg)
                 self.render('___Pkg___', pkg[0].upper() + pkg[1:].lower())
@@ -227,7 +227,6 @@ class InitComponent(Component):
             self.render_confirm()
 
         self.render_random()
-        self.render_pkg()
         self.render_release_datetime()
 
         if not options.skip_builtin:
@@ -247,7 +246,11 @@ class InitComponent(Component):
                 key, value = v.split(':')
             except ValueError:
                 continue
-            self.render('___{}___'.format(key), value)
+
+            if key == 'pkg':
+                self.render_pkg(value)
+            else:
+                self.render('___{}___'.format(key), value)
             pass
 
         pass
