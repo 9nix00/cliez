@@ -1,20 +1,56 @@
-# -*- coding: utf-8 -*-
+"""
+=====================
+Default Config
+=====================
+"""
 
+import importlib
+import logging
 import os
 import sys
-import importlib
 
 COMPONENT_ROOT = None
 GENERAL_ARGUMENTS = []
 EPILOG = None
 
+LOGGING_CONFIG = {  #: Default logging config
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(name)s %(asctime)s:: %(message)s'
+        },
+    },
+    'handlers': {
+        'stdout': {
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+            'formatter': 'verbose',
+        },
+        'stderr': {
+            'class': 'logging.StreamHandler',
+            'stream': sys.stderr,
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'component': {
+            'handlers': ['stderr'],
+            'level': logging.CRITICAL,
+            'propagate': True,
+        },
+    }
+}
+
 
 def settings(path=None, with_path=None):
     """
-    a wrapper for `Settings._wrapped`
+    Get or set `Settings._wrapped`
 
-
-    :return: `Settings`
+    :param str path: a python module file,
+        if user set it,write config to `Settings._wrapped`
+    :param str with_path: search path
+    :return: A instance of `Settings`
     """
 
     if path:
@@ -26,12 +62,9 @@ def settings(path=None, with_path=None):
 class Settings(object):
     """
     cliez global config class
-
     """
 
     _path = None
-    # _db_patch_path = None
-
     _wrapped = None
 
     @staticmethod
@@ -39,20 +72,22 @@ class Settings(object):
         """
         bind user variable to `_wrapped`
 
-
         .. note::
 
             you don't need call this method by yourself.
 
             program will call it in  `cliez.parser.parse`
-            只有在撰写自定义测试用例时,为了区分环境,我们才需要手动声明
 
 
-        :param `str` mod_path: module path, *use 'mod.mod1' not 'mod/mod1' *
+        .. expection::
 
-        :param str with_path: add path to `sys.path`, if path is file,use its parent.
+            if path is not correct,will cause an `ImportError`
 
-        :return: `settings`
+
+        :param str mod_path: module path, *use dot style,'mod.mod1'*
+        :param str with_path: add path to `sys.path`,
+            if path is file,use its parent.
+        :return: A instance of `Settings`
         """
 
         if with_path:
@@ -62,10 +97,8 @@ class Settings(object):
                 sys.path.insert(0, with_path.rsplit('/', 2)[0])
             pass
 
-        try:
-            mod = importlib.import_module(mod_path)
-        except ImportError:
-            raise
+        # raise `ImportError` mod_path if not exist
+        mod = importlib.import_module(mod_path)
 
         settings = Settings()
 
@@ -76,7 +109,6 @@ class Settings(object):
             pass
 
         Settings._path = mod_path
-        # Settings._db_patch_path = mod_path.rsplit('.', 1)[0] + '.db_patch'
         Settings._wrapped = settings
 
         return settings
