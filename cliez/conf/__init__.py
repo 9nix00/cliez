@@ -13,7 +13,7 @@ COMPONENT_ROOT = None
 GENERAL_ARGUMENTS = []
 EPILOG = None
 
-LOGGING_CONFIG = {  #: Default logging config
+LOGGING_CONFIG = {  #: default logging config
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
