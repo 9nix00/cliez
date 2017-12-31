@@ -110,7 +110,7 @@ def parse(parser, argv=None, settings_module=None, no_args_func=None):
             pass
 
         if hasattr(options, 'debug') and options.debug:
-            logger_level = logging.INFO
+            logger_level = logging.DEBUG
             pass
 
         if default_logger:
