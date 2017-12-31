@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import os
 import signal
 import threading
@@ -9,6 +7,14 @@ from .component import Component
 
 
 class SlotComponent(Component):
+    """
+    .. warning::
+
+        Experiment feature.
+
+        BE CAREFUL! WE MAY REMOVE THIS FEATURE!
+
+    """
     class Handle(object):
         """
 
