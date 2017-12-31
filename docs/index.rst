@@ -1,26 +1,13 @@
-Welcome to cliez's documentation!
-=================================
-
-Contents:
-
+.. _contents
 
 .. include:: ../README.rst
 
 
 
-
-
-API
---------------
-
-.. toctree::
-   :maxdepth: 2
-
-   api/modules.rst
-
-
 Indices and tables
-==================
+====================
+* :doc:`api/cliez`
+* :doc:`manual/main`
 
 * :ref:`genindex`
 * :ref:`modindex`

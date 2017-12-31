@@ -1,2 +1,5 @@
 sphinx
-sphinx-rtd-theme
+guzzle_sphinx_theme #guzzles theme
+recommonmark  # support markdown
+Pygments   # highlight
+sphinxcontrib-programoutput # enable shell output
