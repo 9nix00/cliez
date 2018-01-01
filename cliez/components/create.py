@@ -1,7 +1,10 @@
-# -*- coding: utf-8 -*-
+"""
+===================
+Create Component
+===================
+"""
 
 import os
-import logging
 
 from cliez.component import Component
 
@@ -18,12 +21,14 @@ class CreateComponent(Component):
             orders.insert(0, 'bitbucket')
 
         if options.local:
+            self.logger.info("search local repository mode enabled.")
             orders.insert(0, 'localhost')
 
-        project_root = os.path.join(options.dir, options.name) if options.name else options.dir
+        project_root = os.path.join(
+            options.dir,
+            options.name) if options.name else options.dir
 
-        if options.debug:
-            self.print_message("project will clone to %s" % project_root)
+        self.logger.debug("project will clone to %s", project_root)
 
         repo_path = os.path.expanduser(options.repo)
         rtn = -1
@@ -34,13 +39,17 @@ class CreateComponent(Component):
                     self.logger.debug('try clone from %s' % repo_path)
 
                     if os.path.exists(os.path.join(repo_path, '.git')):
-                        rtn = system_call('git clone {} {}'.format(repo_path, project_root))
+                        self.logger.info('Git repository match from %s' % repo_path)
+                        rtn = system_call(
+                            'git clone {} {}'.format(repo_path, project_root))
 
                         if rtn == 0:
                             break
                         pass
                     elif os.path.exists(os.path.join(repo_path, '.hg')):
-                        rtn = system_call('hg clone {} {}'.format(repo_path, project_root))
+                        self.logger.info('Mercurial repository match from %s' % repo_path)
+                        rtn = system_call(
+                            'hg clone {} {}'.format(repo_path, project_root))
 
                         if rtn == 0:
                             break
@@ -48,14 +57,16 @@ class CreateComponent(Component):
 
             elif v == 'github':
 
-                cmd_path = 'git clone ssh:git@github.com:{}.git {}'.format(repo_path, project_root)
+                cmd_path = 'git clone ssh:git@github.com:{}.git {}'.format(
+                    repo_path, project_root)
                 self.logger.debug('try clone from %s' % cmd_path)
                 rtn = system_call(cmd_path)
 
                 if rtn == 0:
                     break
 
-                cmd_path = 'git clone https://github.com/{}.git {}'.format(repo_path, project_root)
+                cmd_path = 'git clone https://github.com/{}.git {}'.format(
+                    repo_path, project_root)
                 self.logger.debug('try clone from %s' % cmd_path)
                 rtn = system_call(cmd_path)
 
@@ -65,9 +76,22 @@ class CreateComponent(Component):
                 pass
 
             elif v == 'bitbucket':
-                cmd_path = 'hg clone ssh://hg@bitbucket.org/{} {}'.format(repo_path, project_root)
+                # .. note::
+                #
+                #   logic should merge with github
+
+                cmd_path = 'hg clone ssh://hg@bitbucket.org/{} {}'.format(
+                    repo_path, project_root)
                 self.logger.debug('try clone from %s' % cmd_path)
                 rtn = system_call(cmd_path)
+                if rtn == 0:
+                    break
+
+                cmd_path = 'hg clone https://hg@bitbucket.org/{} {}'.format(
+                    repo_path, project_root)
+                self.logger.debug('try clone from %s' % cmd_path)
+                rtn = system_call(cmd_path)
+
                 if rtn == 0:
                     break
 
@@ -84,23 +108,23 @@ class CreateComponent(Component):
     def add_arguments(cls):
         """
         Create project.
-        By default cliez find github first, if not found, then try to search bitbucket
 
+        By default cliez find github first,
+        if not found,then try to search bitbucket
 
         if user define `--local` option. search local path first.
 
-        if user define `--bitbucket`, search bitbucket first,then search github.
-
-
-        * note *
-        * currently,we only support ssh mode when use bitbucket *
+        if user define `--bitbucket`, search bitbucket first,
+        then search github.
 
         """
         return [
             (('repo',), dict(help='repo path.')),
             (('name',), dict(nargs='?', default='', help='project name.')),
-            (('--local',), dict(action='store_true', help='try load repo local path.')),
-            (('--bitbucket',), dict(action='store_true', help='search bitbucket first.')),
+            (('--local',),
+             dict(action='store_true', help='try load repo local path.')),
+            (('--bitbucket',),
+             dict(action='store_true', help='search bitbucket first.')),
         ]
 
         pass
