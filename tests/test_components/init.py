@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import argparse
 import os
 import tempfile
@@ -9,12 +7,7 @@ import mock
 
 from cliez import parser
 
-try:
-    input = raw_input
-    mock_input = '__builtin__.raw_input'
-except NameError:
-    mock_input = 'builtins.input'
-    pass
+mock_input = 'builtins.input'
 
 
 class InitComponentTestCase(unittest.TestCase):
@@ -76,29 +69,7 @@ class InitComponentTestCase(unittest.TestCase):
 
         pass
 
-    # def test_in_invalid_root(self):
-    #     """
-    #     missing argument
-    #     :return:
-    #     """
-    #
-    #     dp = tempfile.TemporaryDirectory()
-    #     os.chdir(dp.name)
-    #
-    #     with self.assertRaises(SystemExit):
-    #         with mock.patch(mock_input, side_effect=['yes',
-    # 'pkg_demo', "\n", "\n"]):
-    #             parser.parse(argparse.ArgumentParser(), argv=['command',
-    #  'init'])
-    #
-    #     pass
-
     def test_in_dange_root(self):
-        """
-        缺失参数
-        :return:
-        """
-
         with self.assertRaises(SystemExit):
             with mock.patch(mock_input,
                             side_effect=['yes', 'pkg_demo', "\n", "\n"]):
@@ -115,10 +86,6 @@ class InitComponentTestCase(unittest.TestCase):
         pass
 
     def test_no_confirm(self):
-        """
-        :return:
-        """
-
         with tempfile.TemporaryDirectory() as dp:
             with mock.patch(mock_input, side_effect=['pkg_demo', "\n", "\n"]):
                 parser.parse(argparse.ArgumentParser(),
