@@ -1,33 +1,36 @@
-# -*- coding: utf-8 -*-
+"""
+======================
+Init Component
+======================
 
+
+.. note::
+
+    From Cliez 2.1, we don't support python2 anymore.
+
+
+"""
+
+import configparser
 import os
 import random
 import shutil
 import string
-import sys
 from datetime import datetime, timedelta
 
 from cliez.component import Component
 
-try:
-    input = raw_input
-except NameError:
-    pass
-
-try:
-    import ConfigParser
-
-    Parser = ConfigParser.ConfigParser
-except (NameError, ImportError):
-    import configparser
-
-    Parser = configparser.ConfigParser
+Parser = configparser.ConfigParser
 
 
 class InitComponent(Component):
     exclude_directories = ['.git', '.hg', '__pycache__', '.idea']
 
     def load_gitconfig(self):
+        """
+        try use gitconfig info.
+        author,email etc.
+        """
         gitconfig_path = os.path.expanduser('~/.gitconfig')
 
         if os.path.exists(gitconfig_path):
@@ -39,23 +42,34 @@ class InitComponent(Component):
         pass
 
     def render(self, match_string, new_string):
+        """
+        render template string to user string
+        :param str match_string: template string,syntax: '___VAR___'
+        :param str new_string: user string
+        :return:
+        """
 
         current_dir = self.options.dir
 
+        # safe check,we don't allow handle system root and user root.
         if os.path.expanduser(current_dir) in ['/', os.path.expanduser("~")]:
-            self.error_message("invalid directory")
-            sys.exit(-1)
+            self.error("invalid directory", -1)
             pass
 
-        # .git or .hg may not exist before init execute.
-        # if not os.path.exists('.git') and not os.path.exists('.hg'):
-        #     self.error_message("invalid directory")
-        #     sys.exit(-1)
-        #     pass
-
         def match_directory(path):
+            """
+            exclude indeed directory.
+
+            .. note::
+
+                this function will ignore in all depth.
+
+
+            :param path:
+            :return:
+            """
             skip = False
-            for include_dir in ['/{}/'.format(s) for s in
+            for include_dir in ['/%s/' % s for s in
                                 self.exclude_directories]:
                 if path.find(include_dir) > -1:
                     skip = True
@@ -63,9 +77,9 @@ class InitComponent(Component):
                 pass
             return skip
 
-        # handle files
+        # handle files detail first
         for v in os.walk(current_dir):
-            # skip exclude directories
+            # skip exclude directories in depth 1
             if os.path.basename(v[0]) in self.exclude_directories:
                 continue
             if match_directory(v[0]):
@@ -74,8 +88,6 @@ class InitComponent(Component):
             for base_name in v[2]:
                 file_name = os.path.join(v[0], base_name)
 
-                buffer = ''
-                # ignore binary files
                 try:
                     with open(file_name, 'r') as fh:
                         buffer = fh.read()
@@ -86,6 +98,7 @@ class InitComponent(Component):
                         fh.write(buffer)
                         pass
                 except UnicodeDecodeError:
+                    # ignore binary files
                     continue
 
                 pass
@@ -218,11 +231,6 @@ class InitComponent(Component):
         pass
 
     def run(self, options):
-        system_call = os.system
-
-        if options.debug:
-            system_call = lambda x: print(x) or 0
-
         if not options.yes:
             self.render_confirm()
 
@@ -236,9 +244,6 @@ class InitComponent(Component):
 
         options.variable = options.variable or []
 
-        if options.debug:
-            print(options.variable)
-
         self.logger.debug("user variable list:%s", options.variable)
 
         for v in options.variable:
@@ -250,7 +255,7 @@ class InitComponent(Component):
             if key == 'pkg':
                 self.render_pkg(value)
             else:
-                self.render('___{}___'.format(key), value)
+                self.render('___%s___' % key, value)
             pass
 
         pass
