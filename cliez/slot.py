@@ -15,6 +15,7 @@ class SlotComponent(Component):
         BE CAREFUL! WE MAY REMOVE THIS FEATURE!
 
     """
+
     class Handle(object):
         """
 
@@ -61,7 +62,9 @@ class SlotComponent(Component):
 
             The return value will be used in `Slot.slot`
             """
-            self.component.error_message("please overwrite `__enter__` method,and make sure return False when no data to execute.")
+            self.component.error_message(
+                "please overwrite `__enter__` method,"
+                "and make sure return False when no data to execute.")
             return False
 
         def __exit__(self, exc_type, exc_val, exc_tb):
@@ -72,7 +75,10 @@ class SlotComponent(Component):
             if self.options.thread_sleep_time:
 
                 if self.options.thread_sleep_range:
-                    sleep_time = random.randint(self.options.thread_sleep_time, self.options.thread_sleep_time + self.options.thread_sleep_range)
+                    sleep_time = random.randint(
+                        self.options.thread_sleep_time,
+                        self.options.thread_sleep_time +
+                        self.options.thread_sleep_range)
                     pass
                 else:
                     sleep_time = self.options.thread_sleep_time
@@ -129,7 +135,8 @@ class SlotComponent(Component):
                 p = psutil.Process(pid)
                 try:
                     if current_pid != pid and current == p.cmdline():
-                        self.error_message("process exist. pid:{}".format(p.pid))
+                        self.error_message(
+                            "process exist. pid:{}".format(p.pid))
                         sys.exit(-1)
                         pass
 
@@ -199,7 +206,8 @@ class SlotComponent(Component):
                         t = self.options.sleep
                     sleep(t)
                     # else:
-                    #     print("User interrupt on thread:", threading.current_thread())
+                    #     print("User interrupt on thread:",
+                    # threading.current_thread())
                     #     sys.exit(0)
 
     # user custom method
@@ -211,17 +219,32 @@ class SlotComponent(Component):
     @classmethod
     def add_arguments(cls):
         return [
-            (('--once',), dict(action='store_true', help='execute once and exit.')),
-            (('--exclusive-mode',), dict(action='store_true', help='open this will limit one progress to work.')),
-            (('--no-daemon',), dict(action='store_true', help='set service works in no daemon mode.')),
-            (('--sleep',), dict(nargs='?', type=int, default=2, help='set sleep time,default is 2s.')),
-            (('--sleep-max-time',), dict(nargs='?', type=int, default=60, help='set max sleep time, default is 60s.')),
-            (('--thread-sleep-time',), dict(nargs='?', type=int, default=0, help='set thread sleep min time.')),
+            (('--once',),
+             dict(action='store_true', help='execute once and exit.')),
+            (('--exclusive-mode',), dict(action='store_true',
+                                         help='open this will limit '
+                                              'one progress to work.')),
+            (('--no-daemon',), dict(action='store_true',
+                                    help='set service works in'
+                                         ' no daemon mode.')),
+            (('--sleep',), dict(nargs='?', type=int, default=2,
+                                help='set sleep time,default is 2s.')),
+            (('--sleep-max-time',), dict(nargs='?', type=int, default=60,
+                                         help='set max sleep time,'
+                                              ' default is 60s.')),
+            (('--thread-sleep-time',), dict(nargs='?', type=int, default=0,
+                                            help='set thread sleep '
+                                                 'min time.')),
             (('--thread-sleep-range',), dict(nargs='?',
                                              type=int,
                                              default=0,
-                                             help='when set thread-sleep-time, pickup a random value from ${thread-sleep-time} to ${thread-sleep-time}+range')),
-            (('--threads',), dict(nargs='?', type=int, default=10, help='set slot threads num,default is 10.')),
+                                             help='when set thread-sleep-time,'
+                                                  ' pickup a random value '
+                                                  'from ${thread-sleep-time}'
+                                                  ' to ${thread-sleep-time}'
+                                                  '+range')),
+            (('--threads',), dict(nargs='?', type=int, default=10,
+                                  help='set slot threads num,default is 10.')),
         ]
 
     pass
