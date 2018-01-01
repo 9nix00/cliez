@@ -14,8 +14,6 @@ import time
 
 import termcolor
 
-from cliez import conf
-
 
 class Component(object):
     exclude_global_option = False
@@ -279,71 +277,10 @@ class Component(object):
 
         return desc
 
-    @staticmethod
-    def hump_to_underscore(name):
-        """
-        Convert Hump style to underscore
-
-        :param name: Hump Character
-        :return: str
-        """
-        new_name = ''
-
-        pos = 0
-        for c in name:
-            if pos == 0:
-                new_name = c.lower()
-            elif 65 <= ord(c) <= 90:
-                new_name += '_' + c.lower()
-                pass
-            else:
-                new_name += c
-            pos += 1
-            pass
-        return new_name
-
-    @classmethod
-    def append_arguments(cls, sub_parsers):
-        """
-        Add class options to argparser options.
-
-        :param sub_parsers:
-        :return: None
-        """
-
-        entry_name = cls.hump_to_underscore(cls.__name__).replace('_component',
-                                                                  '')
-
-        # set sub command document
-        epilog = conf.EPILOG if conf.EPILOG else 'This tool generate by `cliez` https://www.github.com/wangwenpei/cliez'
-
-        sub_parser = sub_parsers.add_parser(entry_name, help=cls.__doc__,
-                                            epilog=epilog)
-        sub_parser.description = cls.add_arguments.__doc__
-
-        # add slot arguments
-        if hasattr(cls, 'add_slot_args'):
-            slot_args = cls.add_slot_args() or []
-            for v in slot_args:
-                sub_parser.add_argument(*v[0], **v[1])
-            sub_parser.description = cls.add_slot_args.__doc__
-            pass
-
-        user_arguments = cls.add_arguments() or []
-
-        for v in user_arguments:
-            sub_parser.add_argument(*v[0], **v[1])
-
-        if not cls.exclude_global_option:
-            for v in conf.GENERAL_ARGUMENTS:
-                sub_parser.add_argument(*v[0], **v[1])
-
-        pass
-
     @classmethod
     def add_arguments(cls):
         """
-        User can overwrite this method add custom options
+        Sub-Command Document Write At Here.
         """
         pass
 

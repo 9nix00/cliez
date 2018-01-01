@@ -14,6 +14,7 @@ import sys
 from logging import config as logging_config
 
 from cliez.conf import Settings
+from .utils import append_arguments
 
 
 def command_list():
@@ -61,8 +62,9 @@ def parse(parser, argv=None, settings_module=None, no_args_func=None):
     :param argv: argument list,default is `sys.argv`
     :type argv: list or tuple
 
-    :param str settings_module: settings class name,
-        default is `cliez.conf.Settings`
+    :param str settings_module: settings module name,
+        default is None.
+
     :param object no_args_func: a callable object.if no sub-parser matched,
         parser will call it.
 
@@ -71,7 +73,7 @@ def parse(parser, argv=None, settings_module=None, no_args_func=None):
 
     argv = argv or sys.argv
     commands = command_list()
-    settings = None if not settings_module else Settings.bind(settings_module)
+    settings = Settings.bind(settings_module) if settings_module else None
 
     if type(argv) not in [list, tuple]:
         raise TypeError("argv only can be list or tuple")
@@ -81,7 +83,10 @@ def parse(parser, argv=None, settings_module=None, no_args_func=None):
         sub_parsers = parser.add_subparsers()
         class_name = argv[1].capitalize() + 'Component'
 
-        from cliez.conf import COMPONENT_ROOT, LOGGING_CONFIG
+        from cliez.conf import (COMPONENT_ROOT,
+                                LOGGING_CONFIG,
+                                EPILOG,
+                                GENERAL_ARGUMENTS)
 
         sys.path.insert(0, os.path.dirname(COMPONENT_ROOT))
         mod = importlib.import_module(
@@ -90,7 +95,7 @@ def parse(parser, argv=None, settings_module=None, no_args_func=None):
 
         # dynamic load component
         klass = getattr(mod, class_name)
-        klass.append_arguments(sub_parsers)
+        append_arguments(klass, sub_parsers, EPILOG, GENERAL_ARGUMENTS)
         options = parser.parse_args(argv[1:])
 
         obj = klass(parser, options=options, settings=settings)
@@ -127,6 +132,7 @@ def parse(parser, argv=None, settings_module=None, no_args_func=None):
         # return object to make unit test easy
         return obj
 
+    # print all sub commands when user set.
     if not parser.description and len(commands):
         sub_parsers = parser.add_subparsers()
         [sub_parsers.add_parser(v) for v in commands]
