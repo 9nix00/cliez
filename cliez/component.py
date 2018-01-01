@@ -156,7 +156,8 @@ class Component(object):
 
 
         :param str cmd: command to execute
-        :param bool fake_code: only display command when is True,default is False
+        :param bool fake_code: only display command
+            when is True,default is False
         :return:
         """
         try:
@@ -213,7 +214,8 @@ class Component(object):
             a.load_resource('base/resource.io', root='cliez')
             a.load_resource('/base/resource.io', root='cliez')
             a.load_resource('cliez/base/resource.io')
-            a.load_resource(__file__.rsplit('/', 2)[0] + '/cliez/base/resource.io')
+            a.load_resource(__file__.rsplit('/', 2)[0] +
+            '/cliez/base/resource.io')
 
 
         .. note::

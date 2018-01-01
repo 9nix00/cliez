@@ -1,4 +1,4 @@
-cliez
+Cliez
 ==================
 
 A framework to make CLI-App easier.

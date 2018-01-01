@@ -71,7 +71,6 @@ class CreateTests(unittest.TestCase):
             ))
         pass
 
-
     def test_final_in_bitbucket(self):
         """
         search github first,
@@ -84,7 +83,6 @@ class CreateTests(unittest.TestCase):
 
         :return:
         """
-
         with tempfile.TemporaryDirectory() as dp:
             parser.parse(argparse.ArgumentParser(),
                          argv=['command', 'create',
@@ -95,7 +93,6 @@ class CreateTests(unittest.TestCase):
                 os.path.join(dp, '.hg')
             ))
         pass
-
 
     pass
 

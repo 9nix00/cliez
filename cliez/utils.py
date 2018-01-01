@@ -21,7 +21,8 @@ def include_file(filename, global_vars=None, local_vars=None):
 
     with open(filename, 'r') as f:
         code = compile(f.read(), os.path.basename(filename), 'exec')
-        exec (code, global_vars, local_vars)
+        exec(code, global_vars, local_vars)
+        pass
 
 
 def hump_to_underscore(name):

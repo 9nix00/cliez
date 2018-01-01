@@ -316,7 +316,7 @@ coverage_ignore_modules = [
     "main"
 ]
 coverage_ignore_classes = []
-coverage_ignore_functions = ["main"]
+coverage_ignore_functions = ["main", "add_arguments"]
 
 on3rd = os.environ.get('READTHEDOCS', None) == 'True'
 

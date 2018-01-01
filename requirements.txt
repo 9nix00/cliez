@@ -4,3 +4,5 @@ psutil
 mock
 tox
 coverage
+flake8
+pytest

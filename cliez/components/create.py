@@ -39,7 +39,8 @@ class CreateComponent(Component):
                     self.logger.debug('try clone from %s' % repo_path)
 
                     if os.path.exists(os.path.join(repo_path, '.git')):
-                        self.logger.info('Git repository match from %s' % repo_path)
+                        self.logger.info('Git repository '
+                                         'match from %s' % repo_path)
                         rtn = system_call(
                             'git clone {} {}'.format(repo_path, project_root))
 
@@ -47,7 +48,8 @@ class CreateComponent(Component):
                             break
                         pass
                     elif os.path.exists(os.path.join(repo_path, '.hg')):
-                        self.logger.info('Mercurial repository match from %s' % repo_path)
+                        self.logger.info('Mercurial repository '
+                                         'match from %s' % repo_path)
                         rtn = system_call(
                             'hg clone {} {}'.format(repo_path, project_root))
 

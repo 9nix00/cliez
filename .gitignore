@@ -60,4 +60,6 @@ docs/autodoc/*.html
 # PyBuilder
 target/
 
-MANIFEST
+/MANIFEST
+/cliez.egg-info/
+/.coverage
