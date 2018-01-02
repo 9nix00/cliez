@@ -21,7 +21,6 @@ Submodules
 
    cliez.component
    cliez.main
-   cliez.mixins
    cliez.parser
    cliez.slot
    cliez.utils
