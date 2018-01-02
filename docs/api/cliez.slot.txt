@@ -1,0 +1,4 @@
+.. automodule:: cliez.slot
+    :members:
+    :undoc-members:
+    :show-inheritance:

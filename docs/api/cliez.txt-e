@@ -1,0 +1,28 @@
+cliez package
+=============
+
+.. automodule:: cliez
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Subpackages
+-----------
+
+.. toctree::
+
+    cliez.components
+    cliez.conf
+
+Submodules
+----------
+
+.. toctree::
+
+   cliez.component
+   cliez.main
+   cliez.mixins
+   cliez.parser
+   cliez.slot
+   cliez.utils
+

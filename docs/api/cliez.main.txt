@@ -1,0 +1,4 @@
+.. automodule:: cliez.main
+    :members:
+    :undoc-members:
+    :show-inheritance:

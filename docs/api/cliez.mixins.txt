@@ -1,0 +1,4 @@
+.. automodule:: cliez.mixins
+    :members:
+    :undoc-members:
+    :show-inheritance:

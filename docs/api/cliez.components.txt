@@ -1,0 +1,17 @@
+cliez\.components package
+=========================
+
+.. automodule:: cliez.components
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+Submodules
+----------
+
+.. toctree::
+
+   cliez.components.check
+   cliez.components.create
+   cliez.components.init
+

@@ -20,7 +20,8 @@ class Component(object):
     logger_name = None
     logger = None
 
-    def __init__(self, parser=None, options=None, settings=None,
+    def __init__(self, parser=None, sub_parser=None, options=None,
+                 settings=None,
                  *args, **kwargs):
         """
         Don't overwrite this method.
@@ -28,6 +29,7 @@ class Component(object):
         """
 
         self.parser = parser
+        self.sub_parser = sub_parser
         self.options = options
         self.settings = settings
 

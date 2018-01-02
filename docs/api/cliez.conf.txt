@@ -1,0 +1,8 @@
+cliez\.conf package
+===================
+
+.. automodule:: cliez.conf
+    :members:
+    :undoc-members:
+    :show-inheritance:
+

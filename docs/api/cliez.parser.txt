@@ -1,0 +1,4 @@
+.. automodule:: cliez.parser
+    :members:
+    :undoc-members:
+    :show-inheritance:

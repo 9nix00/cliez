@@ -1,0 +1,4 @@
+.. automodule:: cliez.components.check
+    :members:
+    :undoc-members:
+    :show-inheritance:

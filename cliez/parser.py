@@ -13,8 +13,8 @@ import os
 import sys
 from logging import config as logging_config
 
+from .utils import hump_to_underscore
 from cliez.conf import Settings
-from .utils import append_arguments
 
 
 def command_list():
@@ -53,7 +53,51 @@ def command_list():
         return []
 
 
-def parse(parser, argv=None, settings_module=None, no_args_func=None):
+def append_arguments(klass, sub_parsers, default_epilog, general_arguments):
+    """
+    Add class options to argparser options.
+
+    :param cliez.component.Component klass: subclass of Component
+    :param Namespace sub_parsers:
+    :param str default_epilog: default_epilog
+    :param list general_arguments: global options, defined by user
+    :return: Namespace subparser
+    """
+
+    entry_name = hump_to_underscore(klass.__name__).replace(
+        '_component',
+        '')
+
+    # set sub command document
+    epilog = default_epilog if default_epilog \
+        else 'This tool generate by `cliez` ' \
+             'https://www.github.com/wangwenpei/cliez'
+
+    sub_parser = sub_parsers.add_parser(entry_name, help=klass.__doc__,
+                                        epilog=epilog)
+    sub_parser.description = klass.add_arguments.__doc__
+
+    # add slot arguments
+    if hasattr(klass, 'add_slot_args'):
+        slot_args = klass.add_slot_args() or []
+        for v in slot_args:
+            sub_parser.add_argument(*v[0], **v[1])
+        sub_parser.description = klass.add_slot_args.__doc__
+        pass
+
+    user_arguments = klass.add_arguments() or []
+
+    for v in user_arguments:
+        sub_parser.add_argument(*v[0], **v[1])
+
+    if not klass.exclude_global_option:
+        for v in general_arguments:
+            sub_parser.add_argument(*v[0], **v[1])
+
+    return sub_parser
+
+
+def parse(parser, argv=None, settings_key='settings', no_args_func=None):
     """
     parser cliez app
 
@@ -62,8 +106,8 @@ def parse(parser, argv=None, settings_module=None, no_args_func=None):
     :param argv: argument list,default is `sys.argv`
     :type argv: list or tuple
 
-    :param str settings_module: settings module name,
-        default is None.
+    :param str settings: settings option name,
+        default is settings.
 
     :param object no_args_func: a callable object.if no sub-parser matched,
         parser will call it.
@@ -73,7 +117,6 @@ def parse(parser, argv=None, settings_module=None, no_args_func=None):
 
     argv = argv or sys.argv
     commands = command_list()
-    settings = Settings.bind(settings_module) if settings_module else None
 
     if type(argv) not in [list, tuple]:
         raise TypeError("argv only can be list or tuple")
@@ -95,10 +138,15 @@ def parse(parser, argv=None, settings_module=None, no_args_func=None):
 
         # dynamic load component
         klass = getattr(mod, class_name)
-        append_arguments(klass, sub_parsers, EPILOG, GENERAL_ARGUMENTS)
+        sub_parser = append_arguments(klass, sub_parsers, EPILOG,
+                                      GENERAL_ARGUMENTS)
         options = parser.parse_args(argv[1:])
 
-        obj = klass(parser, options=options, settings=settings)
+        settings = Settings.bind(
+            getattr(options, settings_key)
+        ) if settings_key and hasattr(options, settings_key) else None
+
+        obj = klass(parser, sub_parser, options, settings)
 
         # init logger
         default_logger = LOGGING_CONFIG['loggers'].get('component')

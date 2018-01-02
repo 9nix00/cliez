@@ -1,0 +1,16 @@
+{# Import the theme's layout. #}
+{% extends "!layout.html" %}
+
+{%- block ga %}
+{%- if theme_google_analytics_account %}
+<script type="text/javascript"
+        src="http://tajs.qq.com/stats?sId={{ theme_google_analytics_account }}"
+        charset="UTF-8"></script>
+{%- endif %}
+{%- endblock %}
+
+{%- block footer_wrapper %}
+<div class="footer">
+    &copy; Copyright {{ copyright }}. 未经授权,禁止转载
+</div>
+{%- endblock %}
