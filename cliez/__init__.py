@@ -10,5 +10,5 @@ e.g: `Cabric <https://github.com/nextoa/cabric/>`_
 
 """
 
-version = "2.0.12"
-version_info = (2, 0, 12)
+version = "2.1.0"
+version_info = (2, 1, 0)

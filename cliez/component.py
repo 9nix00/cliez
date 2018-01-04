@@ -126,11 +126,9 @@ class Component(object):
         fh = fh or sys.stderr
 
         if fh is sys.stderr:
-            if self.logger.level != logging.CRITICAL:
-                termcolor.cprint(msg, color="red")
+            termcolor.cprint(msg, color="red")
         else:
             fh.write(msg)
-
         pass
 
     def error(self, message=None, exit_code=2):

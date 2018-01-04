@@ -39,7 +39,7 @@ class ParserTests(TestCase):
         with self.assertRaises(SystemExit) as cm:
             parser.parse(self.parser, argv=['command', '--version'])
 
-        self.assertEqual(cm.exception, 0)
+        self.assertEqual(cm.exception.code, 0)
         pass
 
     def test_no_value(self):

@@ -1,3 +1,5 @@
+import os
+import sys
 from unittest import TestCase, main
 
 from cliez.conf import settings, Settings
@@ -15,6 +17,7 @@ class Model(object):
 
 class SettingsTests(TestCase):
     def setUp(self):
+        sys.path.insert(0, os.path.dirname(__file__))
         Settings.bind('res_settings.demo', __file__)
         self.model = Model()
         pass
