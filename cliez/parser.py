@@ -13,8 +13,8 @@ import os
 import sys
 from logging import config as logging_config
 
-from .utils import hump_to_underscore
 from cliez.conf import Settings
+from .utils import hump_to_underscore
 
 
 def command_list():
@@ -149,9 +149,7 @@ def parse(parser, argv=None, settings_key='settings', no_args_func=None):
         obj = klass(parser, sub_parser, options, settings)
 
         # init logger
-        default_logger = LOGGING_CONFIG['loggers'].get('component')
         logger_level = logging.CRITICAL
-
         if hasattr(options, 'verbose'):
             if options.verbose == 1:
                 logger_level = logging.ERROR
@@ -164,16 +162,25 @@ def parse(parser, argv=None, settings_key='settings', no_args_func=None):
 
         if hasattr(options, 'debug') and options.debug:
             logger_level = logging.DEBUG
+            # http lib use a strange way to logging
+            try:
+                import http.client as http_client
+                http_client.HTTPConnection.debuglevel = 1
+            except Exception:
+                # do nothing
+                pass
             pass
 
-        if default_logger:
-            default_logger['level'] = logger_level
+        loggers = LOGGING_CONFIG['loggers']
+        for k, v in loggers.items():
+            v.setdefault('level', logger_level)
             if logger_level in [logging.INFO, logging.DEBUG]:
-                default_logger['handlers'] = ['stdout']
+                v['handlers'] = ['stdout']
             pass
 
         logging_config.dictConfig(LOGGING_CONFIG)
-        obj.logger.setLevel(logger_level)
+        # this may not necessary
+        # obj.logger.setLevel(logger_level)
 
         obj.run(options)
 
