@@ -29,26 +29,26 @@ class InitComponentTestCase(unittest.TestCase):
 
         pass
 
-    def test_with_variables(self):
-        """
-        custom variable
-        :return:
-        """
-
-        with tempfile.TemporaryDirectory() as dp:
-            parser.parse(argparse.ArgumentParser(),
-                         argv=['command', 'create',
-                               'wangwenpei/cliez-kickstart',
-                               '--dir', dp,
-                               '--debug'])
-
-            with mock.patch(mock_input,
-                            side_effect=['yes', 'pkg_demo', "\n", "\n"]):
-                parser.parse(argparse.ArgumentParser(),
-                             argv=['command', 'init', '--dir', dp, '--debug',
-                                   '-s', 'keywords:a-keyword'])
-
-        pass
+    # def test_with_variables(self):
+    #     """
+    #     custom variable
+    #     :return:
+    #     """
+    #
+    #     with tempfile.TemporaryDirectory() as dp:
+    #         parser.parse(argparse.ArgumentParser(),
+    #                      argv=['command', 'create',
+    #                            'wangwenpei/cliez-kickstart',
+    #                            '--dir', dp,
+    #                            '--debug'])
+    #
+    #         with mock.patch(mock_input,
+    #                         side_effect=['yes', 'pkg_demo', "\n", "\n"]):
+    #             parser.parse(argparse.ArgumentParser(),
+    #                          argv=['command', 'init', '--dir', dp, '--debug',
+    #                                '-s', 'keywords:a-keyword'])
+    #
+    #     pass
 
     def test_skip_builtin(self):
         """
