@@ -46,5 +46,3 @@ def hump_to_underscore(name):
         pos += 1
         pass
     return new_name
-
-
