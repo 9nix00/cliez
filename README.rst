@@ -4,7 +4,7 @@ Cliez
 A framework to make CLI-App easier.
 
 
-|build-status| |license| |pyimp|
+|build-status| |coverage| |license| |pyimp|
 
 
 
