@@ -13,7 +13,7 @@ setup(
         author='WANG WENPEI',
         zip_safe=False,
         test_suite="tests",
-        author_email='wangwenpei@nextoa.com',
+        author_email='stormxx@1024.engineer',
         description='make CLI-App easier',
         keywords='cli',
         entry_points={
