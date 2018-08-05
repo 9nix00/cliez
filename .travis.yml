@@ -13,13 +13,15 @@ python:
 install:
   - "pip install -r requirements.txt"
   - "pip install codecov"
+  - "pip install coverage"
+
 # command to run tests
 script:
   - "ssh-keyscan github.com >> ~/.ssh/known_hosts"
   - "ssh-keyscan bitbucket.org >> ~/.ssh/known_hosts"
   - "flake8 cliez"
   - "flake8 tests --ignore=F841"
-  - "python setup.py test"
+  - "coverage run setup.py test"
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
